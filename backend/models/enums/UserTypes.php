@@ -15,25 +15,7 @@ class UserTypes {
     // const COACH = 3;
     // const CLIENT = 4;
     // const PARTICIPANT = 5;
-    // const FACULTY = 6;
-	
-	//status for participant
-	// const ADD_TO_SYS1 = 10;
-    // const ADD_TO_BATCH1 = 11;
-    // const ASN_ADDED = 12;
-    // const ASN_RESUBSN = 13;
-    // const ASN_APPR = 14;
-    // const RES_ADDED = 15;
-    // const CERT_UPLD1 = 16;
-	
-	// /* // status for faculty*/
-	// const ADD_TO_SYS2 = 20;
-    // const ADD_TO_PROG = 21;
-    // const ADD_TO_BATCH2 = 22;
-    // const DEACT = 23;
-    // const ASN_UP_ST = 24;
-    // const ASN_RESUBTD = 25;
-    // const CERT_UPLD2 = 26;
+    // const FACULTY = 6;	
 
     public static $constants = [
         'super_admin' => self::SUPER_ADMIN,

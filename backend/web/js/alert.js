@@ -63,6 +63,73 @@
 			});
         });
     });
+    $('.swal-warning-poten').on('click', function() {
+		var title = $(this).attr("data-title");
+		var text = $(this).attr("data-text");
+		var type = $(this).attr("data-type");
+		var showCancelButton = $(this).attr("data-show-confirm-button");
+		var confirmButtonColor = $(this).attr("data-confirm-button-color");
+		var confirmButtonText = $(this).attr("data-confirm-button-text");
+		var closeOnConfirm = $(this).attr("data-close-on-confirm");
+		var id = $(this).attr("data-id");
+		var url = $(this).attr("data-url");
+		
+        swal({
+            title: title?title:'Are you sure?',
+            text: text?text:'You want to move this record to Potential Users!',
+            type: type?type:'info',
+            showCancelButton: showCancelButton?showCancelButton:true,
+            confirmButtonColor: confirmButtonColor?confirmButtonColor:'#ddb455',
+            confirmButtonText: confirmButtonText?confirmButtonText:'Yes, Move it to Potential!',
+            closeOnConfirm: closeOnConfirm?closeOnConfirm:false
+        }, function() {
+			$.ajax({
+				type:'post',
+				url:url,
+				onSuccess:function(data){
+					if(data){
+						swal('Deactivate!','','success');
+					}else{
+						swal('Not Deactivate!','','error');
+					}
+				}
+			});
+        });
+    });
+    $('.swal-info-join').on('click', function() {
+		var title = $(this).attr("data-title");
+		var text = $(this).attr("data-text");
+		var type = $(this).attr("data-type");
+		var showCancelButton = $(this).attr("data-show-confirm-button");
+		var confirmButtonColor = $(this).attr("data-confirm-button-color");
+		var confirmButtonText = $(this).attr("data-confirm-button-text");
+		var closeOnConfirm = $(this).attr("data-close-on-confirm");
+		var id = $(this).attr("data-id");
+		var url = $(this).attr("data-url");
+		
+        swal({
+            title: title?title:'Are you sure?',
+            text: text?text:'You want to move this record to Joined Users!',
+            type: type?type:'info',
+            showCancelButton: showCancelButton?showCancelButton:true,
+            confirmButtonColor: confirmButtonColor?confirmButtonColor:'#55dd90',
+            confirmButtonText: confirmButtonText?confirmButtonText:'Yes, Move it to Joined!',
+            closeOnConfirm: closeOnConfirm?closeOnConfirm:false
+        }, function() {
+			$.ajax({
+				type:'post',
+				url:url,
+				onSuccess:function(data){
+					if(data){
+						swal('Deactivate!','','success');
+					}else{
+						swal('Not Deactivate!','','error');
+					}
+				}
+			});
+        });
+    });
+	
     $('.swal-warning-assignment-end').on('click', function() {
 		var title = $(this).attr("data-title");
 		var text = $(this).attr("data-text");

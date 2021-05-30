@@ -206,7 +206,7 @@ use yii\helpers\ArrayHelper;
             </div>
             <div class="col-sm-3">
                 <label class="control-label">currency<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'currency_id')->dropDownList($currency, ['options' => [$model->currency => ['Selected' => 'selected']], 'prompt' => ' -- Select Currency --'])->label(false) ?>
+                <?= $form->field($model, 'currency_id')->dropDownList($currency, ['options' => [$model->currency_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Currency --'])->label(false) ?>
             </div>
         </div>
         <div class="form-group row"><!--form-material-->

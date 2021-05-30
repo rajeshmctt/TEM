@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\EnquirySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Enquiries';
+$this->title = $title;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="page enquiry-index"><!-- program-index -->
@@ -41,9 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     role="tabpanel">
 							<div class="panel-body">
 								<div class="form-inline padding-bottom-15">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
+                                    <div class="row" style="<?=$title=="Enquiries"?"":"display:none" ?>">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
                                             <!--<a href="javascript:void(0);" data-no-link="true" id="addRowBtn" class="btn btn-success btn-sm"><i class="icon md-plus" aria-hidden="true"></i>Add New
                                                 Level</a>-->
 											<?= Html::a('Create Enquiry', ['create'], ['class' => 'btn btn-success']) ?>
@@ -110,7 +110,53 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_at',
             //'updated_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            // ['class' => 'yii\grid\ActionColumn'],
+            [
+                'header'=>'View / Potential / Joined / Delete',
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update}{potential}{joined}{delete}',
+
+                'buttons' => [
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry/update', 'id' => $model->id]), [
+                            'title' => Yii::t('yii', 'Update'),
+                            'data' => [
+                                'link-to' => 'user-update',
+                            ],
+                        ]);
+                    },
+                    'potential' => function ($url, $model) {
+                        return $model->status != 0 ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-favorite-outline"></span>', '#', [
+                            'title' => Yii::t('yii', 'Potential'),
+                            'class' => 'swal-warning-poten',
+                            'data' => [
+                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/topotential', 'id' => $model->id]),
+                                'no-link' => "true",
+                            ],
+                        ]) : '';
+                    },
+                    'joined' => function ($url, $model) {
+                        return $model->status != 0 ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-favorite"></span>', '#', [
+                            'title' => Yii::t('yii', 'Joined'),
+                            'class' => 'swal-info-join',
+                            'data' => [
+                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/tojoined', 'id' => $model->id]),
+                                'no-link' => "true",
+                            ],
+                        ]) : '';
+                    },
+                    'delete' => function ($url, $model) {
+                        return $model->status != 0 ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-delete"></span>', '#', [
+                            'title' => Yii::t('yii', 'Deactivate'),
+                            'class' => 'swal-warning-confirm',
+                            'data' => [
+                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/delete', 'id' => $model->id]),
+                                'no-link' => "true",
+                            ],
+                        ]) : '';
+                    },
+                ],
+            ],
         ],
     ]); ?>
 

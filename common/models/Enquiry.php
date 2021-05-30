@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "enquiry".
@@ -47,6 +48,8 @@ use Yii;
  */
 class Enquiry extends \yii\db\ActiveRecord
 {
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
     /**
      * {@inheritdoc}
      */
@@ -55,12 +58,20 @@ class Enquiry extends \yii\db\ActiveRecord
         return 'enquiry';
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
             [['date_of_enquiry', 'country_id', 'program_id', 'invoice_raised_l1', 'l1_batch', 'l1_status', 'invoice_raised_l2', 'l2_batch', 'l2_status', 'invoice_raised_l3', 'l3_batch', 'l3_status', 'amount', 'currency_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['full_name', 'address', 'owner', 'subject'], 'string', 'max' => 255],
             [['contact_no'], 'string', 'max' => 20],

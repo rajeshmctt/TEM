@@ -5,6 +5,7 @@ namespace common\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Enquiry;
+// use backend\models\enums\EnquiryStatusTypes;
 
 /**
  * EnquirySearch represents the model behind the search form of `common\models\Enquiry`.
@@ -38,9 +39,9 @@ class EnquirySearch extends Enquiry
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($status, $params)
     {
-        $query = Enquiry::find();
+        $query = Enquiry::find()->where(['status'=>$status])->orderBy(['created_at' => SORT_DESC]);
 
         // add conditions that should always apply here
 
