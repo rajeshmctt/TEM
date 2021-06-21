@@ -15,9 +15,6 @@ use Yii;
  * @property int|null $updated_at
  *
  * @property Program $program
- * @property Enquiry[] $enquiries
- * @property Enquiry[] $enquiries0
- * @property Enquiry[] $enquiries1
  */
 class Batch extends \yii\db\ActiveRecord
 {
@@ -67,32 +64,32 @@ class Batch extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Enquiries]].
+    * Gets query for [[EnquiryBatches]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEnquiries()
+   public function getEnquiryBatches()
     {
-        return $this->hasMany(Enquiry::className(), ['l1_batch' => 'id']);
+        return $this->hasMany(EnquiryBatch::className(), ['batch_id' => 'id']);
     }
-
-    /**
-     * Gets query for [[Enquiries0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEnquiries0()
+	
+	public static function getProgBatches($prog)
     {
-        return $this->hasMany(Enquiry::className(), ['l2_batch' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Enquiries1]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEnquiries1()
+        $data=  static::find()->where([ 'program_id'=>$prog ])->all();
+        //$value=(count($data)==0)? []: \yii\helpers\ArrayHelper::map($data, 'name','name');
+        $value=(count($data)==0)? []: \yii\helpers\ArrayHelper::map($data, 'id','name');
+		/*$value = [];
+		foreach($data as $dt){
+			$value[] = $dt->id;
+		}*/
+        return $value;
+    } 
+	
+	public static function getBatchPrograms($batch)
     {
-        return $this->hasMany(Enquiry::className(), ['l3_batch' => 'id']);
+        $data=  static::find()->where([ 'id'=>$batch ])->all();
+        //$value=(count($data)==0)? []: \yii\helpers\ArrayHelper::map($data, 'name','name');
+        $value=(count($data)==0)? []: \yii\helpers\ArrayHelper::map($data, 'id','program_id');
+        return $value;
     }
 }

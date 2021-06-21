@@ -66,8 +66,12 @@ class BatchController extends Controller
     {
         $model = new Batch();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            echo "<pre>"; print_r($model); exit;
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            
         }
 
         return $this->render('create', [
@@ -125,6 +129,22 @@ class BatchController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+	public function actionSearchForBatches2()
+    {
+        $program = yii::$app->request->get('program');
+        //echo "<pre>"; print_r($action_steps); exit;
+        $out = [];
+        if($program != '') {
+			if(Yii::$app->user->identity->role==1){
+				$batches = Batch::find()->where(['program_id' => $program])->all();
+				$out[] = 'Select a batch';
+				foreach ($batches as $val) {
+					$out[$val->id] = $val->name;
+				}
+			}
+		}
+        return json_encode($out);
+    }
     
     public function actionForprog($id)
     {

@@ -21,7 +21,7 @@ use yii\widgets\ListView;
 use ogheo\comments\widget\Comments;
 use dosamigos\datepicker\DatePicker;
 
-$this->title = 'Slotter';
+$this->title = 'TEM';
 ?>
 <div class="page">
     <div class="site-index">
@@ -33,7 +33,7 @@ $this->title = 'Slotter';
                         <div class="row">
                             <div class="col-md-3 col-xs-12">
                                 <div class="widget">
-                                    <div class="widget-content padding-30 bg-blue-custom-600">
+                                    <div class="widget-content padding-30 bg-orange-600">
                                         <div class="widget-watermark darker font-size-60 margin-15"><i
                                                 class="icon md-balance" aria-hidden="true"></i></div>
                                         <div class="counter counter-md counter-inverse text-left">
@@ -41,7 +41,11 @@ $this->title = 'Slotter';
                                                 <span class="counter-number"><?= $clients=90 ?></span>
                                                 <span class="counter-number-related text-capitalize">Enquiries</span>
                                             </div>
-                                            <div class="counter-label text-capitalize"><a class="link-theme" href="<?= Yii::$app->urlManager->createAbsoluteUrl(['enquiry/index']); ?>">Manage Enquiries</a>
+                                            <div class="counter-label text-capitalize">
+											<a class="link-theme" href="<?= Yii::$app->urlManager->createAbsoluteUrl(['enquiry/index']); ?>">Manage Enquiries</a>
+											</div>
+											<div class="counter-label text-capitalize"><br>
+											<?= Html::a('Create Enquiry', ['enquiry/create'], ['class' => 'btn btn-primary']) ?>
 											</div>
 
                                         </div>
@@ -68,7 +72,7 @@ $this->title = 'Slotter';
 
                             <div class="col-md-3 col-xs-12">
                                 <div class="widget">
-                                    <div class="widget-content padding-30 bg-green-600">
+                                    <div class="widget-content padding-30 bg-blue-custom-600">
                                         <div class="widget-watermark darker font-size-60 margin-15"><i
                                                 class="icon md-accounts" aria-hidden="true"></i></div>
                                         <div class="counter counter-md counter-inverse text-left">

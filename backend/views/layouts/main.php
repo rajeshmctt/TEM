@@ -119,7 +119,7 @@ AppAsset::register($this);
             <!--<img class="navbar-brand-logo navbar-brand-logo-normal" src="<?= Yii::$app->urlManager->baseUrl; ?>/images/logo.png"
         title="Remark">-->
             <img class="navbar-brand-logo navbar-brand-logo-special"
-                 src="<?= Yii::$app->urlManager->baseUrl; ?>/images/logo_new.png"
+                 src="<?= Yii::$app->urlManager->baseUrl; ?>/images/logo_new.jpg"
                  title="Slot Scheduler">
 			<!--<h3>Slot Scheduler</h3>-->
         </a>
@@ -244,11 +244,23 @@ AppAsset::register($this);
     </li>
 	<li class="dropdown site-menu-item has-sub">
         <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("enquiry/index"); ?>">
-            <i class="site-menu-icon md-city" aria-hidden="true"></i>
+            <i class="site-menu-icon md-email" aria-hidden="true"></i>
             <span class="site-menu-title"> Enquiries</span>
 		</a>
     </li>
 	<li class="dropdown site-menu-item has-sub">
+        <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("enquiry/potential"); ?>">
+            <i class="site-menu-icon md-star-half" aria-hidden="true"></i>
+            <span class="site-menu-title"> Potential</span>
+		</a>
+    </li>
+	<li class="dropdown site-menu-item has-sub">
+        <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("enquiry/joined"); ?>">
+            <i class="site-menu-icon md-star" aria-hidden="true"></i>
+            <span class="site-menu-title"> Confirmed</span>
+		</a>
+    </li>
+	<li class="dropdown site-menu-item has-sub" style="display:none">
         <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("user/index"); ?>">
             <i class="site-menu-icon md-city" aria-hidden="true"></i>
             <span class="site-menu-title"> Users</span>
@@ -271,30 +283,6 @@ AppAsset::register($this);
 
 <?php if (Yii::$app->user->identity->role == UserTypes::SUPER_ADMIN) { ?>
     <!--RDM 3-10-19 hide events menu-->
-	<!--<li class="dropdown site-menu-item has-sub">
-        <a class="dropdown-toggle" href="javascript:void(0)" data-dropdown-toggle="false">
-            <i class="site-menu-icon md-balance" aria-hidden="true"></i>
-            <span class="site-menu-title">Events</span>
-            <span class="site-menu-arrow"></span>
-        </a>
-
-        <div class="dropdown-menu">
-            <div class="site-menu-scroll-wrap is-list">
-                <div>
-                    <div>
-                        <ul class="site-menu-sub site-menu-normal-list">
-                            <li class="site-menu-item">
-                                <a class="animsition-link"
-                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("event/index"); ?>">
-                                    <span class="site-menu-title">Manage Events</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </li>-->
 	<li class="site-menu-item">
 		<a href="<?= Yii::$app->urlManager->createAbsoluteUrl("location/index"); ?>">
 			<i class="site-menu-icon md-archive" aria-hidden="true"></i>
@@ -316,29 +304,6 @@ AppAsset::register($this);
             <span class="site-menu-title">Events</span>
             <span class="site-menu-arrow"></span>
         </a>
-
-        <div class="dropdown-menu">
-            <div class="site-menu-scroll-wrap is-list">
-                <div>
-                    <div>
-                        <ul class="site-menu-sub site-menu-normal-list">
-                            <li class="site-menu-item">
-                                <a class="animsition-link"
-                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl(['event/create']); ?>">
-                                    <span class="site-menu-title">Add Event</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link"
-                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("event/my-events"); ?>">
-                                    <span class="site-menu-title">Manage Events</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
     </li>
 <?php } ?>
 
@@ -454,30 +419,6 @@ AppAsset::register($this);
                             </li>-->
                             <li class="site-menu-item">
                                 <a class="animsition-link"
-                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("company/index"); ?>">
-                                    <span class="site-menu-title">Manage companies</span>
-                                </a>
-                            </li>
-							<!--<li class="site-menu-item">
-                                <a class="animsition-link"
-                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("announcement/create"); ?>">
-                                    <span class="site-menu-title">Add Announcement</span>
-                                </a>
-                            </li>-->
-                            <li class="site-menu-item">
-                                <a class="animsition-link"
-                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("announcement/index"); ?>">
-                                    <span class="site-menu-title">Manage Announcement</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link"
-                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("agreement/index"); ?>">
-                                    <span class="site-menu-title">Manage Agreements</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link"
                                    href="<?= Yii::$app->urlManager->createAbsoluteUrl("template/index"); ?>">
                                     <span class="site-menu-title">Manage Templates</span>
                                 </a>
@@ -543,7 +484,7 @@ AppAsset::register($this);
 <!-- Footer -->
 <footer class="site-footer">
     <!--<div class="site-footer-legal">© <?= date('Y'); ?> <a href="#">InMuto Consulting LLP</a></div>-->
-    <div class="site-footer-legal">© <?= date('Y'); ?> <a target="_blank" rel="noopener noreferrer" href="https://www.slotscheduler.com/">Slot Scheduler
+    <div class="site-footer-legal">© <?= date('Y'); ?> <a target="_blank" rel="noopener noreferrer" href="https://www.coach-to-transformation.com/">Training Enquiry Management
 	</a></div>
     <div class="site-footer-right">
         <!--Crafted with <i class="red-600 icon md-favorite"></i> by <a href="http://fierydevs.com">Fierydevs</a>-->

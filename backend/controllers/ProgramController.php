@@ -66,8 +66,12 @@ class ProgramController extends Controller
     {
         $model = new Program();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) ) {
+            // echo "<pre>"; print_r($model); exit;
+            if($model->save()){
+                return $this->redirect(['index']);
+            }
+            
         }
 
         return $this->render('create', [

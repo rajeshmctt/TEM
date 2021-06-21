@@ -26,11 +26,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'name',
-            'program_id',
-            'start_date',
-            'created_at',
+            // 'id',
+            [
+                'label' => 'Batch',
+                'attribute' => 'name',
+            ],
+            // 'program_id',
+            [
+                'label' => 'Program',
+                'attribute' => 'program_id',
+                'value' => function ($model) {
+                    return $model->program->name;
+                },
+            ],
+            // 'start_date',
+            // 'created_at',
             //'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],

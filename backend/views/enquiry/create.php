@@ -34,6 +34,31 @@ $this->params['breadcrumbs'][] = $this->title;
         'currency' => $currency,
         'programs' => $programs,
         'pbatches' => $pbatches,
+        'owners' => $owners,
     ]) ?>
 
 </div>
+
+<?php
+$this->registerJs('
+$(document).ready(function(){
+var add = '.$add.';
+link =  "'.$link.'";
+if(add==1){
+		swal({
+			title: "Information",
+			text: "Do you want to create another enquiry?",
+			type: "info",
+			showCancelButton: true,
+			confirmButtonColor: "#ff9988",
+			confirmButtonText: "No",
+			cancelButtonText: "Yes",
+			cancelButtonColor: "#EE6B55",
+			closeOnConfirm: true
+		}, function(){
+			window.location.href = link;
+	  	});
+	
+	}
+});
+');?>

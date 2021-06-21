@@ -18,8 +18,8 @@ class EnquirySearch extends Enquiry
     public function rules()
     {
         return [
-            [['id', 'date_of_enquiry', 'country_id', 'program_id', 'invoice_raised_l1', 'l1_batch', 'l1_status', 'invoice_raised_l2', 'l2_batch', 'l2_status', 'invoice_raised_l3', 'l3_batch', 'l3_status', 'amount', 'currency_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['full_name', 'contact_no', 'email', 'address', 'owner', 'city', 'source', 'subject', 'referred_by', 'final_status_l1', 'final_status_l2', 'final_status_l3'], 'safe'],
+            [['id', 'date_of_enquiry', 'country_id', 'program_id',  'amount', 'currency_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['full_name', 'contact_no', 'email', 'address', 'owner', 'city', 'source', 'subject', 'referred_by', 'remarks'], 'safe'],
         ];
     }
 
@@ -63,15 +63,6 @@ class EnquirySearch extends Enquiry
             'date_of_enquiry' => $this->date_of_enquiry,
             'country_id' => $this->country_id,
             'program_id' => $this->program_id,
-            'invoice_raised_l1' => $this->invoice_raised_l1,
-            'l1_batch' => $this->l1_batch,
-            'l1_status' => $this->l1_status,
-            'invoice_raised_l2' => $this->invoice_raised_l2,
-            'l2_batch' => $this->l2_batch,
-            'l2_status' => $this->l2_status,
-            'invoice_raised_l3' => $this->invoice_raised_l3,
-            'l3_batch' => $this->l3_batch,
-            'l3_status' => $this->l3_status,
             'amount' => $this->amount,
             'currency_id' => $this->currency_id,
             'status' => $this->status,
@@ -87,10 +78,8 @@ class EnquirySearch extends Enquiry
             ->andFilterWhere(['like', 'city', $this->city])
             ->andFilterWhere(['like', 'source', $this->source])
             ->andFilterWhere(['like', 'subject', $this->subject])
-            ->andFilterWhere(['like', 'referred_by', $this->referred_by])
-            ->andFilterWhere(['like', 'final_status_l1', $this->final_status_l1])
-            ->andFilterWhere(['like', 'final_status_l2', $this->final_status_l2])
-            ->andFilterWhere(['like', 'final_status_l3', $this->final_status_l3]);
+            ->andFilterWhere(['like', 'remarks', $this->remarks])
+            ->andFilterWhere(['like', 'referred_by', $this->referred_by]);
 
         return $dataProvider;
     }

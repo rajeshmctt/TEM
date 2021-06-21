@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\jui\DatePicker;
+use yii\widgets\ActiveForm;
+use backend\models\enums\UserTypes;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\EnquirySearch */
@@ -41,16 +44,27 @@ $this->params['breadcrumbs'][] = $this->title;
                     role="tabpanel">
 							<div class="panel-body">
 								<div class="form-inline padding-bottom-15">
-                                    <div class="row" style="<?=$title=="Enquiries"?"":"display:none" ?>">
+                                    <div class="row">
                                         <div class="col-sm-6">
+                                        
+                                        <?php $form = ActiveForm::begin([
+                                            'action' => ['index'],
+                                            'method' => 'get',
+                                        ]); ?>
                                             <div class="form-group">
-                                            <!--<a href="javascript:void(0);" data-no-link="true" id="addRowBtn" class="btn btn-success btn-sm"><i class="icon md-plus" aria-hidden="true"></i>Add New
-                                                Level</a>-->
-											<?= Html::a('Create Enquiry', ['create'], ['class' => 'btn btn-success']) ?>
+                                                <!--<a href="javascript:void(0);" data-no-link="true" id="addRowBtn" class="btn btn-success btn-sm"><i class="icon md-plus" aria-hidden="true"></i>Add New
+                                                    Level</a>-->
+                                                <?= Html::a('Create Enquiry', ['create'], ['class' => 'btn btn-success']) ?>
+                                                <?= Html::submitButton( '<i class="icon md-download"></i> Export To Excel', ['class' => 'btn btn-warning', 'name' => 'export']) ?>
+                                                <!--<a class="btn btn-success add_enq waves-effect waves-light" href="#">Create Enquiry (modal)</a>-->
+                                            </div>
+
+                                        <?php ActiveForm::end(); ?>
                                         </div>
                                     </div>
+
+                                    
                                 </div>
-                            </div>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -73,18 +87,31 @@ $this->params['breadcrumbs'][] = $this->title;
             'contact_no',
             'email:email',
             //'address',
-            'owner',
+            // 'owner', //hide
             //'city',
-            [
+            /*[
                 'label' => 'Country',
                 'attribute' => 'country_id',
                 'value' => function ($model) {
                     return isset($model->country_id)?$model->country->name:'Not Set';
                 },
-            ],
-            //'source',
+            ],*/
             'subject',
-            'referred_by',
+            [
+                'label' => 'Source',
+                'attribute' => 'source',
+                'value' => function ($model) {
+                    return isset($model->source)?UserTypes::$sources[$model->source]:'N/A';
+                },
+            ],
+            'referred_by',  //hide
+            [
+                'label' => 'Program',
+                'attribute' => 'program_id',
+                'value' => function ($model) {
+                    return isset($model->program_id)?$model->program->name:'N/A';
+                },
+            ],
             // 'program_id',
             //'final_status_l1',
             //'invoice_raised_l1',
@@ -98,36 +125,62 @@ $this->params['breadcrumbs'][] = $this->title;
             //'invoice_raised_l3',
             //'l3_batch',
             //'l3_status',
-            'amount',
-            [
-                'label' => 'Currency',
-                'attribute' => 'currency_id',
-                'value' => function ($model) {
-                    return isset($model->currency_id)?$model->currency->name:'-Not Set-';
-                },
-            ],
+            // 'amount',
+            // [
+            //     'label' => 'Currency',
+            //     'attribute' => 'currency_id',
+            //     'value' => function ($model) {
+            //         return isset($model->currency_id)?$model->currency->name:'-Not Set-';
+            //     },
+            // ],
             //'status',
             //'created_at',
             //'updated_at',
 
             // ['class' => 'yii\grid\ActionColumn'],
             [
-                'header'=>'View / Potential / Joined / Delete',
+                // 'header'=>'View / Potential / Joined / Delete',
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}{potential}{joined}{delete}',
+                'template' => '{update}{updatep}{updatej}{enquiries}{potential}{joined}{delete}',
 
                 'buttons' => [
                     'update' => function ($url, $model) {
-                        return Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry/update', 'id' => $model->id]), [
+                        return $model->status == 10 ? Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry/update', 'id' => $model->id]), [
                             'title' => Yii::t('yii', 'Update'),
                             'data' => [
                                 'link-to' => 'user-update',
                             ],
-                        ]);
+                        ]):'';
+                    },
+                    'updatep' => function ($url, $model) {
+                        return $model->status == 6 ? Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry/updatep', 'id' => $model->id]), [
+                            'title' => Yii::t('yii', 'Update'),
+                            'data' => [
+                                'link-to' => 'user-update',
+                            ],
+                        ]):'';
+                    },
+                    'updatej' => function ($url, $model) {
+                        return $model->status == 3 ? Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry/updatej', 'id' => $model->id]), [
+                            'title' => Yii::t('yii', 'Update'),
+                            'data' => [
+                                'link-to' => 'user-update',
+                            ],
+                        ]):'';
+                    },
+                    'enquiries' => function ($url, $model) {
+                        return ($model->status == 3 || $model->status == 6) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-skip-previous"></span>', '#', [
+                            'title' => Yii::t('yii', 'Move to Enquiries'),
+                            'class' => 'swal-info-enq',
+                            'data' => [
+                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/toenq', 'id' => $model->id]),
+                                'no-link' => "true",
+                            ],
+                        ]) : '';
                     },
                     'potential' => function ($url, $model) {
-                        return $model->status != 0 ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-favorite-outline"></span>', '#', [
-                            'title' => Yii::t('yii', 'Potential'),
+                        return ($model->status == 3 || $model->status == 10) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-favorite-outline"></span>', '#', [
+                            'title' => Yii::t('yii', 'Move to Potential'),
                             'class' => 'swal-warning-poten',
                             'data' => [
                                 'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/topotential', 'id' => $model->id]),
@@ -136,8 +189,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]) : '';
                     },
                     'joined' => function ($url, $model) {
-                        return $model->status != 0 ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-favorite"></span>', '#', [
-                            'title' => Yii::t('yii', 'Joined'),
+                        return ($model->status == 6 ) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-favorite"></span>', '#', [
+                            'title' => Yii::t('yii', 'Move to Joined'),
                             'class' => 'swal-info-join',
                             'data' => [
                                 'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/tojoined', 'id' => $model->id]),
@@ -171,3 +224,72 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 </div>
+
+
+		<!--  Create Enquiry modal start-->
+		<div class="modal fade modal-fade-in-scale-up modal-theme" id="create_enquiry" aria-hidden="true" aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
+			<div class="modal-dialog" id="modal-dialog">
+				<div class="modal-content">
+					<?php $form = ActiveForm::begin(); ?>
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true" class="close-theme">×</span>
+							</button>
+							<h4 class="modal-title modal-title-theme">Notes</h4>
+						</div>
+						<div class="modal-body">
+							<div class="form-group form-material row">
+								<div class="col-sm-12">
+									<!--<?/*= $form->field($model, 'agreement_content')->textarea(['id' => 'summernote', 'data-plugin' => 'summernote', 'value' => $agreement])->label(false) */?>-->
+									<textarea  class="form-control" name="notes" required></textarea><!--id="summernote" data-plugin="summernote" style="display: none;"-->
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<?= Html::hiddenInput('session_id', null, ['id' => 'session_id2']); ?>
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default btn-pure margin-0" data-dismiss="modal">Close</button>
+							<?= Html::submitButton('Update', ['class' => 'btn btn-success pull-right', 'id' => 'btn_reschedule']) ?>
+						</div>
+					<?php ActiveForm::end(); ?>
+				</div>
+			</div>
+		</div>
+			<!--  Create Enquiry modal end-->
+
+            <?php
+
+Yii::$app->view->registerJs("
+
+	$(document).ready(function() {
+		$('#dt').datepicker({
+			/*format: 'dd/mm/yyyy',*/
+			autoclose: true
+		});
+
+        $('.add_enq').click(function(){
+            $('#create_enquiry').modal('show');
+        });
+
+        $('.notes1').click(function(){
+			var id = $(this).data('id');
+            $('#session_id2').val(id);
+			$.ajax({
+				url :'" . Yii::$app->getUrlManager()->createUrl(['session/search-model']) . "',
+				data:{id:id},
+				success:function(data)
+				{
+                    obj = $.parseJSON(data);
+                    $('.note-editable').html(obj.notes);
+                    $('.note-editable').css('height','100px');
+					$('#update_notes').modal('show');
+				}
+			});
+		});
+	});
+
+", \yii\web\View::POS_END);
+
+?>

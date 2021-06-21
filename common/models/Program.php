@@ -17,6 +17,8 @@ use Yii;
  */
 class Program extends \yii\db\ActiveRecord
 {
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
     /**
      * {@inheritdoc}
      */
@@ -67,5 +69,12 @@ class Program extends \yii\db\ActiveRecord
     public function getEnquiries()
     {
         return $this->hasMany(Enquiry::className(), ['program_id' => 'id']);
+    }
+	
+	public static function getPrograms()
+    {
+        $data=  static::find()->all();
+        $value=(count($data)==0)? []: \yii\helpers\ArrayHelper::map($data, 'id','name');
+        return $value;
     }
 }

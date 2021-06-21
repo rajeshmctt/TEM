@@ -31,18 +31,6 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'referred_by')->textInput(['maxlength' => true]) ?>
     
-    <?= $form->field($model, 'final_status_l1')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'invoice_raised_l1')->textInput() ?>
-    
-    <?= $form->field($model, 'l1_status')->textInput() ?>
-    <?= $form->field($model, 'final_status_l2')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'invoice_raised_l2')->textInput() ?>
-    
-    <?= $form->field($model, 'l2_status')->textInput() ?>
-    <?= $form->field($model, 'final_status_l3')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'invoice_raised_l3')->textInput() ?>
-    
-    <?= $form->field($model, 'l3_status')->textInput() ?>
     <?= $form->field($model, 'amount')->textInput() ?>
     <?= $form->field($model, 'currency_id')->textInput() ?>
     <?= $form->field($model, 'status')->textInput() ?>
@@ -103,10 +91,6 @@ use yii\helpers\ArrayHelper;
                 <?= $form->field($model, 'address')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Owner<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'owner')->textInput()->label(false) ?>
-            </div>
-            <div class="col-sm-3">
                 <label class="control-label">City<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'city')->textInput()->label(false) ?>
             </div>
@@ -114,17 +98,13 @@ use yii\helpers\ArrayHelper;
                 <label class="control-label">Country<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'country_id')->dropDownList($countries, ['options' => [$model->country_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Country --'])->label(false) ?>
             </div>
-        <!--</div>
-		<div class="form-group row">form-material-->
+        </div>
+		<div class="form-group row"><!--form-material-->
             <div class="col-sm-3">
                 <label class="control-label">Source<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
+                <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['id'=>'source','options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
             </div>
-            <div class="col-sm-3">
-                <label class="control-label">Subject<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'subject')->textInput()->label(false) ?>
-            </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" id="referred_by" style="<?=$model->source==1?'':'display:none' ?>">
                 <label class="control-label">Referred by<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'referred_by')->textInput()->label(false) ?>
             </div>
@@ -146,74 +126,36 @@ use yii\helpers\ArrayHelper;
                 <!--<?//= $form->field($model, 'program_id')->dropDownList($programs, ['options' => [$model->program_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Program --'])->label(false) ?>-->
             </div>
 
-        <?php        
-        // $dataBatches=ArrayHelper::map(\common\models\Batch::find()->asArray()->all(), 'id', 'name');
-        // echo $form->field($model, 'l1_batch')->dropDownList($dataBatches,['id'=>'l1_batch']);
-        ?>
+        </div>
+		<div class="form-group row">
+            <div class="col-sm-6">
+                <label class="control-label">Remarks<span class="red-theme">*</span></label>
+            <?= $form->field($model, 'remarks')->textarea(['rows' => 4])->label(false) ?>
+            </div>
+            <div class="col-sm-3">
+                <label class="control-label">Owner<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'owner_id')->dropDownList($owners, ['options' => [$model->owner_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Owner --'])->label(false) ?>
+            </div>
+            <div class="col-sm-3">
+                <label class="control-label">Subject<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'subject')->textInput()->label(false) ?>
+            </div>
 
-            <div class="col-sm-3">
-                <label class="control-label">final_status_l1<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'final_status_l1')->textInput()->label(false) ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">invoice_raised_l1<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'invoice_raised_l1')->dropDownList([0=>'No',1=>'Yes'],['id'=>'invoice_raised_l1'])->label(false); ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">l1_batch<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'l1_batch')->dropDownList($pbatches,['options' => [$model->source => ['Selected' => 'selected']], 'id'=>'l1_batch', 'prompt' => ' -- Select Batch --'])->label(false); ?>
-                <!--<?//= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>-->
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">l1_status<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'l1_status')->dropDownList([0=>'NA',1=>'Joined'],['id'=>'l1_status'])->label(false); ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">final_status_l2<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'final_status_l2')->textInput()->label(false) ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">invoice_raised_l2<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'invoice_raised_l2')->dropDownList([0=>'No',1=>'Yes'],['id'=>'invoice_raised_l2'])->label(false); ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">l2_batch<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'l2_batch')->dropDownList($pbatches,['id'=>'l2_batch'])->label(false); ?><!--$dataBatches-->
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">l2_status<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'l2_status')->dropDownList([0=>'NA',1=>'Joined'],['id'=>'l2_status'])->label(false); ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">final_status_l3<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'final_status_l3')->textInput()->label(false) ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">invoice_raised_l3<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'invoice_raised_l3')->dropDownList([0=>'No',1=>'Yes'],['id'=>'invoice_raised_l3'])->label(false); ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">l3_batch<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'l3_batch')->dropDownList($pbatches,['id'=>'l3_batch'])->label(false); ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">l3_status<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'l3_status')->dropDownList([0=>'NA',1=>'Joined'],['id'=>'l3_status'])->label(false); ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">amount<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'amount')->textInput()->label(false) ?>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">currency<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'currency_id')->dropDownList($currency, ['options' => [$model->currency_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Currency --'])->label(false) ?>
-            </div>
         </div>
         <div class="form-group row"><!--form-material-->
 
         </div>
         <div class="form-group form-material">
-            <?= Html::submitButton('Add', ['class' => 'btn btn-success pull-right btn_client_add']) ?>
+            <?= Html::submitButton($model->isNewRecord?'Add':'Update', ['class' => 'btn btn-success pull-right btn_client_add']) ?>
+            
+            <?= $model->isNewRecord?'':Html::a('Move to Potential', '#', [
+                            'title' => Yii::t('yii', 'Move to Potential'),
+                            'class' => 'swal-warning-poten btn btn-warning',
+                            'data' => [
+                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/topotential', 'id' => $model->id]),
+                                'no-link' => "true",
+                            ],
+                        ]); ?>
         </div>
 		<?php ActiveForm::end(); ?>
     
@@ -247,7 +189,17 @@ $this->registerJs('
 	}
 $(document).ready(function(){
     
-	$("#enquiry_date").datepicker({
+    $("#source").change(function() {
+        console.log("test");
+        var inputVal = $(this).val();
+        if(inputVal==1) {
+            $("#referred_by").show();
+        }else{
+            $("#referred_by").hide();
+        }
+    });
+
+    $("#enquiry_date").datepicker({
         /*format: "dd/mm/yyyy",*/
         autoclose: true
     });
