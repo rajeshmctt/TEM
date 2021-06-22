@@ -60,7 +60,7 @@ use yii\helpers\ArrayHelper;
                            href="#exampleCollapseDefaultClient"
                            data-parent="#exampleAccordionDefault" aria-expanded="false"
                            aria-controls="exampleCollapseDefaultClient">
-                            <?= $model->full_name ?> <span style="font-size:10px">Click for details</span>
+                            <?= $model->full_name ?> <span style="font-size:12px">Click the '+' sign for details</span>
                         </a>
                     </div>
                     <div class="panel-collapse collapse" id="exampleCollapseDefaultClient"
@@ -195,8 +195,11 @@ use yii\helpers\ArrayHelper;
         ]); ?>
 
 
-        <div class="form-group row" style="display:none"><!--form-material-->
-            
+        <div class="form-group row"><!--form-material style="display:none"-->
+            <div class="col-sm-12">
+                <label class="control-label">Remarks<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'remarks')->textarea(['rows' => 3])->label(false) ?>
+            </div>
         </div>
         <div class="form-group row"><!--grant-div panel-body-->
                             
@@ -227,7 +230,7 @@ use yii\helpers\ArrayHelper;
 						'name' => 'Enquiry[batch1]',
 						'id' => 'bat',
 						'value' => isset($batches[0])?$batches[0]:'', // initial value
-						'data' => isset($batches[0])?Batch::getProgBatches($myprograms[$batches[0]]):[],
+						'data' => isset($batches[0])?Batch::getProgBatches($myprograms[$batches[0]]):Batch::getProgBatches($model->program_id),
 						'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
 						'pluginOptions' => [
 							'tags' => true,

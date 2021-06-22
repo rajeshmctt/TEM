@@ -43,11 +43,11 @@
 		
         swal({
             title: title?title:'Are you sure?',
-            text: text?text:'You want to Deactivate this record!',
+            text: text?text:'You want to Delete this record!',
             type: type?type:'warning',
             showCancelButton: showCancelButton?showCancelButton:true,
             confirmButtonColor: confirmButtonColor?confirmButtonColor:'#DD6B55',
-            confirmButtonText: confirmButtonText?confirmButtonText:'Yes, Deactivate it!',
+            confirmButtonText: confirmButtonText?confirmButtonText:'Yes, Delete it!',
             closeOnConfirm: closeOnConfirm?closeOnConfirm:false
         }, function() {
 			$.ajax({
@@ -55,9 +55,75 @@
 				url:url,
 				onSuccess:function(data){
 					if(data){
-						swal('Deactivate!','','success');
+						swal('Delete!','','success');
 					}else{
-						swal('Not Deactivate!','','error');
+						swal('Not Delete!','','error');
+					}
+				}
+			});
+        });
+    });
+    $('.swal-close-confirm').on('click', function() {
+		var title = $(this).attr("data-title");
+		var text = $(this).attr("data-text");
+		var type = $(this).attr("data-type");
+		var showCancelButton = $(this).attr("data-show-confirm-button");
+		var confirmButtonColor = $(this).attr("data-confirm-button-color");
+		var confirmButtonText = $(this).attr("data-confirm-button-text");
+		var closeOnConfirm = $(this).attr("data-close-on-confirm");
+		var id = $(this).attr("data-id");
+		var url = $(this).attr("data-url");
+		
+        swal({
+            title: title?title:'Are you sure?',
+            text: text?text:'You want to Close this record!',
+            type: type?type:'warning',
+            showCancelButton: showCancelButton?showCancelButton:true,
+            confirmButtonColor: confirmButtonColor?confirmButtonColor:'#DD6B55',
+            confirmButtonText: confirmButtonText?confirmButtonText:'Yes, Close it!',
+            closeOnConfirm: closeOnConfirm?closeOnConfirm:false
+        }, function() {
+			$.ajax({
+				type:'post',
+				url:url,
+				onSuccess:function(data){
+					if(data){
+						swal('Close!','','success');
+					}else{
+						swal('Not Closed!','','error');
+					}
+				}
+			});
+        });
+    });
+    $('.swal-restore-confirm').on('click', function() {
+		var title = $(this).attr("data-title");
+		var text = $(this).attr("data-text");
+		var type = $(this).attr("data-type");
+		var showCancelButton = $(this).attr("data-show-confirm-button");
+		var confirmButtonColor = $(this).attr("data-confirm-button-color");
+		var confirmButtonText = $(this).attr("data-confirm-button-text");
+		var closeOnConfirm = $(this).attr("data-close-on-confirm");
+		var id = $(this).attr("data-id");
+		var url = $(this).attr("data-url");
+		
+        swal({
+            title: title?title:'Are you sure?',
+            text: text?text:'You want to Restore this record!',
+            type: type?type:'warning',
+            showCancelButton: showCancelButton?showCancelButton:true,
+            confirmButtonColor: confirmButtonColor?confirmButtonColor:'#DD6B55',
+            confirmButtonText: confirmButtonText?confirmButtonText:'Yes, Restore it!',
+            closeOnConfirm: closeOnConfirm?closeOnConfirm:false
+        }, function() {
+			$.ajax({
+				type:'post',
+				url:url,
+				onSuccess:function(data){
+					if(data){
+						swal('Restore!','','success');
+					}else{
+						swal('Not Restored!','','error');
 					}
 				}
 			});
@@ -76,7 +142,7 @@
 		
         swal({
             title: title?title:'Are you sure?',
-            text: text?text:'You want to move this record to Potential Users!',
+            text: text?text:'You want to move this record to Potential Participants!',
             type: type?type:'info',
             showCancelButton: showCancelButton?showCancelButton:true,
             confirmButtonColor: confirmButtonColor?confirmButtonColor:'#ddb455',
@@ -109,11 +175,11 @@
 		
         swal({
             title: title?title:'Are you sure?',
-            text: text?text:'You want to move this record to Joined Users!',
+            text: text?text:'You want to move this record to Confirmed Participart!',
             type: type?type:'info',
             showCancelButton: showCancelButton?showCancelButton:true,
             confirmButtonColor: confirmButtonColor?confirmButtonColor:'#55dd90',
-            confirmButtonText: confirmButtonText?confirmButtonText:'Yes, Move it to Joined!',
+            confirmButtonText: confirmButtonText?confirmButtonText:'Yes, Move it to Confirmed!',
             closeOnConfirm: closeOnConfirm?closeOnConfirm:false
         }, function() {
 			$.ajax({

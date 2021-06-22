@@ -186,6 +186,13 @@ use yii\helpers\ArrayHelper;
         ]); ?>
 
 
+        <div class="form-group row"><!--form-material style="display:none"-->
+            <div class="col-sm-12">
+                <label class="control-label">Remarks<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'remarks')->textarea(['rows' => 3])->label(false) ?>
+            </div>
+        </div>
+                        <!--add  program  logic -->
                         <div class="form-group row" id="pb1"><!--grant-div panel-body-->
                             
                             <!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->

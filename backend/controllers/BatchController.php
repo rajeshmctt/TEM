@@ -37,10 +37,21 @@ class BatchController extends Controller
     {
         $searchModel = new BatchSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model = new Batch();
+
+        if ($model->load(Yii::$app->request->post())) {
+            // echo "<pre>"; print_r($model); exit;
+            if($model->save()){
+                Yii::$app->getSession()->setFlash('success','Batch added successfully');
+                return $this->redirect(['index']);
+            }
+            
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
         ]);
     }
 
@@ -67,7 +78,7 @@ class BatchController extends Controller
         $model = new Batch();
 
         if ($model->load(Yii::$app->request->post())) {
-            echo "<pre>"; print_r($model); exit;
+            // echo "<pre>"; print_r($model); exit;
             if($model->save()){
                 return $this->redirect(['view', 'id' => $model->id]);
             }

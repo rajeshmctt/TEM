@@ -38,7 +38,7 @@ $this->title = 'TEM';
                                                 class="icon md-balance" aria-hidden="true"></i></div>
                                         <div class="counter counter-md counter-inverse text-left">
                                             <div class="counter-number-group">
-                                                <span class="counter-number"><?= $clients=90 ?></span>
+                                                <span class="counter-number"><?= $e_cnt ?></span>
                                                 <span class="counter-number-related text-capitalize">Enquiries</span>
                                             </div>
                                             <div class="counter-label text-capitalize">
@@ -60,7 +60,7 @@ $this->title = 'TEM';
                                                 class="icon md-accounts" aria-hidden="true"></i></div>
                                         <div class="counter counter-md counter-inverse text-left">
                                             <div class="counter-number-group">
-                                                <span class="counter-number"> <?= $ecount=30 ?></span>
+                                                <span class="counter-number"> <?= $p_cnt ?></span>
                                                 <span class="counter-number-related text-capitalize">Potential</span>
                                             </div>
                                             <div class="counter-label text-capitalize"><a class="link-theme" href="<?= Yii::$app->urlManager->createAbsoluteUrl(['enquiry/potential']); ?>"> Manage Potential</a></div>
@@ -77,8 +77,8 @@ $this->title = 'TEM';
                                                 class="icon md-accounts" aria-hidden="true"></i></div>
                                         <div class="counter counter-md counter-inverse text-left">
                                             <div class="counter-number-group">
-                                                <span class="counter-number">20 </span>
-                                                <span class="counter-number-related text-capitalize">Joined</span>
+                                                <span class="counter-number"><?= $c_cnt ?> </span>
+                                                <span class="counter-number-related text-capitalize">Confirmed</span>
                                             </div>
                                             <div class="counter-label text-capitalize"><a class="link-theme" href="<?= Yii::$app->urlManager->createAbsoluteUrl(["enquiry/joined"]); ?>"> Manage Joined</a></div>
 

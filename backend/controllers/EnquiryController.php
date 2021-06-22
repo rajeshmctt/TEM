@@ -81,7 +81,7 @@ class EnquiryController extends Controller
             $dataProvider = $searchModel->search(EnquiryStatusTypes::POTENTIAL, Yii::$app->request->queryParams);
 
             return $this->render('indexp', [
-                'title' => 'Potential Users',
+                'title' => 'Potential Participants',
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
@@ -105,7 +105,31 @@ class EnquiryController extends Controller
             $dataProvider = $searchModel->search(EnquiryStatusTypes::JOINED, Yii::$app->request->queryParams);
 
             return $this->render('indexj', [
-                'title' => 'Joined Users',
+                'title' => 'Confirmed Participants',
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+    }
+
+    /**
+     * Lists closed Enquiry models.
+     * @return mixed
+     */
+    public function actionClosed()
+    {
+        // Export excel functionality 19june21 RDM
+        $export = Yii::$app->request->get('export');
+        if(isset($export)) // && !isset($search)
+        {
+            $this->export(EnquiryStatusTypes::CLOSED);
+        }
+		else {
+            $searchModel = new EnquirySearch();
+            $dataProvider = $searchModel->search(EnquiryStatusTypes::CLOSED, Yii::$app->request->queryParams);
+
+            return $this->render('indexc', [
+                'title' => 'Closed Enquiries',
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
@@ -536,8 +560,9 @@ class EnquiryController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        if($model->status == 0)
+        // $model = 
+        $this->findModel($id)->delete();
+        /*if($model->status == 0)
 		{
             $model->status = 10;
             if($model->save())
@@ -550,6 +575,38 @@ class EnquiryController extends Controller
             if($model->save())
 	        {
 		        Yii::$app->getSession()->setFlash('error','Record deactivated successfully');
+		        return $this->redirect(Yii::$app->request->referrer);
+		        // echo "<pre>"; print_r($this->redirect(Yii::$app->request->referrer)); exit;
+	        }else{
+				echo "parameters missing "; exit;
+			}
+        }*/
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Deletes an existing Enquiry model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionClose($id)
+    {
+        $model = $this->findModel($id);
+        if($model->status == 2)
+		{
+            $model->status = 10;
+            if($model->save())
+	        {
+		        Yii::$app->getSession()->setFlash('success','Record Moved to Enquiries successfully');
+			    return $this->redirect(Yii::$app->request->referrer);
+	        }
+        }else{
+            $model->status = 2;
+            if($model->save())
+	        {
+		        Yii::$app->getSession()->setFlash('error','Enquiry closed successfully');
 		        return $this->redirect(Yii::$app->request->referrer);
 		        // echo "<pre>"; print_r($this->redirect(Yii::$app->request->referrer)); exit;
 	        }else{

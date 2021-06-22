@@ -37,10 +37,17 @@ class LocationController extends Controller
     {
         $searchModel = new LocationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model = new Location();
 
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            // return $this->redirect(['view', 'id' => $model->id]);
+                Yii::$app->getSession()->setFlash('success','Country added successfully');
+            return $this->redirect(['index']);
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
         ]);
     }
 

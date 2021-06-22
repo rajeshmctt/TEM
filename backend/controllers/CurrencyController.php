@@ -37,10 +37,17 @@ class CurrencyController extends Controller
     {
         $searchModel = new CurrencySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model = new Currency();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->getSession()->setFlash('success','Currency added successfully');
+            return $this->redirect(['index']);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
         ]);
     }
 

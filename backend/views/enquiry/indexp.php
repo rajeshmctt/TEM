@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 // 'header'=>'View / Potential / Joined / Delete',
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}{updatep}{updatej}{enquiries}{potential}{joined}{delete}',
+                'template' => '{update}{updatep}{updatej}{enquiries}{potential}{joined}{close}{delete}',
 
                 'buttons' => [
                     'update' => function ($url, $model) {
@@ -170,7 +170,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]):'';
                     },
                     'enquiries' => function ($url, $model) {
-                        return ($model->status == 3 || $model->status == 6) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-skip-previous"></span>', '#', [
+                        return ($model->status == 3 || $model->status == 6) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-star-outline"></span>', '#', [
                             'title' => Yii::t('yii', 'Move to Enquiries'),
                             'class' => 'swal-info-enq',
                             'data' => [
@@ -180,7 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]) : '';
                     },
                     'potential' => function ($url, $model) {
-                        return ($model->status == 3 || $model->status == 10) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-favorite-outline"></span>', '#', [
+                        return ($model->status == 3 || $model->status == 10) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-star-half"></span>', '#', [
                             'title' => Yii::t('yii', 'Move to Potential'),
                             'class' => 'swal-warning-poten',
                             'data' => [
@@ -190,11 +190,21 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]) : '';
                     },
                     'joined' => function ($url, $model) {
-                        return ($model->status == 6 ) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-favorite"></span>', '#', [
+                        return ($model->status == 6 ) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-star"></span>', '#', [
                             'title' => Yii::t('yii', 'Move to Joined'),
                             'class' => 'swal-info-join',
                             'data' => [
                                 'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/tojoined', 'id' => $model->id]),
+                                'no-link' => "true",
+                            ],
+                        ]) : '';
+                    },
+                    'close' => function ($url, $model) {
+                        return $model->status != 0 ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-close"></span>', '#', [
+                            'title' => Yii::t('yii', 'Close'),
+                            'class' => 'swal-close-confirm',
+                            'data' => [
+                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/close', 'id' => $model->id]),
                                 'no-link' => "true",
                             ],
                         ]) : '';

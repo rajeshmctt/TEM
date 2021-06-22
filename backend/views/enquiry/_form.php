@@ -130,7 +130,7 @@ use yii\helpers\ArrayHelper;
 		<div class="form-group row">
             <div class="col-sm-6">
                 <label class="control-label">Remarks<span class="red-theme">*</span></label>
-            <?= $form->field($model, 'remarks')->textarea(['rows' => 4])->label(false) ?>
+                <?= $form->field($model, 'remarks')->textarea(['rows' => 4])->label(false) ?>
             </div>
             <div class="col-sm-3">
                 <label class="control-label">Owner<span class="red-theme">*</span></label>

@@ -244,7 +244,7 @@ AppAsset::register($this);
     </li>
 	<li class="dropdown site-menu-item has-sub">
         <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("enquiry/index"); ?>">
-            <i class="site-menu-icon md-email" aria-hidden="true"></i>
+            <i class="site-menu-icon md-star-outline" aria-hidden="true"></i>
             <span class="site-menu-title"> Enquiries</span>
 		</a>
     </li>
@@ -258,6 +258,12 @@ AppAsset::register($this);
         <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("enquiry/joined"); ?>">
             <i class="site-menu-icon md-star" aria-hidden="true"></i>
             <span class="site-menu-title"> Confirmed</span>
+		</a>
+    </li>
+	<li class="dropdown site-menu-item has-sub">
+        <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("enquiry/closed"); ?>">
+            <i class="site-menu-icon md-close" aria-hidden="true"></i>
+            <span class="site-menu-title"> Closed Enquiries</span>
 		</a>
     </li>
 	<li class="dropdown site-menu-item has-sub" style="display:none">

@@ -37,10 +37,20 @@ class ProgramController extends Controller
     {
         $searchModel = new ProgramSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model = new Program();
 
+        if ($model->load(Yii::$app->request->post()) ) {
+            // echo "<pre>"; print_r($model); exit;
+            if($model->save()){
+                Yii::$app->getSession()->setFlash('success','Program added successfully');
+                return $this->redirect(['index']);
+            }
+            
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
         ]);
     }
 

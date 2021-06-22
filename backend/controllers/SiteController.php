@@ -6,6 +6,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\Enquiry;
+use backend\models\enums\EnquiryStatusTypes;
 
 /**
  * Site controller
@@ -60,7 +62,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $e_cnt = count((array)Enquiry::find()->where(['status'=>EnquiryStatusTypes::ACTIVE])->all());
+        $p_cnt = count((array)Enquiry::find()->where(['status'=>EnquiryStatusTypes::POTENTIAL])->all());
+        $c_cnt = count((array)Enquiry::find()->where(['status'=>EnquiryStatusTypes::JOINED])->all());
+        // echo $ecnt; exit;
+        return $this->render('index',[
+            'e_cnt' => $e_cnt,
+            'p_cnt' => $p_cnt,
+            'c_cnt' => $c_cnt,
+        ]);
     }
 
     /**
