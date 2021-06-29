@@ -33,6 +33,7 @@ class Location extends \yii\db\ActiveRecord
         return [
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['name'], 'required'],
         ];
     }
 
@@ -43,7 +44,7 @@ class Location extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Country',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

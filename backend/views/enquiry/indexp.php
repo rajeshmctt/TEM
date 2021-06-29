@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\jui\DatePicker;
 use yii\widgets\ActiveForm;
+use backend\models\enums\UserTypes;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\EnquirySearch */
@@ -98,6 +99,13 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'subject',
             // 'referred_by',  //hide
             [
+                'label' => 'Owner',
+                'attribute' => 'owner_id',
+                'value' => function ($model) {
+                    return isset($model->owner_id)?$model->owner0->name:'Not Set';
+                },
+            ],
+            [
                 'format'=> 'raw',
                 'label' => 'Program',
                 'attribute' => 'program_id',
@@ -111,6 +119,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     // return isset($model->program_id)?$model->program->name:'N/A';
                     return $prgs;
+                },
+            ],
+            [
+                'label' => 'Status',
+                'attribute' => 'enq_status',
+                'value' => function ($model) {
+                    return isset($model->enq_status)?UserTypes::$estatus[$model->enq_status]:'N/A';
                 },
             ],
             // 'program_id',

@@ -41,9 +41,13 @@ class ProgramController extends Controller
 
         if ($model->load(Yii::$app->request->post()) ) {
             // echo "<pre>"; print_r($model); exit;
+            $model->tentative_date = strtotime($model->tentative_date);
+            // echo "<pre>"; print_r($model); exit;
             if($model->save()){
                 Yii::$app->getSession()->setFlash('success','Program added successfully');
                 return $this->redirect(['index']);
+            }else{
+                echo "<pre>"; print_r($model->getErrors()); exit;
             }
             
         }

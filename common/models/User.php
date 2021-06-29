@@ -30,6 +30,11 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+	
+    public $old_password;
+    public $new_password;
+    public $confirm_password;
+    public $change_password;
 
 
     /**
@@ -56,7 +61,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-           [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required'],
+           [['username', 'auth_key', 'password_hash', 'email'], 'required'],
            [['status', 'created_at', 'updated_at'], 'integer'],
            [['username', 'full_name', 'password_hash', 'password_reset_token', 'email', 'contact_no', 'verification_token'], 'string', 'max' => 255],
            [['auth_key'], 'string', 'max' => 32],

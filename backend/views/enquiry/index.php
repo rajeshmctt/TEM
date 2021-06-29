@@ -89,13 +89,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //'address',
             // 'owner', //hide
             //'city',
-            /*[
-                'label' => 'Country',
-                'attribute' => 'country_id',
+            [
+                'label' => 'Owner',
+                'attribute' => 'owner_id',
                 'value' => function ($model) {
-                    return isset($model->country_id)?$model->country->name:'Not Set';
+                    return isset($model->owner_id)?$model->owner0->name:'Not Set';
                 },
-            ],*/
+            ],
             'subject',
             [
                 'label' => 'Source',
@@ -110,6 +110,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'program_id',
                 'value' => function ($model) {
                     return isset($model->program_id)?$model->program->name:'N/A';
+                },
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
+            ],
+            [
+                'label' => 'Status',
+                'attribute' => 'enq_status',
+                'value' => function ($model) {
+                    return isset($model->enq_status)?UserTypes::$estatus[$model->enq_status]:'N/A';
                 },
             ],
             // 'program_id',
@@ -189,7 +197,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]) : '';
                     },
                     'joined' => function ($url, $model) {
-                        return ($model->status == 6 ) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-star"></span>', '#', [
+                        return ($model->status == (6 || 10) ) ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-star"></span>', '#', [
                             'title' => Yii::t('yii', 'Move to Joined'),
                             'class' => 'swal-info-join',
                             'data' => [
@@ -201,10 +209,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'close' => function ($url, $model) {
                         return $model->status != 0 ? "&nbsp;&nbsp;&nbsp;" . Html::a('<span class="icon md-close"></span>', '#', [
                             'title' => Yii::t('yii', 'Close'),
-                            'class' => 'swal-close-confirm',
+                            'class' => 'swal-close-confirm2',
                             'data' => [
-                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/close', 'id' => $model->id]),
+                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/close-enquiry', 'id' => $model->id]),
                                 'no-link' => "true",
+                                'key' => $model->id,
                             ],
                         ]) : '';
                     },
@@ -267,13 +276,41 @@ $this->params['breadcrumbs'][] = $this->title;
 				</div>
 			</div>
 		</div>
-			<!--  Create Enquiry modal end-->
+			<!-- md-close Create Enquiry modal end-->
 
             <?php
 
 Yii::$app->view->registerJs("
 
 	$(document).ready(function() {
+
+		$('.swal-close-confirm2').on('click', function() {
+            id = $(this).data('key');
+            swal({
+                title: 'Are you sure?',
+                text: 'You want to Close this record!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: 'Yes, Close it!',
+                closeOnConfirm: true
+            }, function() {
+                $.ajax({
+                    url: '" . Yii::$app->urlManager->createUrl('enquiry/close-enquiry') . "',
+                    data: {id:id},
+                    method: 'GET',
+                    success: function(data) {
+                        $('#modal-content-password').html(data);
+                        $('#mt1').html('Reason for Closing');
+                        $('#examplePasswordPopup').modal('show');
+                    },
+                    error: function(error) {
+                        
+                    }
+                });
+            });
+		});
+        
 		$('#dt').datepicker({
 			/*format: 'dd/mm/yyyy',*/
 			autoclose: true

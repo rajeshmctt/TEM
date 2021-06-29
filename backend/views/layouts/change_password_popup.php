@@ -14,7 +14,7 @@ use common\models\User;
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" class="close-theme">x</span>
                           </button>
-                          <h4 class="modal-title modal-title-theme">Change Password</h4>
+                          <h4 id="mt1" class="modal-title modal-title-theme">Change Password</h4>
                         </div>
 						<div id="modal-content-password"></div>
                         

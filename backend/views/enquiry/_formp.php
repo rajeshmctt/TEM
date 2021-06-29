@@ -110,7 +110,7 @@ use yii\helpers\ArrayHelper;
             </div>
             <div class="col-sm-3">
                 <label class="control-label">Owner<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'owner')->textInput()->label(false) ?>
+                <?= $form->field($model, 'owner_id')->dropDownList($owners, ['options' => [$model->owner_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Owner --'])->label(false) ?>
             </div>
             <div class="col-sm-3">
                 <label class="control-label">City<span class="red-theme">*</span></label>
@@ -124,15 +124,19 @@ use yii\helpers\ArrayHelper;
 		<div class="form-group row">form-material-->
             <div class="col-sm-3">
                 <label class="control-label">Source<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
+                <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['id'=>'source','options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
+            </div>
+            <div class="col-sm-3" id="referred_by" style="<?=$model->source==1?'':'display:none' ?>">
+                <label class="control-label">Referred by<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'referred_by')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3">
                 <label class="control-label">Subject<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'subject')->textInput()->label(false) ?>
             </div>
-            <div class="col-sm-3">
-                <label class="control-label">Referred by<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'referred_by')->textInput()->label(false) ?>
+            <div class="col-sm-3" <?=$model->isNewRecord?'style="display:none"':'' ?>>
+                <label class="control-label">Status</label>
+                <?= $form->field($model, 'enq_status')->dropDownList(UserTypes::$estatus, ['options' => [$model->enq_status => ['Selected' => 'selected']], 'prompt' => ' -- Select Status --'])->label(false) ?>
             </div>
             <div class="col-sm-3" style="display:none">
                 <label class="control-label">Program<span class="red-theme">*</span></label>
@@ -196,10 +200,32 @@ use yii\helpers\ArrayHelper;
 
 
         <div class="form-group row"><!--form-material style="display:none"-->
-            <div class="col-sm-12">
+            <div class="col-sm-12" style="display:none">
                 <label class="control-label">Remarks<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'remarks')->textarea(['rows' => 3])->label(false) ?>
             </div>
+        <div class="col-sm-3">
+                <label class="control-label">Remark date<span class="red-theme">*</span></label>
+                <input type="text" name="Remark[date_of_remark]" id="remark_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="" >
+            </div>
+            <div class="col-sm-9">
+                <label class="control-label">New Remark</label>
+                <div class="form-group field-enquiry-remarks">
+                    <textarea id="remarks" class="form-control" name="Remark[remark]" rows="1" aria-invalid="false"></textarea>
+                </div>            
+            </div>
+<!--
+        </div>
+        <div class="form-group row">form-material-->
+            <div class="col-sm-12" >
+                <label class="control-label">Old Remarks</label>
+                <textarea rows="<?=count($model->enquiryRemarks)?>" style="width:100%; background-color:#ffeebb" readonly>
+                <?php foreach($model->enquiryRemarks as $rem){ ?>
+                    <?= date("m/d/Y",$rem->date).": ".$rem->remarks."\n" ?>
+                <?php } ?>
+                </textarea>
+            </div>
+            
         </div>
         <div class="form-group row"><!--grant-div panel-body-->
                             
@@ -389,6 +415,21 @@ $this->registerJs('
 $(document).ready(function(){
     
 	$("#enquiry_date").datepicker({
+        /*format: "dd/mm/yyyy",*/
+        autoclose: true
+    });
+
+    $("#source").change(function() {
+        console.log("test");
+        var inputVal = $(this).val();
+        if(inputVal==1) {
+            $("#referred_by").show();
+        }else{
+            $("#referred_by").hide();
+        }
+    });
+
+    $("#remark_date").datepicker({
         /*format: "dd/mm/yyyy",*/
         autoclose: true
     });

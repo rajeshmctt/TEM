@@ -7,6 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\Enquiry;
+use common\models\User;
 use backend\models\enums\EnquiryStatusTypes;
 
 /**
@@ -24,11 +25,11 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error','forgot-password', 'reset-password','change-password'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', ''],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -65,12 +66,63 @@ class SiteController extends Controller
         $e_cnt = count((array)Enquiry::find()->where(['status'=>EnquiryStatusTypes::ACTIVE])->all());
         $p_cnt = count((array)Enquiry::find()->where(['status'=>EnquiryStatusTypes::POTENTIAL])->all());
         $c_cnt = count((array)Enquiry::find()->where(['status'=>EnquiryStatusTypes::JOINED])->all());
+        $x_cnt = count((array)Enquiry::find()->where(['status'=>EnquiryStatusTypes::CLOSED])->all());
         // echo $ecnt; exit;
         return $this->render('index',[
             'e_cnt' => $e_cnt,
             'p_cnt' => $p_cnt,
             'c_cnt' => $c_cnt,
+            'x_cnt' => $x_cnt,
         ]);
+    }
+
+    public function actionChangePassword()
+    {
+
+        $password_model = User::findone(Yii::$app->user->identity->id);
+        // $password_model->scenario = 'changepass';
+
+        //if (Yii::$app->request->isAjax && $model->load($_POST))
+        $validationResult = $this->ajaxValidation($password_model);
+        if ($validationResult) {
+            return $validationResult;
+        }
+
+
+        if ($password_model->load(Yii::$app->request->get())) {	//echo "test"; exit;
+            //$password_model->new_password
+            $user = Yii::$app->request->get('User');
+            // echo "<pre>123"; print_r($user['new_password']); exit;
+			// if($password_model->role != UserTypes::COACH){
+			// }
+			// $password_model->setPassword($password_model->new_password);
+			$password_model->setPassword($user['new_password']);
+			// $password_model->save();
+			// echo "<pre>".$password_model->role; print_r($password_model->getErrors()); exit;
+            if ($password_model->save()) {	//echo 1; exit;
+                Yii::$app->getSession()->setFlash('info', 'Password updated successfully');
+                return $this->redirect(Yii::$app->request->referrer);	
+            } else {	//echo 2; exit;
+                return $this->renderAjax('change_password_content', [
+                    'password_model' => $password_model]);
+            }
+        } else {
+
+            return $this->renderPartial('change_password_content', [
+                'password_model' => $password_model
+            ]);
+        }
+
+    }
+
+    private function ajaxValidation($model)
+    {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = "json";
+            return ActiveForm::validate($model);
+        } else {
+            return false;
+        }
     }
 
     /**

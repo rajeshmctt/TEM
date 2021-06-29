@@ -52,16 +52,6 @@ class UserTypes {
         // self::PARTICIPANT => 'Participant',
         // self::FACULTY => 'Faculty',
     ];
-	public static $qtypes = [
-		1 => 'Text',
-		2 => 'Rating',
-	];
-	public static $scale = [
-		1 => '0-5',
-		2 => '0-10',
-		3 => '1-5',
-		4 => '1-10',
-	];
 	public static $cancel = [
 		1 => 'Yes',
 		2 => 'No',
@@ -73,7 +63,31 @@ class UserTypes {
 	public static $sources = [
 		1 => 'Referrer',
 		2 => 'Google ads',
-		3 => 'Ctt',
+		3 => 'Website',
+		4 => 'Direct',
+		5 => 'Others',
+	];
+	public static $invoice = [
+		0=>'Pending',
+		1=>'Raised',
+		2=>'Paid',
+	];
+	public static $fstatus = [
+		0=>'NA',
+		1=>'Joined'
+	];
+	public static $estatus = [
+		0=>'Open',
+		1=>'Not Reachable',
+		2=>'Confirmed',
+		3=>'For Later',
+		4=>'Joined',
+		5=>'Others'
+	];
+	public static $reasons = [
+		0=>'Not Interested',
+		1=>'Joined somewhere else',
+		2=>'Not relevant',
 	];
 	// public static $events1 = [
 		// self::ADD_TO_SYS1 => 'New Participant added',

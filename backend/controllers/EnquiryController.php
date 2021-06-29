@@ -10,10 +10,14 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\Location;
 use common\models\EnquiryBatch;
+use common\models\EnquiryRemarks;
 use common\models\Currency;
 use common\models\Program;
 use common\models\Batch;
 use common\models\Owner;
+use common\models\Country;
+use common\models\State;
+use common\models\City;
 use backend\models\enums\EnquiryStatusTypes;
 use backend\models\enums\UserTypes;
 use PHPExcel;
@@ -159,7 +163,10 @@ class EnquiryController extends Controller
         // echo $add; exit;
         $model = new Enquiry();
         $countries = [];
-        foreach(Location::find()->all() as $ctry){
+        // foreach(Location::find()->all() as $ctry){
+        //     $countries[$ctry->id] = $ctry->name;
+        // }
+        foreach(Country::find()->all() as $ctry){
             $countries[$ctry->id] = $ctry->name;
         }
         $currency = [];
@@ -221,9 +228,19 @@ class EnquiryController extends Controller
     {
         $model = $this->findModel($id);
         $countries = [];
-        foreach(Location::find()->all() as $ctry){
+        foreach(Country::find()->all() as $ctry){
             $countries[$ctry->id] = $ctry->name;
         }
+        $states = [];
+        foreach(State::find()->where(['country_id'=>$model->countries_id])->all() as $state){
+            $states[$state->id] = $state->name;
+        }
+        $cities = [];
+        foreach(City::find()->where(['state_id'=>$model->state_id])->all() as $city){
+            $cities[$city->id] = $city->name;
+        }
+        // echo "<pre>"; print_r($cities); exit;
+
         $currency = [];
         foreach(Currency::find()->all() as $crr){
             $currency[$crr->id] = $crr->name;
@@ -247,6 +264,7 @@ class EnquiryController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->date_of_enquiry = strtotime($model->date_of_enquiry);
             // if($model->l1_batch==0){
+            // echo "<pre>"; print_r($model->date_of_enquiry); exit;
             //     $model->l1_batch = NULL;
             // }
             // if($model->l2_batch==0){
@@ -255,7 +273,20 @@ class EnquiryController extends Controller
             // if($model->l3_batch==0){
             //     $model->l3_batch = NULL;
             // }
+            $remark = Yii::$app->request->post('Remark');
+            // echo "<pre>"; print_r($remark); exit;
             if($model->save()){
+                if($remark['date_of_remark']!=''){
+                    $remark_m = new EnquiryRemarks();
+                    $remark_m->date = strtotime($remark['date_of_remark']);
+                    $remark_m->remarks = $remark['remark'];
+                    $remark_m->enquiry_id = $model->id;
+                    if($remark_m->save()){
+    
+                    }else{
+                        echo "1<pre>"; print_r($remark_m->getErrors()); exit;
+                    }
+                }
                 // return $this->redirect(['index']);
 		        Yii::$app->getSession()->setFlash('success','Record Updated successfully');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -267,6 +298,8 @@ class EnquiryController extends Controller
         return $this->render('update', [
             'model' => $model,
             'countries' => $countries,
+            'states' => $states,
+            'cities' => $cities,
             'currency' => $currency,
             'programs' => $programs,
             'pbatches' => $pbatches,
@@ -307,6 +340,11 @@ class EnquiryController extends Controller
             $pbatches[$pbt->id] = $pbt->name;
         }
         $doe = $model->date_of_enquiry;
+        $owners_m = Owner::find()->all();
+        $owners =[];
+        foreach($owners_m as $owner){
+            $owners[$owner->id] = $owner->name;
+        }
         if ($model->load(Yii::$app->request->post())) {
             if($model->date_of_enquiry != ''){
                 $model->date_of_enquiry = $doe;
@@ -357,7 +395,19 @@ class EnquiryController extends Controller
             // if($model->l3_batch==0){
             //     $model->l3_batch = NULL;
             // }
+            $remark = Yii::$app->request->post('Remark');
             if($model->save()){
+                if($remark['date_of_remark']!=''){
+                    $remark_m = new EnquiryRemarks();
+                    $remark_m->date = strtotime($remark['date_of_remark']);
+                    $remark_m->remarks = $remark['remark'];
+                    $remark_m->enquiry_id = $model->id;
+                    if($remark_m->save()){
+
+                    }else{
+                        echo "<pre>"; print_r($remark_m->getErrors()); exit;
+                    }
+                }
                 // return $this->redirect(['index']);
 		        Yii::$app->getSession()->setFlash('success','Record Updated successfully');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -375,7 +425,47 @@ class EnquiryController extends Controller
             'pbatches' => $pbatches,
             'batches' => $batches,
             'pgcount' => $pgcount,
+            'owners' => $owners,
         ]);
+    }
+
+    public function actionCloseEnquiry($id)
+    {
+
+        $e_model = Enquiry::findone($id);
+        // echo  "<pre>123"; print_r($e_model); exit;
+        if ($e_model->load(Yii::$app->request->get())) {	//echo "test"; exit;
+            //$password_model->new_password
+            
+
+            if($e_model->status == 2)
+            {
+                $e_model->status = 10;
+                if($e_model->save())
+                {
+                    Yii::$app->getSession()->setFlash('success','Record Moved to Enquiries successfully');
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+            }else{
+                $e_model->status = 2;
+                if($e_model->save())
+                {
+                    Yii::$app->getSession()->setFlash('error','Enquiry closed successfully');
+                    return $this->redirect(Yii::$app->request->referrer);
+                    // echo "<pre>"; print_r($this->redirect(Yii::$app->request->referrer)); exit;
+                }else {	//echo 2; exit;
+                    return $this->renderAjax('change_password_content', [
+                        'e_model' => $e_model]);
+                }
+            }
+
+        } else {
+
+            return $this->renderPartial('close_enquiry_content', [
+                'e_model' => $e_model
+            ]);
+        }
+
     }
 
     /**
@@ -410,8 +500,16 @@ class EnquiryController extends Controller
             $pbatches[0] = '--Select Batch--';
             $pbatches[$pbt->id] = $pbt->name;
         }
+        $doe = $model->date_of_enquiry;
+        $owners_m = Owner::find()->all();
+        $owners =[];
+        foreach($owners_m as $owner){
+            $owners[$owner->id] = $owner->name;
+        }
         if ($model->load(Yii::$app->request->post())) {
-            $model->date_of_enquiry = strtotime($model->date_of_enquiry);
+            if($model->date_of_enquiry != ''){
+                $model->date_of_enquiry = $doe;
+            }
 
             $enquiries = Yii::$app->request->post('Enquiry');
 			// echo'<pre>'; print_r($enquiries); exit;	
@@ -458,7 +556,15 @@ class EnquiryController extends Controller
             // if($model->l3_batch==0){
             //     $model->l3_batch = NULL;
             // }
+            $remark = Yii::$app->request->post('Remark');
             if($model->save()){
+                if($remark['date_of_remark']!=''){
+                    $remark_m = new EnquiryRemarks();
+                    $remark_m->date = strtotime($remark['date_of_remark']);
+                    $remark_m->remarks = $remark['remark'];
+                    $remark_m->enquiry_id = $model->id;
+                    $remark_m->save();
+                }
                 // return $this->redirect(['index']);
 		        Yii::$app->getSession()->setFlash('success','Record Updated successfully');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -476,6 +582,7 @@ class EnquiryController extends Controller
             'myprograms' => $myprograms,
             'batches' => $batches,
             'pgcount' => $pgcount,
+            'owners' => $owners,
         ]);
     }
 	
@@ -682,6 +789,36 @@ class EnquiryController extends Controller
         }
         
         return $this->redirect(['index']);
+    }
+    
+	public function actionSearchForStates()
+    {
+        $country = yii::$app->request->get('country');
+        //echo "<pre>"; print_r($action_steps); exit;
+        $out = [];
+        if($country != '') {
+            $states = State::find()->where(['country_id' => $country])->all();
+            $out[] = 'Select a State';
+            foreach ($states as $val) {
+                $out[$val->id] = $val->name;
+            }
+		}
+        return json_encode($out);
+    }
+    
+	public function actionSearchForCities()
+    {
+        $state = yii::$app->request->get('state');
+        //echo "<pre>"; print_r($action_steps); exit;
+        $out = [];
+        if($state != '') {
+            $cities = City::find()->where(['state_id' => $state])->all();
+            $out[] = 'Select a City';
+            foreach ($cities as $val) {
+                $out[$val->id] = $val->name;
+            }
+		}
+        return json_encode($out);
     }
 
     /**

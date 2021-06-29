@@ -66,6 +66,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <?php // $form->field($model, 'name')->textInput(['id' => 'locationname'])->label(false) ?>
                                                                 <h5 class="loc-error red-theme">Location cannnot be blank</h5>
                                                             </div>
+                                        <div class="col-sm-3">
+                                            <label class="control-label">Hours<span class="red-theme">*</span></label>
+                                            <?= $form->field($model, 'hours')->textInput(['type' => 'number'])->label(false) ?>
+                                        </div>
+                                        <div class="col-sm-3">    
+                                            <label class="control-label">Tentative Date<span class="red-theme">*</span></label>
+                                            <input type="text" name="Program[tentative_date]" id="tentative_date" class="form-control" data-provide="datepicker" placeholder="Tentative Date" value="<?=isset($model->tentative_date)? date("m/d/Y",$model->tentative_date):''?>" >
+                                        </div>
                                                             <div class="col-sm-2">
                                                                 <?= Html::submitButton('Add', ['class' => 'btn btn-success pull-right', 'id' => 'sub_location']) ?>
                                                             </div>
@@ -87,8 +95,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
             // 'id',
             'name',
-            // 'created_at',
-            // 'updated_at',
+            // 'hours',
+            [
+                'label' => 'Hours',
+                'attribute' => 'hours',
+                'value' => function ($model) {
+                    return isset($model->hours)?$model->hours:'';
+                },
+            ],
+            // 'tentative_date',
+            [
+                'label' => 'Tentative Date',
+                'attribute' => 'tentative_date',
+                'value' => function ($model) {
+                    return isset($model->tentative_date)?date('m/d/Y',$model->tentative_date):'';
+                },
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
@@ -114,6 +136,11 @@ Yii::$app->view->registerJs("
 	$(document).ready(function() {
         $('.con-error').hide();
         $('.loc-error').hide();
+        
+    $('#tentative_date').datepicker({
+        /*format: 'dd/mm/yyyy',*/
+        autoclose: true
+    });
 
 $('#addRowBtn').click(function(e) {
 		      $('#location').animate( { height: 'toggle' }, 800, 'linear' )

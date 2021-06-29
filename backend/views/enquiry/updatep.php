@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'pbatches' => $pbatches,
 		'batches' => $batches,
 		'pgcount' => $pgcount,
+        'owners' => $owners,
     ]) ?>
 
 </div>

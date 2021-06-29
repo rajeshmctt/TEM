@@ -91,23 +91,56 @@ use yii\helpers\ArrayHelper;
                 <?= $form->field($model, 'address')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">City<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'city')->textInput()->label(false) ?>
+                <label class="control-label">Country<span class="red-theme">*</span></label>
+                <!--<?//= $form->field($model, 'country_id')->dropDownList($countries, ['options' => [$model->country_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Country --'])->label(false) ?>-->
+                <?= Select2::widget([
+						'name' => 'Enquiry[countries_id]',
+						'id' => 'coun',
+                        'value' => isset($model->countries_id)?$model->countries_id:'', // initial value
+						'data' => $countries,
+						'options' => ['placeholder' => 'Select a Country','class'=>'country'],
+						'pluginOptions' => [
+							'tags' => true,
+							//'multiple' => 'true',
+							'tokenSeparators' => [',', ' '],
+							'maximumInputLength' => 20,
+						],
+					]); ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Country<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'country_id')->dropDownList($countries, ['options' => [$model->country_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Country --'])->label(false) ?>
+                <label class="control-label">State<span class="red-theme">*</span></label>
+                    <?= Select2::widget([
+                        'name' => 'Enquiry[state_id]',
+                        'id' => 'stat',
+                        'value' => isset($model->state_id)?$model->state_id:'', // initial value
+                        'data' => (count((array)$states)!=0)?$states:[],
+                        'options' => ['placeholder' => 'Select a State','class'=>'stat'],
+                        'pluginOptions' => [
+                            'tags' => true,
+                            //'multiple' => 'true',
+                            'tokenSeparators' => [',', ' '],
+                            'maximumInputLength' => 20,
+                        ],
+                    ]); ?>
+            </div>
+            <div class="col-sm-3">
+                <label class="control-label">City<span class="red-theme">*</span></label>                
+                <?= Select2::widget([
+                        'name' => 'Enquiry[city_id]',
+                        'id' => 'city',
+                        'value' => isset($model->city_id)?$model->city_id:'', // initial value
+                        'data' => isset($model->state_id)?$cities:[],
+                        'options' => ['placeholder' => 'Select a City','class'=>'city'],
+                        'pluginOptions' => [
+                            'tags' => true,
+                            //'multiple' => 'true',
+                            'tokenSeparators' => [',', ' '],
+                            'maximumInputLength' => 20,
+                        ],
+                    ]); ?>
             </div>
         </div>
 		<div class="form-group row"><!--form-material-->
-            <div class="col-sm-3">
-                <label class="control-label">Source<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['id'=>'source','options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
-            </div>
-            <div class="col-sm-3" id="referred_by" style="<?=$model->source==1?'':'display:none' ?>">
-                <label class="control-label">Referred by<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'referred_by')->textInput()->label(false) ?>
-            </div>
             <div class="col-sm-3">
                 <label class="control-label">Program<span class="red-theme">*</span></label>
                 <?php
@@ -125,13 +158,17 @@ use yii\helpers\ArrayHelper;
                 ?>
                 <!--<?//= $form->field($model, 'program_id')->dropDownList($programs, ['options' => [$model->program_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Program --'])->label(false) ?>-->
             </div>
+            <div class="col-sm-3">
+                <label class="control-label">Source<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['id'=>'source','options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
+            </div>
+            <div class="col-sm-3" id="referred_by" style="<?=$model->source==1?'':'display:none' ?>">
+                <label class="control-label">Referred by<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'referred_by')->textInput()->label(false) ?>
+            </div>
 
         </div>
 		<div class="form-group row">
-            <div class="col-sm-6">
-                <label class="control-label">Remarks<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'remarks')->textarea(['rows' => 4])->label(false) ?>
-            </div>
             <div class="col-sm-3">
                 <label class="control-label">Owner<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'owner_id')->dropDownList($owners, ['options' => [$model->owner_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Owner --'])->label(false) ?>
@@ -140,10 +177,55 @@ use yii\helpers\ArrayHelper;
                 <label class="control-label">Subject<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'subject')->textInput()->label(false) ?>
             </div>
+            <div class="col-sm-3" <?=$model->isNewRecord?'style="display:none"':'' ?>>
+                <label class="control-label">Status</label>
+                <?= $form->field($model, 'enq_status')->dropDownList(UserTypes::$estatus, ['options' => [$model->enq_status => ['Selected' => 'selected']], 'prompt' => ' -- Select Status --'])->label(false) ?>
+            </div>
 
         </div>
-        <div class="form-group row"><!--form-material-->
+		<div class="form-group row" <?=$model->isNewRecord?'style="display:none"':'' ?>>
+            <div class="col-sm-6" style="display:none">
+                <label class="control-label">Remarks<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'remarks')->textarea(['rows' => 4])->label(false) ?>
+            </div>
 
+            <div class="col-sm-3">
+                <label class="control-label">Remark date<span class="red-theme">*</span></label>
+                <input type="text" name="Remark[date_of_remark]" id="remark_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="" >
+            </div>
+            <div class="col-sm-9">
+                <label class="control-label">New Remark</label>
+                <div class="form-group field-enquiry-remarks">
+                    <textarea id="remarks" class="form-control" name="Remark[remark]" rows="1" aria-invalid="false"></textarea>
+                </div>            
+            </div>
+<!--
+        </div>
+        <div class="form-group row">form-material-->
+            <div class="col-sm-12" >
+                <label class="control-label">Remarks</label>
+                <textarea style="width:100%" readonly>
+                <?php foreach($model->enquiryRemarks as $rem){ ?>
+                    <?= date("m/d/Y",$rem->date).": ".$rem->remarks."\n" ?>
+                <?php } ?>
+                </textarea>
+            </div>
+        <table class="table table-striped table-bordered" style="display:none">
+            <thead>
+                <tr>
+                    <th style="width=20%">Date</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($model->enquiryRemarks as $rem){ ?>
+                <tr>
+                    <td><?= $rem->date ?></td>
+                    <td><?= $rem->remarks ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
         </div>
         <div class="form-group form-material">
             <?= Html::submitButton($model->isNewRecord?'Add':'Update', ['class' => 'btn btn-success pull-right btn_client_add']) ?>
@@ -189,6 +271,49 @@ $this->registerJs('
 	}
 $(document).ready(function(){
     
+		$("#coun").change(function(){
+			var country = $(this).val();
+			console.log(country);
+			$.ajax({
+				url: "' . Yii::$app->getUrlManager()->createUrl(["enquiry/search-for-states"]) . '",
+				data: {country:country},
+				type:"get",
+				success: function (data) {
+					var obj = JSON.parse(data);
+					//alert(obj.results);
+					console.log(data);
+					console.log(data);
+					$("#stat").find("option").remove();
+					$.each(obj, function(key,value) {
+						var key_string = JSON.stringify(key);
+						$("#stat").append("<option value="+key_string+">"+value+"</option>");
+					});
+				}
+			});
+
+		});
+		$("#stat").change(function(){
+			var state = $(this).val();
+			console.log(state);
+			$.ajax({
+				url: "' . Yii::$app->getUrlManager()->createUrl(["enquiry/search-for-cities"]) . '",
+				data: {state:state},
+				type:"get",
+				success: function (data) {
+					var obj = JSON.parse(data);
+					//alert(obj.results);
+					console.log(data);
+					console.log(data);
+					$("#city").find("option").remove();
+					$.each(obj, function(key,value) {
+						var key_string = JSON.stringify(key);
+						$("#city").append("<option value="+key_string+">"+value+"</option>");
+					});
+				}
+			});
+
+		});
+
     $("#source").change(function() {
         console.log("test");
         var inputVal = $(this).val();
@@ -200,6 +325,11 @@ $(document).ready(function(){
     });
 
     $("#enquiry_date").datepicker({
+        /*format: "dd/mm/yyyy",*/
+        autoclose: true
+    });
+
+    $("#remark_date").datepicker({
         /*format: "dd/mm/yyyy",*/
         autoclose: true
     });

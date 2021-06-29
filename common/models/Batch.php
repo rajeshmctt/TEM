@@ -34,6 +34,7 @@ class Batch extends \yii\db\ActiveRecord
         return [
             [['program_id', 'start_date', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 50],
+            [['program_id', 'name'], 'required'],
             [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => Program::className(), 'targetAttribute' => ['program_id' => 'id']],
         ];
     }

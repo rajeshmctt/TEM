@@ -6,12 +6,26 @@ use yii\helpers\Html;
 /* @var $model common\models\User */
 
 $this->title = 'Create User';
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['user/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-create">
+<div class="page enquiry-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+	<?php if(!Yii::$app->request->isAjax){?>
+		<div class="page-header">
+			<h1 class="page-title"><?= Html::encode($this->title) ?></h1>
+			<ol class="breadcrumb">
+				<li><a href="<?= Yii::$app->urlManager->createAbsoluteUrl("site/index");?>" data-link-to='site'>Home</a></li>
+				<?php foreach($this->params['breadcrumbs'] as $k=>$v){
+					if(isset($v['label'])){
+						echo "<li><a href=".Yii::$app->urlManager->createAbsoluteUrl($v['url'])." data-link-to='enquiry-index'>".$v['label']."</a></li>";
+					}else{
+						echo "<li class='active'>$v</li>";
+					}
+				}?>
+			</ol>
+		</div>
+	<?php }?>
 
     <?= $this->render('_form', [
         'model' => $model,

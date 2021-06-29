@@ -5,6 +5,7 @@ namespace common\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\User;
+use backend\models\enums\UserTypes;
 
 /**
  * UserSearch represents the model behind the search form of `common\models\User`.
@@ -40,7 +41,7 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find();
+        $query = User::find()->where(['role' => UserTypes::CLIENT]);
 
         // add conditions that should always apply here
 

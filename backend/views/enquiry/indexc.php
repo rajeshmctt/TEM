@@ -99,6 +99,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'referred_by',  //hide
             [
+                'label' => 'Owner',
+                'attribute' => 'owner_id',
+                'value' => function ($model) {
+                    return isset($model->owner_id)?$model->owner0->name:'Not Set';
+                },
+            ],
+            [
                 'label' => 'Program',
                 'attribute' => 'program_id',
                 'value' => function ($model) {

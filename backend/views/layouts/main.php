@@ -152,7 +152,7 @@ AppAsset::register($this);
                     echo "Admin";
                 } else {
                     ?>
-                    <?= Yii::$app->user->identity->first_name;
+                    <?= Yii::$app->user->identity->full_name;
                 } ?>
                 </span>
                     </a>
@@ -211,7 +211,7 @@ AppAsset::register($this);
     </a>
 </li>
 
-<?php if (Yii::$app->user->identity->role == UserTypes::SUPER_ADMIN) {  ?>
+<?php if (Yii::$app->user->identity->role == (UserTypes::SUPER_ADMIN || UserTypes::CLIENT)) {  ?>
 	<li class="dropdown site-menu-item has-sub" style="display:none">
         <a class="dropdown-toggle" href="javascript:void(0)" data-dropdown-toggle="false">
             <i class="site-menu-icon md-account-box" aria-hidden="true"></i>
@@ -266,15 +266,21 @@ AppAsset::register($this);
             <span class="site-menu-title"> Closed Enquiries</span>
 		</a>
     </li>
-	<li class="dropdown site-menu-item has-sub" style="display:none">
+<?php } ?>
+
+<?php if (Yii::$app->user->identity->role == UserTypes::SUPER_ADMIN) { ?>
+	<li class="dropdown site-menu-item has-sub">
         <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("user/index"); ?>">
-            <i class="site-menu-icon md-city" aria-hidden="true"></i>
+            <i class="site-menu-icon md-account-circle" aria-hidden="true"></i>
             <span class="site-menu-title"> Users</span>
 		</a>
     </li>
+<?php } ?>
+
+<?php if (Yii::$app->user->identity->role == (UserTypes::SUPER_ADMIN || UserTypes::CLIENT) ) { ?>
 	<li class="dropdown site-menu-item has-sub">
         <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("program/index"); ?>">
-            <i class="site-menu-icon md-city" aria-hidden="true"></i>
+            <i class="site-menu-icon md-desktop-mac" aria-hidden="true"></i>
             <span class="site-menu-title"> Program</span>
 		</a>
     </li>
@@ -285,11 +291,8 @@ AppAsset::register($this);
 		</a>
     </li>
 	
-<?php } ?>
-
-<?php if (Yii::$app->user->identity->role == UserTypes::SUPER_ADMIN) { ?>
     <!--RDM 3-10-19 hide events menu-->
-	<li class="site-menu-item">
+	<li class="site-menu-item" style="display:none">
 		<a href="<?= Yii::$app->urlManager->createAbsoluteUrl("location/index"); ?>">
 			<i class="site-menu-icon md-archive" aria-hidden="true"></i>
 			<span class="site-menu-title">Country</span>
@@ -301,16 +304,12 @@ AppAsset::register($this);
 			<span class="site-menu-title">Currency</span>
 		</a>
 	</li>
-<?php } ?>
-
-<?php if (Yii::$app->user->identity->role == UserTypes::CLIENT) { ?>
-    <li class="dropdown site-menu-item has-sub">
-        <a class="dropdown-toggle" href="javascript:void(0)" data-dropdown-toggle="false">
-            <i class="site-menu-icon md-balance" aria-hidden="true"></i>
-            <span class="site-menu-title">Events</span>
-            <span class="site-menu-arrow"></span>
-        </a>
-    </li>
+	<li class="site-menu-item">
+		<a href="#">
+			<i class="site-menu-icon md-assignment" aria-hidden="true"></i>
+			<span class="site-menu-title">Reports</span>
+		</a>
+	</li>
 <?php } ?>
 
 <?php if (Yii::$app->user->identity->role == UserTypes::CLIENT) { ?>

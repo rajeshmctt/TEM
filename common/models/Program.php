@@ -9,6 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property string|null $name
+* @property int|null $tentative_date 
+* @property int|null $hours 
  * @property int|null $created_at
  * @property int|null $updated_at
  *
@@ -33,8 +35,9 @@ class Program extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'updated_at'], 'integer'],
+            [['tentative_date', 'hours', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['name'], 'required'],
         ];
     }
 
@@ -45,7 +48,9 @@ class Program extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Program',
+            'tentative_date' => 'Tentative Date',
+            'hours' => 'Hours',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
