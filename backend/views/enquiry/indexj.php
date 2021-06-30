@@ -72,20 +72,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             // 'id',
             // 'date_of_enquiry',
             [
-                // 'label' => 'Program',
+                'label' => 'Enquiry Date',
                 'attribute' => 'date_of_enquiry',
                 'value' => function ($model) {
                     return date('M-d-Y',$model->date_of_enquiry);
                 },
             ],
-            'full_name',
+            [
+                'label' => 'Name',
+                'attribute' => 'full_name',
+            ],
             // 'contact_no',
             // 'email:email',
             //'address',
@@ -106,6 +109,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],*/
             //'source',
+            [
+                'label' => 'Country',
+                'attribute' => 'countries_id',
+                'value' => function ($model) {
+                    return isset($model->countries_id)?$model->countries->name:'';
+                },
+            ],
             'subject',
             // 'referred_by',  //hide
             [

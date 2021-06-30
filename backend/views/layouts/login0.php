@@ -16,6 +16,7 @@ $this->beginPage() ?>
 <html class="no-js css-menubar" lang="en">
 <!-- Mirrored from urban.nyasha.me/html/extras-signin.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 03 Dec 2015 12:49:02 GMT -->
 <head>
+	<base target="_parent">
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="" name="description">
@@ -97,7 +98,7 @@ $this->beginPage() ?>
 			  <footer class="page-copyright page-copyright-inverse">
 				<!--<p>WEBSITE BY amazingSurge</p>-->
 				<p>© <?= date('Y'); ?>. All RIGHT RESERVED.</p>
-				<div class="social">
+				<!--<div class="social">
 				  <a class="btn btn-icon btn-pure" href="javascript:void(0)">
 					<i class="icon bd-twitter" aria-hidden="true"></i>
 				  </a>
@@ -107,7 +108,7 @@ $this->beginPage() ?>
 				  <a class="btn btn-icon btn-pure" href="javascript:void(0)">
 					<i class="icon bd-google-plus" aria-hidden="true"></i>
 				  </a>
-				</div>
+				</div>--><!--RDM 3-10-2019 hide-->
 			  </footer>
 			</div>
 			

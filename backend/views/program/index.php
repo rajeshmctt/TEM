@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -112,7 +112,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update}&nbsp;&nbsp;{delete}'
+            ],
         ],
     ]); ?>
 

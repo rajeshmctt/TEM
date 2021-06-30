@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -88,11 +88,18 @@ $this->params['breadcrumbs'][] = $this->title;
             //'address',
             // 'owner', //hide
             //'city',
-            [
+            /*[
                 'label' => 'Country',
                 'attribute' => 'country_id',
                 'value' => function ($model) {
                     return isset($model->country_id)?$model->country->name:'Not Set';
+                },
+            ],*/
+            [
+                'label' => 'Country',
+                'attribute' => 'countries_id',
+                'value' => function ($model) {
+                    return isset($model->countries_id)?$model->countries->name:'';
                 },
             ],
             //'source',

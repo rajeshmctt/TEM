@@ -163,12 +163,14 @@ class EnquiryController extends Controller
         // echo $add; exit;
         $model = new Enquiry();
         $countries = [];
-        // foreach(Location::find()->all() as $ctry){
-        //     $countries[$ctry->id] = $ctry->name;
-        // }
         foreach(Country::find()->all() as $ctry){
             $countries[$ctry->id] = $ctry->name;
         }
+        // foreach(Location::find()->all() as $ctry){
+        //     $countries[$ctry->id] = $ctry->name;
+        // }
+        $states = [];
+        $cities = [];
         $currency = [];
         foreach(Currency::find()->all() as $crr){
             $currency[$crr->id] = $crr->name;
@@ -187,6 +189,8 @@ class EnquiryController extends Controller
         // echo $link; exit; 
         if ($model->load(Yii::$app->request->post())) {
             $model->date_of_enquiry = strtotime($model->date_of_enquiry);
+            //default enq_status on create = open
+            $model->enq_status = 0;
             /*if($model->l1_batch==0){
                 $model->l1_batch = NULL;
             }
@@ -208,6 +212,8 @@ class EnquiryController extends Controller
         return $this->render('create', [
             'model' => $model,
             'countries' => $countries,
+            'states' => $states,
+            'cities' => $cities,
             'currency' => $currency,
             'programs' => $programs,
             'pbatches' => $pbatches,

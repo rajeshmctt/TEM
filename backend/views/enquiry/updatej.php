@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model common\models\Enquiry */
 
 $this->title = 'Update Joined User: ' . $model->full_name;
-$this->params['breadcrumbs'][] = ['label' => 'Enquiries', 'url' => ['enquiry/joined']];
+$this->params['breadcrumbs'][] = ['label' => 'Confirmed Participants', 'url' => ['enquiry/joined']];
 // $this->params['breadcrumbs'][] = ['label' => 'Ann '.$model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
