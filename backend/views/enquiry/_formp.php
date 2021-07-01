@@ -108,20 +108,65 @@ use yii\helpers\ArrayHelper;
                 <label class="control-label">Address<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'address')->textInput()->label(false) ?>
             </div>
-            <div class="col-sm-3">
-                <label class="control-label">Owner<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'owner_id')->dropDownList($owners, ['options' => [$model->owner_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Owner --'])->label(false) ?>
-            </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" style="display:none">
                 <label class="control-label">City<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'city')->textInput()->label(false) ?>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" style="display:none">
                 <label class="control-label">Country<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'country_id')->dropDownList($countries, ['options' => [$model->country_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Country --'])->label(false) ?>
             </div>
-        <!--</div>
-		<div class="form-group row">form-material-->
+            <div class="col-sm-3">
+                <label class="control-label">Country<span class="red-theme">*</span></label>
+                <!--<?//= $form->field($model, 'country_id')->dropDownList($countries, ['options' => [$model->country_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Country --'])->label(false) ?>-->
+                <?= Select2::widget([
+						'name' => 'Enquiry[countries_id]',
+						'id' => 'coun',
+                        'value' => isset($model->countries_id)?$model->countries_id:'', // initial value
+						'data' => $countries,
+						'options' => ['placeholder' => 'Select a Country','class'=>'country'],
+						'pluginOptions' => [
+							'tags' => true,
+							//'multiple' => 'true',
+							'tokenSeparators' => [',', ' '],
+							'maximumInputLength' => 20,
+						],
+					]); ?>
+            </div>
+            <div class="col-sm-3">
+                <label class="control-label">State<span class="red-theme">*</span></label>
+                    <?= Select2::widget([
+                        'name' => 'Enquiry[state_id]',
+                        'id' => 'stat',
+                        'value' => isset($model->state_id)?$model->state_id:'', // initial value
+                        'data' => (count((array)$states)!=0)?$states:[],
+                        'options' => ['placeholder' => 'Select a State','class'=>'stat'],
+                        'pluginOptions' => [
+                            'tags' => true,
+                            //'multiple' => 'true',
+                            'tokenSeparators' => [',', ' '],
+                            'maximumInputLength' => 20,
+                        ],
+                    ]); ?>
+            </div>
+            <div class="col-sm-3">
+                <label class="control-label">City<span class="red-theme">*</span></label>                
+                <?= Select2::widget([
+                        'name' => 'Enquiry[city_id]',
+                        'id' => 'city',
+                        'value' => isset($model->city_id)?$model->city_id:'', // initial value
+                        'data' => isset($model->state_id)?$cities:[],
+                        'options' => ['placeholder' => 'Select a City','class'=>'city'],
+                        'pluginOptions' => [
+                            'tags' => true,
+                            //'multiple' => 'true',
+                            'tokenSeparators' => [',', ' '],
+                            'maximumInputLength' => 20,
+                        ],
+                    ]); ?>
+            </div>
+        </div>
+		<div class="form-group row form-material">
             <div class="col-sm-3">
                 <label class="control-label">Source<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['id'=>'source','options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
@@ -137,6 +182,10 @@ use yii\helpers\ArrayHelper;
             <div class="col-sm-3" <?=$model->isNewRecord?'style="display:none"':'' ?>>
                 <label class="control-label">Status</label>
                 <?= $form->field($model, 'enq_status')->dropDownList(UserTypes::$estatus, ['options' => [$model->enq_status => ['Selected' => 'selected']], 'prompt' => ' -- Select Status --'])->label(false) ?>
+            </div>
+            <div class="col-sm-3">
+                <label class="control-label">Owner<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'owner_id')->dropDownList($owners, ['options' => [$model->owner_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Owner --'])->label(false) ?>
             </div>
             <div class="col-sm-3" style="display:none">
                 <label class="control-label">Program<span class="red-theme">*</span></label>
@@ -414,6 +463,49 @@ $this->registerJs('
 	}
 $(document).ready(function(){
     
+		$("#coun").change(function(){
+			var country = $(this).val();
+			console.log(country);
+			$.ajax({
+				url: "' . Yii::$app->getUrlManager()->createUrl(["enquiry/search-for-states"]) . '",
+				data: {country:country},
+				type:"get",
+				success: function (data) {
+					var obj = JSON.parse(data);
+					//alert(obj.results);
+					console.log(data);
+					console.log(data);
+					$("#stat").find("option").remove();
+					$.each(obj, function(key,value) {
+						var key_string = JSON.stringify(key);
+						$("#stat").append("<option value="+key_string+">"+value+"</option>");
+					});
+				}
+			});
+
+		});
+		$("#stat").change(function(){
+			var state = $(this).val();
+			console.log(state);
+			$.ajax({
+				url: "' . Yii::$app->getUrlManager()->createUrl(["enquiry/search-for-cities"]) . '",
+				data: {state:state},
+				type:"get",
+				success: function (data) {
+					var obj = JSON.parse(data);
+					//alert(obj.results);
+					console.log(data);
+					console.log(data);
+					$("#city").find("option").remove();
+					$.each(obj, function(key,value) {
+						var key_string = JSON.stringify(key);
+						$("#city").append("<option value="+key_string+">"+value+"</option>");
+					});
+				}
+			});
+
+		});
+
 	$("#enquiry_date").datepicker({
         /*format: "dd/mm/yyyy",*/
         autoclose: true

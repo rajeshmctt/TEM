@@ -120,7 +120,7 @@ AppAsset::register($this);
         title="Remark">-->
             <img class="navbar-brand-logo navbar-brand-logo-special"
                  src="<?= Yii::$app->urlManager->baseUrl; ?>/images/logo_new.jpg"
-                 title="Slot Scheduler">
+                 title="Training Enquiry Mangement">
 			<!--<h3>Slot Scheduler</h3>-->
         </a>
     </div>

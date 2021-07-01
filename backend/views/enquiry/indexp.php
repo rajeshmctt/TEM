@@ -169,7 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return $model->status == 10 ? Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry/update', 'id' => $model->id]), [
-                            'title' => Yii::t('yii', 'Update'),
+                            'title' => Yii::t('yii', 'View'),
                             'data' => [
                                 'link-to' => 'user-update',
                             ],
@@ -177,7 +177,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'updatep' => function ($url, $model) {
                         return $model->status == 6 ? Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry/updatep', 'id' => $model->id]), [
-                            'title' => Yii::t('yii', 'Update'),
+                            'title' => Yii::t('yii', 'View'),
                             'data' => [
                                 'link-to' => 'user-update',
                             ],
@@ -185,7 +185,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'updatej' => function ($url, $model) {
                         return $model->status == 3 ? Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry/updatej', 'id' => $model->id]), [
-                            'title' => Yii::t('yii', 'Update'),
+                            'title' => Yii::t('yii', 'View'),
                             'data' => [
                                 'link-to' => 'user-update',
                             ],

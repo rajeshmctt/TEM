@@ -328,9 +328,21 @@ class EnquiryController extends Controller
         $pgcount = count($batches); 
         // echo "<pre>"; print_r($batches); exit;
         $countries = [];
-        foreach(Location::find()->all() as $ctry){
+        // $countries = [];
+        foreach(Country::find()->all() as $ctry){
             $countries[$ctry->id] = $ctry->name;
         }
+        $states = [];
+        foreach(State::find()->where(['country_id'=>$model->countries_id])->all() as $state){
+            $states[$state->id] = $state->name;
+        }
+        $cities = [];
+        foreach(City::find()->where(['state_id'=>$model->state_id])->all() as $city){
+            $cities[$city->id] = $city->name;
+        }
+        // foreach(Location::find()->all() as $ctry){
+        //     $countries[$ctry->id] = $ctry->name;
+        // }
         $currency = [];
         foreach(Currency::find()->all() as $crr){
             $currency[$crr->id] = $crr->name;
@@ -425,6 +437,8 @@ class EnquiryController extends Controller
         return $this->render('updatep', [
             'model' => $model,
             'countries' => $countries,
+            'states' => $states,
+            'cities' => $cities,
             'currency' => $currency,
             'programs' => $programs,
             'myprograms' => $myprograms,
@@ -489,9 +503,20 @@ class EnquiryController extends Controller
         $pgcount = count($batches); 
         // echo "<pre>"; print_r($model->enquiryBatches[0]->batch->name); exit;
         $countries = [];
-        foreach(Location::find()->all() as $ctry){
+        foreach(Country::find()->all() as $ctry){
             $countries[$ctry->id] = $ctry->name;
         }
+        $states = [];
+        foreach(State::find()->where(['country_id'=>$model->countries_id])->all() as $state){
+            $states[$state->id] = $state->name;
+        }
+        $cities = [];
+        foreach(City::find()->where(['state_id'=>$model->state_id])->all() as $city){
+            $cities[$city->id] = $city->name;
+        }
+        // foreach(Location::find()->all() as $ctry){
+        //     $countries[$ctry->id] = $ctry->name;
+        // }
         $currency = [];
         foreach(Currency::find()->all() as $crr){
             $currency[$crr->id] = $crr->name;
@@ -582,6 +607,8 @@ class EnquiryController extends Controller
         return $this->render('updatej', [
             'model' => $model,
             'countries' => $countries,
+            'states' => $states,
+            'cities' => $cities,
             'currency' => $currency,
             'programs' => $programs,
             'pbatches' => $pbatches,
@@ -610,7 +637,7 @@ class EnquiryController extends Controller
                 'color' => array('rgb' => '#4caf50')
             ]
         ];
-        if(Yii::$app->user->identity->role==UserTypes::SUPER_ADMIN){
+        if(Yii::$app->user->identity->role == (UserTypes::SUPER_ADMIN || UserTypes::CLIENT)){
             $objPHPExcel->setActiveSheetIndex(0);
             $objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Enquiry Date');
             $objPHPExcel->getActiveSheet()->SetCellValue('B1', 'Full Name');
