@@ -246,8 +246,8 @@ use yii\helpers\ArrayHelper;
             </div>
         
         <div class="col-sm-3">
-                <label class="control-label">Remark date<span class="red-theme">*</span></label>
-                <input type="text" name="Remark[date_of_remark]" id="remark_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="" >
+                <label class="control-label">Call date<span class="red-theme">*</span></label>
+                <input type="text" name="Remark[date_of_remark]" id="remark_date" class="form-control" data-provide="datepicker" placeholder="Call Date" value="" >
             </div>
             <div class="col-sm-9">
                 <label class="control-label">New Remark</label>
@@ -316,8 +316,20 @@ use yii\helpers\ArrayHelper;
                                 <?= Html::dropDownList('invoice1', null,UserTypes::$invoice,['class'=>'form-control']) ?>
                             </div>
                             <div class="col-sm-2">
-                                <label class="control-label">Final Status<span class="red-theme"></span></label>
-                                <?= Html::dropDownList('fstatus1', null,UserTypes::$fstatus,['class'=>'form-control']) ?>
+                                <label class="control-label">Electives<span class="red-theme"></span></label>
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[electives1]',
+                                    'id' => 'electives1',
+                                    'value' => isset($electives[0])?$electives[0]:[], // initial value
+                                    'data' => $allelec,
+                                    'options' => ['placeholder' => 'Select Electives','class'=>'electives'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
                             </div>
                             <!--<div class="col-sm-2">
                                 <label class="control-label">Status<span class="red-theme"></span></label>
@@ -326,15 +338,28 @@ use yii\helpers\ArrayHelper;
                             </div>-->
                             <div class="col-sm-3">
                                 <label class="control-label">Amount<span class="red-theme"></span></label>
-                                <input type="text" id="amount" class="form-control" name="Enquiry[amount]" value="" aria-invalid="false">
+                                <input type="text" id="amount1" class="form-control" name="Enquiry[amount1]" value="" aria-invalid="false">
                             </div>
                             <div class="col-sm-3">
                                 <label class="control-label">Currency<span class="red-theme"></span></label>
-                                <input type="text" id="currency" class="form-control" name="Enquiry[currency]" value="" aria-invalid="false">
+                                <!--<input type="text" id="currency" class="form-control" name="Enquiry[currency]" value="" aria-invalid="false">-->
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[currency1]',
+                                    'id' => 'currency1',
+                                    'value' => isset($model->currency_id)?$model->currency_id:'', // initial value
+                                    'data' => $currency,
+                                    'options' => ['placeholder' => 'Select Currency','class'=>'currency'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        //'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
                             </div>
                             <div class="col-sm-5">
                                 <label class="control-label">Installment Plan<span class="red-theme"></span></label>
-                                <input type="text" id="installment_plan" class="form-control" name="Enquiry[installment_plan]" value="" aria-invalid="false">
+                                <input type="text" id="installment_plan1" class="form-control" name="Enquiry[installment_plan1]" value="" aria-invalid="false">
                             </div>
 
                             <div class="col-sm-1">
@@ -387,8 +412,20 @@ use yii\helpers\ArrayHelper;
                                 <?= Html::dropDownList('invoice2', null,UserTypes::$invoice,['class'=>'form-control']) ?>
                             </div>
                             <div class="col-sm-2">
-                                <label class="control-label">Final Status<span class="red-theme"></span></label>
-                                <?= Html::dropDownList('fstatus2', null,UserTypes::$fstatus,['class'=>'form-control']) ?>
+                                <label class="control-label">Electives<span class="red-theme"></span></label>
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[electives2]',
+                                    'id' => 'electives2',
+                                    'value' => isset($electives[1])?$electives[1]:[], // initial value
+                                    'data' => $allelec,
+                                    'options' => ['placeholder' => 'Select Electives','class'=>'electives'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
                             </div>
                             <!--<div class="col-sm-2">
                                 <label class="control-label">Status<span class="red-theme"></span></label>
@@ -401,7 +438,20 @@ use yii\helpers\ArrayHelper;
                             </div>
                             <div class="col-sm-3">
                                 <label class="control-label">Currency<span class="red-theme"></span></label>
-                                <input type="text" id="currency2" class="form-control" name="Enquiry[currency2]" value="" aria-invalid="false">
+                                <!--<input type="text" id="currency" class="form-control" name="Enquiry[currency]" value="" aria-invalid="false">-->
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[currency2]',
+                                    'id' => 'currency2',
+                                    'value' => isset($model->currency_id)?$model->currency_id:'', // initial value
+                                    'data' => $currency,
+                                    'options' => ['placeholder' => 'Select Currency','class'=>'currency'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        //'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
                             </div>
                             <div class="col-sm-5">
                                 <label class="control-label">Installment Plan<span class="red-theme"></span></label>
@@ -459,7 +509,19 @@ use yii\helpers\ArrayHelper;
                             </div>
                             <div class="col-sm-2">
                                 <label class="control-label">Final Status<span class="red-theme"></span></label>
-                                <?= Html::dropDownList('fstatus3', null,UserTypes::$fstatus,['class'=>'form-control']) ?>
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[electives3]',
+                                    'id' => 'electives3',
+                                    'value' => isset($electives[2])?$electives[2]:[], // initial value
+                                    'data' => $allelec,
+                                    'options' => ['placeholder' => 'Select Electives','class'=>'electives'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
                             </div>
                             <!--<div class="col-sm-2">
                                 <label class="control-label">Status<span class="red-theme"></span></label>
@@ -472,7 +534,20 @@ use yii\helpers\ArrayHelper;
                             </div>
                             <div class="col-sm-3">
                                 <label class="control-label">Currency<span class="red-theme"></span></label>
-                                <input type="text" id="currency3" class="form-control" name="Enquiry[currency3]" value="" aria-invalid="false">
+                                <!--<input type="text" id="currency" class="form-control" name="Enquiry[currency]" value="" aria-invalid="false">-->
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[currency3]',
+                                    'id' => 'currency3',
+                                    'value' => isset($model->currency_id)?$model->currency_id:'', // initial value
+                                    'data' => $currency,
+                                    'options' => ['placeholder' => 'Select Currency','class'=>'currency'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        //'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
                             </div>
                             <div class="col-sm-5">
                                 <label class="control-label">Installment Plan<span class="red-theme"></span></label>

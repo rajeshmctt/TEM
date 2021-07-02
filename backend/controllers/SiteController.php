@@ -136,7 +136,7 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        $this->layout = 'blank';
+        // $this->layout = 'blank';
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
@@ -148,6 +148,48 @@ class SiteController extends Controller
             return $this->render('login', [
                 'model' => $model,
             ]);
+        }
+    }
+
+    public function actionForgotPassword()
+    {
+        $model = new User();
+
+        /* $validationResult = $this->ajaxValidation($model);
+        if($validationResult){
+            return $validationResult;
+        } */
+		
+        if ($model->load(Yii::$app->request->post())) {
+            //echo $model->email;exit;
+            if ($model->sendEmail($model->email)) { //echo "test1"; exit;
+                Yii::$app->getSession()->setFlash('success', ['message' => 'Check your email for further instructions.']);
+                if(!Yii::$app->request->get("ajax")){
+					return $this->redirect(['site/login']);
+                }else{
+                    return $this->redirect('site/login');
+                }
+            } else {    //echo "test2"; exit;
+                Yii::$app->getSession()->setFlash('error', ['message' => 'Sorry, we are unable to reset password for email provided.']);
+                if(!Yii::$app->request->get("ajax")){
+					return $this->redirect(['site/login']);
+                }else{
+                    return $this->redirect('site/login');
+                }
+            }
+        } else {
+			//if(!Yii::$app->request->get("from_app")){
+				if(!Yii::$app->request->get("ajax")){
+					$this->layout = "login";
+				}
+				return $this->render('forgot_password', [
+					'model' => $model,
+				]);
+			/* }else{
+				return $this->renderPartial('forgot_password', [
+					'model' => $model,
+				]);
+			} */
         }
     }
 

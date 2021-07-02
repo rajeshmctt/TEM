@@ -290,6 +290,12 @@ AppAsset::register($this);
             <span class="site-menu-title"> Batches</span>
 		</a>
     </li>
+	<li class="dropdown site-menu-item has-sub">
+        <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("elective/index"); ?>">
+            <i class="site-menu-icon md-desktop-mac" aria-hidden="true"></i>
+            <span class="site-menu-title"> Electives</span>
+		</a>
+    </li>
 	
     <!--RDM 3-10-19 hide events menu-->
 	<li class="site-menu-item" style="display:none">
@@ -304,12 +310,29 @@ AppAsset::register($this);
 			<span class="site-menu-title">Currency</span>
 		</a>
 	</li>
-	<li class="site-menu-item">
-		<a href="#">
-			<i class="site-menu-icon md-assignment" aria-hidden="true"></i>
-			<span class="site-menu-title">Reports</span>
+	<li class="dropdown site-menu-item has-sub">
+        <a class="dropdown-toggle" href="javascript:void(0)" data-dropdown-toggle="false">
+            <i class="site-menu-icon md-assignment" aria-hidden="true"></i>
+            <span class="site-menu-title"> Reports</span>
+			<span class="site-menu-arrow"></span>
 		</a>
-	</li>
+		<div class="dropdown-menu">
+            <div class="site-menu-scroll-wrap is-list">
+                <div>
+                    <div>
+                        <ul class="site-menu-sub site-menu-normal-list">
+                            <li class="site-menu-item">
+                                <a class="animsition-link"
+                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("enquiry/alldata"); ?>">
+                                    <span class="site-menu-title">All Data</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
 <?php } ?>
 
 <?php if (Yii::$app->user->identity->role == UserTypes::CLIENT) { ?>

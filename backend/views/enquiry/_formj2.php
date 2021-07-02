@@ -7,7 +7,9 @@ use yii\helpers\Url;
 use kartik\select2\Select2;
 use common\models\Program;
 use common\models\Batch;
+use common\models\Company;
 use yii\helpers\ArrayHelper;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Enquiry */
@@ -31,7 +33,6 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'source')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'referred_by')->textInput(['maxlength' => true]) ?>
-    
     <?= $form->field($model, 'amount')->textInput() ?>
     <?= $form->field($model, 'currency_id')->textInput() ?>
     <?= $form->field($model, 'status')->textInput() ?>
@@ -51,16 +52,14 @@ use yii\helpers\ArrayHelper;
 <div class="page-content">
 
 
-
-
-<div class="panel-group" id="exampleAccordionDefault" aria-multiselectable="true" role="tablist">
+            <div class="panel-group" id="exampleAccordionDefault" aria-multiselectable="true" role="tablist">
                 <div class="panel">
                     <div class="panel-heading" id="exampleHeadingDefaultClient" role="tab">
                         <a class="panel-title collapsed" id="panel-theme" data-toggle="collapse"
                            href="#exampleCollapseDefaultClient"
                            data-parent="#exampleAccordionDefault" aria-expanded="false"
                            aria-controls="exampleCollapseDefaultClient">
-                            <?= $model->full_name ?> <span style="font-size:12px">Click the '+' sign for details</span>
+                           <?= $model->full_name ?> <span style="font-size:12px">Click the '+' sign for details</span>
                         </a>
                     </div>
                     <div class="panel-collapse collapse" id="exampleCollapseDefaultClient"
@@ -82,28 +81,27 @@ use yii\helpers\ArrayHelper;
 
                                                         <div class="form-group form-material row">
                                                         <div class="col-sm-3">    
-                <label class="control-label">Enquiry Date<span class="red-theme">*</span></label>
-                <input type="text" name="Enquiry[date_of_enquiry]" id="enquiry_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="<?=isset($model->date_of_enquiry)? date("m/d/Y",$model->date_of_enquiry):''?>" >
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">Full Name<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'full_name')->textInput()->label(false) ?>
-                <input type="hidden" name="Enquiry[pgcount]" id="pgcount" value="<?=$pgcount?>">
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">Email<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'email')->textInput()->label(false) ?>
-				
-				<h5 style="display: none;" class='error red-theme' id="email_error" style="display: none">Email has already been taken.<a href="" id="conv" class="btn btn-success btn-xs">Check User</a></h5>
-            </div>
-            <div class="col-sm-3">
-                <label class="control-label">Contact No<span class="red-theme">*&nbsp;&nbsp;</span></label><label id="descr" class="mask-label"></label>
-                <?= $form->field($model, 'contact_no')->textInput(['id' => 'customer_phone'])->label(false); ?>
-                <p class="theme_2 help-block">+91(8567)234-678</p>
+                                                            <label class="control-label">Enquiry Date<span class="red-theme">*</span></label>
+                                                            <input type="text" name="Enquiry[date_of_enquiry]" id="enquiry_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="<?=isset($model->date_of_enquiry)? date("m/d/Y",$model->date_of_enquiry):''?>" >
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="control-label">Full Name<span class="red-theme">*</span></label>
+                                                            <?= $form->field($model, 'full_name')->textInput()->label(false) ?>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="control-label">Email<span class="red-theme">*</span></label>
+                                                            <?= $form->field($model, 'email')->textInput()->label(false) ?>
+                                                            
+                                                            <h5 style="display: none;" class='error red-theme' id="email_error" style="display: none">Email has already been taken.<a href="" id="conv" class="btn btn-success btn-xs">Check User</a></h5>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="control-label">Contact No<span class="red-theme">*&nbsp;&nbsp;</span></label><label id="descr" class="mask-label"></label>
+                                                            <?= $form->field($model, 'contact_no')->textInput(['id' => 'customer_phone'])->label(false); ?>
+                                                            <p class="theme_2 help-block">+91(8567)234-678</p>
 
-                <div style="display:none;" class="theme"><input type="checkbox" id="phone_mask" checked></div>
-                
-            </div>
+                                                            <div style="display:none;" class="theme"><input type="checkbox" id="phone_mask" checked></div>
+                                                            
+                                                        </div>
             <div class="col-sm-3">
                 <label class="control-label">Address<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'address')->textInput()->label(false) ?>
@@ -165,8 +163,8 @@ use yii\helpers\ArrayHelper;
                         ],
                     ]); ?>
             </div>
-        </div>
-		<div class="form-group row form-material">
+        <!--</div>
+		<div class="form-group row">form-material-->
             <div class="col-sm-3">
                 <label class="control-label">Source<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['id'=>'source','options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
@@ -202,17 +200,12 @@ use yii\helpers\ArrayHelper;
                     '])->label(false); 
 
                 ?>
+                <!--<?//= $form->field($model, 'program_id')->dropDownList($programs, ['options' => [$model->program_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Program --'])->label(false) ?>-->
             </div>
 
-            <div class="col-sm-3" style="display:none">
-                <label class="control-label">amount<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'amount')->textInput()->label(false) ?>
-            </div>
-            <div class="col-sm-3" style="display:none">
-                <label class="control-label">currency<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'currency_id')->dropDownList($currency, ['options' => [$model->currency_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Currency --'])->label(false) ?>
-            </div>
-                                                    </div>
+
+
+                                                        </div>
         <div class="form-group form-material">
             <?= Html::submitButton('Update', ['class' => 'btn btn-success pull-right btn_client_add']) ?>
         </div>
@@ -229,8 +222,7 @@ use yii\helpers\ArrayHelper;
                     </div>
                 </div>
             </div>
-
-
+        
 
 
     <div class="panel">
@@ -253,6 +245,7 @@ use yii\helpers\ArrayHelper;
                 <label class="control-label">Remarks<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'remarks')->textarea(['rows' => 3])->label(false) ?>
             </div>
+        
         <div class="col-sm-3">
                 <label class="control-label">Call date<span class="red-theme">*</span></label>
                 <input type="text" name="Remark[date_of_remark]" id="remark_date" class="form-control" data-provide="datepicker" placeholder="Call Date" value="" >
@@ -268,7 +261,7 @@ use yii\helpers\ArrayHelper;
         <div class="form-group row">form-material-->
             <div class="col-sm-12" >
                 <label class="control-label">Old Remarks</label>
-                <textarea rows="<?=count($model->enquiryRemarks)?>" style="width:100%; background-color:#ffeebb" readonly>
+                <textarea style="width:100%; background-color:#ffeebb" readonly>
                 <?php foreach($model->enquiryRemarks as $rem){ ?>
                     <?= date("m/d/Y",$rem->date).": ".$rem->remarks."\n" ?>
                 <?php } ?>
@@ -276,139 +269,111 @@ use yii\helpers\ArrayHelper;
             </div>
             
         </div>
-        <div class="form-group row"><!--grant-div panel-body-->
-                            
-			<!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->
-				<div class="col-sm-6">
-					<label class="control-label">Program</label>
-					<!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->
-					<?= Select2::widget([
-						'name' => 'Enquiry[program1]',
-						'id' => 'prog',
-						'value' => isset($batches[0])?$myprograms[$batches[0]]:$model->program_id, // initial value
-						'data' => Program::getPrograms(),
-						'options' => ['placeholder' => 'Select a Program','class'=>'prog'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-					<!--<p class="theme_3 help-block">&nbsp You can also add a new Country</p>-->
-					<h5 style="display:none" class='error red-theme'>Country cannot be a
-						number.</h5>
-				</div>
-				<div class="col-sm-5">
-					<label class="control-label">Batch</label>
-					<?= Select2::widget([
-						'name' => 'Enquiry[batch1]',
-						'id' => 'bat',
-						'value' => isset($batches[0])?$batches[0]:'', // initial value
-						'data' => isset($batches[0])?Batch::getProgBatches($myprograms[$batches[0]]):Batch::getProgBatches($model->program_id),
-						'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-					<!--<?//= Html:: dropDownList('User[batches][]','',[],['id'=>'bat','class'=>'form-control batches','prompt'=>'Select Batch'])?>-->
-				</div>
-			<!--</div>-->
-			<div class="col-sm-1">
-				<label class="control-label add-grant-button"> Add </label>
-				<button type="button" class="btn btn-success btn-round add-grant-button"><i class="glyphicon glyphicon-plus"></i></button>
-			</div>
-		</div>
-        <div class="form-group row" id="pb2" <?= (count($batches)>1?'':'style="display:none"')?>><!--grant-div panel-body-->
-			<!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->
-				<div class="col-sm-6">
-					<label class="control-label">Program</label><br>
-					<!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->
-					<?= Select2::widget([
-						'name' => 'Enquiry[program2]',
-						'id' => 'prog2',
-						'value' => isset($batches[1])?$myprograms[$batches[1]]:'', // initial value
-						'data' => Program::getPrograms(),
-						'options' => ['placeholder' => 'Select a Program','class'=>'prog'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-					<h5 style="display:none" class='error red-theme'>Country cannot be a
-						number.</h5>
-				</div>
-				<div class="col-sm-5">
-					<label class="control-label">Batch</label>
-					<?= Select2::widget([
-						'name' => 'Enquiry[batch2]',
-						'id' => 'bat2',
-						'value' => isset($batches[1])?$batches[1]:'', // initial value
-						'data' => isset($batches[1])?Batch::getProgBatches($myprograms[$batches[1]]):[],
-						'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-				</div>
-			<!--</div>-->
-			<div class="col-sm-1">
-				<label class="control-label remove-grant-button"> Remove </label>
-				<button type="button" class="btn btn-success btn-round remove-grant-button"><i class="glyphicon glyphicon-minus"></i></button>
-			</div>
-		</div>
-		<div class="form-group row" id="pb3" <?= (count($batches)>2?'':'style="display:none"')?>><!--grant-div panel-body-->
-			<!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->
-				<div class="col-sm-6">
-					<label class="control-label">Program</label>
-					<!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->
-					<?= Select2::widget([
-						'name' => 'Enquiry[program3]',
-						'id' => 'prog3',
-						'value' => isset($batches[2])?$myprograms[$batches[2]]:'', // initial value
-						'data' => Program::getPrograms(),
-						'options' => ['placeholder' => 'Select a Program','class'=>'prog'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-					<h5 style="display:none" class='error red-theme'>Country cannot be a
-						number.</h5>
-				</div>
-				<div class="col-sm-5">
-					<label class="control-label">Batch</label>
-					<?= Select2::widget([
-						'name' => 'Enquiry[batch3]',
-						'id' => 'bat3',
-						'value' => isset($batches[2])?$batches[2]:'', // initial value
-						'data' => isset($batches[2])?(Batch::getProgBatches($myprograms[$batches[2]])):[],
-						'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-				</div>
-			<!--</div>-->
-			<div class="col-sm-1">
-				<label class="control-label remove-grant-button"> Remove </label>
-				<button type="button" class="btn btn-success btn-round remove-grant-button"><i class="glyphicon glyphicon-minus"></i></button>
-			</div>
-		</div>
-		
+        <!-- Index type  logic -->
+
+
+        <p>
+        <?= Html::a('Add a Program', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        // 'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            // 'id',
+            // 'name',
+            // 'enquiry_id',
+            [
+                'label'=>'Program',
+                'attribute'=>'program_id',
+                'value'=>function ($model) {
+                    return isset($model->program_id)?$model->program->name:'';
+                },
+            ],
+            [
+                'label'=>'Batch',
+                'attribute'=>'batch_id',
+                'value'=>function ($model) {
+                    return isset($model->batch_id)?$model->batch->name:'';
+                },
+            ],
+            //'start_date',
+            //'created_at',
+            //'updated_at',
+            //'final_status',
+            [
+                'label'=>'Currency',
+                'attribute'=>'currency',
+                'value'=>function ($model) {
+                    return isset($model->currency)?$model->currency0->name:'';
+                },
+            ],
+            // [
+            //     'label' => 'Hours',
+            //     'attribute' => 'hours',
+            //     'value' => function ($model) {
+            //         return isset($model->hours)?$model->hours:'';
+            //     },
+            // ],
+            [
+                'label'=>'Amount',
+                'attribute'=>'amount',
+                'value'=>function ($model) {
+                    return ($model->amount!='')?$model->amount:'';
+                },
+            ],
+            [
+                'label'=>'Installment Plan',
+                'attribute'=>'installment_plan',
+                'value'=>function ($model) {
+                    return ($model->installment_plan!='')?$model->installment_plan:'';
+                },
+            ],
+            [
+                'label'=>'Invoicing',
+                'attribute'=>'invoicing',
+                'value'=>function ($model) {
+                    return ($model->invoicing!='')?UserTypes::$invoice($model->invoicing):'';
+                },
+            ],
+            //'status',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update}&nbsp;&nbsp;{delete}',
+
+                'buttons' => [                    
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry-batch/update', 'id' => $model->id]), [
+                            'title' => Yii::t('yii', 'Update'),
+                            'data' => [
+                                'link-to' => 'user-update',
+                            ],
+                        ]);
+                    },
+                ]
+            ],
+        ],
+    ]); ?>
+
+
+
+        <div class="form-group row"><!--form-material-->
+            
+
+            <div class="col-sm-3" style="display:none">
+                <label class="control-label">amount<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'amount')->textInput()->label(false) ?>
+            </div>
+            <div class="col-sm-3" style="display:none">
+                <label class="control-label">currency<span class="red-theme">*</span></label>
+                <?= $form->field($model, 'currency_id')->dropDownList($currency, ['options' => [$model->currency_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Currency --'])->label(false) ?>
+            </div>
+        </div>
         <div class="form-group row"><!--form-material-->
 
         </div>
@@ -416,17 +381,17 @@ use yii\helpers\ArrayHelper;
             <?= Html::submitButton('Update', ['class' => 'btn btn-success pull-right btn_client_add']) ?>
             <?= Html::a('Move to Enquiry', '#', [
                             'title' => Yii::t('yii', 'Move to Enquiries'),
-                            'class' => 'swal-info-enq btn btn-warning',
+                            'class' => 'swal-info-enq btn btn-danger',
                             'data' => [
                                 'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/toenq', 'id' => $model->id]),
                                 'no-link' => "true",
                             ],
                         ]) ?>
-            <?= Html::a('Move to Confirmed', '#', [
-                            'title' => Yii::t('yii', 'Move to Joined'),
-                            'class' => 'swal-info-join btn btn-primary',
+            <?= Html::a('Move to Potential', '#', [
+                            'title' => Yii::t('yii', 'Move to Potential'),
+                            'class' => 'swal-warning-poten btn btn-warning',
                             'data' => [
-                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/tojoined', 'id' => $model->id]),
+                                'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/topotential', 'id' => $model->id]),
                                 'no-link' => "true",
                             ],
                         ]) ?>
@@ -505,7 +470,6 @@ $(document).ready(function(){
 			});
 
 		});
-
 	$("#enquiry_date").datepicker({
         /*format: "dd/mm/yyyy",*/
         autoclose: true
@@ -805,6 +769,8 @@ return false;
 		});
 
 	});
+
+    
     
 	$("#prog").change(function(){
 		var program = $(this).val();
@@ -874,6 +840,7 @@ return false;
 		});
 
 	});
+    
     $(".add-grant-button").click(function(){
         if(!$("#pb2").is(":visible")){
             $("#pb2").show();

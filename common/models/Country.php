@@ -12,6 +12,7 @@ use Yii;
  * @property string|null $name
  *
  * @property City[] $cities
+* @property Currency[] $currencies 
  * @property Enquiry[] $enquiries
  * @property State[] $states
  */
@@ -57,6 +58,16 @@ class Country extends \yii\db\ActiveRecord
     {
         return $this->hasMany(City::className(), ['country_id' => 'id']);
     }
+    
+    /**
+     * Gets query for [[Currencies]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */ 
+    public function getCurrencies() 
+    { 
+        return $this->hasMany(Currency::className(), ['country_id' => 'id']); 
+    } 
 
     /**
      * Gets query for [[Enquiries]].

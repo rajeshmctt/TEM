@@ -3,16 +3,16 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
-use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\CurrencySearch */
+/* @var $searchModel common\models\ProgramSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Currencies';
+$this->title = 'Elective';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="page enquiry-index"><!-- program-index -->
+
+<div class="page elective-index"><!-- program-index -->
 		<div class="page-header">
             <h1 class="page-title"><?= Html::encode($this->title) ?></h1>
             <ol class="breadcrumb">
@@ -32,13 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-lg-12">
                     <div class="panel-group" id="exampleAccordionDefault" aria-multiselectable="true" role="tablist">
 					<div class="panel">
-                        <!--<div class="panel-heading" id="exampleHeadingDefaultLevel" role="tab">
-							<a class="panel-title collapsed" id="panel-theme" data-toggle="collapse" href="#exampleCollapseDefaultLevel"
-                                  data-parent="#exampleAccordionDefault" aria-expanded="true"
-                                  aria-controls="exampleCollapseDefaultLevel">
-								Faculties
-							</a>
-                        </div>-->
 						<div class="panel-collapse collapse in" id="exampleCollapseDefaultLevel" aria-labelledby="exampleHeadingDefaultLevel"
                     role="tabpanel">
 							<div class="panel-body">
@@ -47,12 +40,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <div class="col-sm-6">
                                         
                                             <div class="form-group">
-                                                <!--<a href="javascript:void(0);" data-no-link="true" id="addRowBtn" class="btn btn-success btn-sm"><i class="icon md-plus" aria-hidden="true"></i>Add New
-                                                    Level</a>-->
-                                                <!--<?= Html::a('Add Currency', ['create'], ['class' => 'btn btn-success']) ?>-->
+                                                <!--<?= Html::a('Add Elective', ['create'], ['class' => 'btn btn-success']) ?>-->
                                                 <a href="javascript:void(0);" data-no-link="true" id="addRowBtn"
                                                    class="btn btn-success btn-sm">
-                                                    <i class="icon md-plus" aria-hidden="true"></i>Add Currency</a>
+                                                    <i class="icon md-plus" aria-hidden="true"></i>Add Elective</a>
                                             </div>
 
                                         </div>
@@ -60,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                     
                                 </div>
+                                
                                 <div class="panel" id="location" style="display: none;">
 
                                         <div class="row row-lg mgcut">
@@ -69,31 +61,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         <?php $form = ActiveForm::begin(); ?>
                                                         <div class="form-group row"><!-- form-material-->
                                                             <div class="col-sm-4">
-                                                                <label class="control-label">Currency</label>
+                                                                <label class="control-label">Elective</label>
                                                                 <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label(false) ?>
                                                                 <?php // $form->field($model, 'name')->textInput(['id' => 'locationname'])->label(false) ?>
-                                                                <h5 class="loc-error red-theme">Location cannnot be blank</h5>
+                                                                <h5 class="loc-error red-theme">Elective cannnot be blank</h5>
                                                             </div>
-                                    <div class="col-sm-4">
-                                        <label class="control-label">Country</label>
-                                        <!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->                                        
-                <?= Select2::widget([
-						'name' => 'Currency[country_id]',
-						'id' => 'coun',
-                        'value' => isset($model->country_id)?$model->country_id:'', // initial value
-						'data' => $countries,
-						'options' => ['placeholder' => 'Select a Country','class'=>'country'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-                                        <!--<p class="theme_3 help-block">&nbsp You can also add a new Country</p>-->
-                                        <h5 style="display:none" class='error red-theme'>Country cannot be a
-                                            number.</h5>
-                                    </div>
+                                        <div class="col-sm-3">
+                                            <label class="control-label">Hours<span class="red-theme">*</span></label>
+                                            <?= $form->field($model, 'hours')->textInput(['type' => 'number'])->label(false) ?>
+                                        </div>
+                                        <div class="col-sm-3">    
+                                            <label class="control-label">Tentative Date<span class="red-theme">*</span></label>
+                                            <input type="text" name="Elective[tentative_date]" id="tentative_date" class="form-control" data-provide="datepicker" placeholder="Tentative Date" value="<?=isset($model->tentative_date)? date("m/d/Y",$model->tentative_date):''?>" >
+                                        </div>
                                                             <div class="col-sm-2">
                                                                 <?= Html::submitButton('Add', ['class' => 'btn btn-success pull-right', 'id' => 'sub_location']) ?>
                                                             </div>
@@ -115,19 +95,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
             // 'id',
             'name',
+            // 'hours',
             [
-                'label' => 'Country',
-                'attribute' => 'country_id',
+                'label' => 'Hours',
+                'attribute' => 'hours',
                 'value' => function ($model) {
-                    return isset($model->country_id)?$model->country->name:'';
+                    return isset($model->hours)?$model->hours:'';
                 },
             ],
-            // 'created_at',
-            // 'updated_at',
+            // 'tentative_date',
+            [
+                'label' => 'Tentative Date',
+                'attribute' => 'tentative_date',
+                'value' => function ($model) {
+                    return isset($model->tentative_date)?date('m/d/Y',$model->tentative_date):'';
+                },
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}&nbsp;&nbsp;{delete}',
+                'template' => '{update}&nbsp;&nbsp;{delete}'
             ],
         ],
     ]); ?>
@@ -152,6 +139,11 @@ Yii::$app->view->registerJs("
 	$(document).ready(function() {
         $('.con-error').hide();
         $('.loc-error').hide();
+        
+    $('#tentative_date').datepicker({
+        /*format: 'dd/mm/yyyy',*/
+        autoclose: true
+    });
 
 $('#addRowBtn').click(function(e) {
 		      $('#location').animate( { height: 'toggle' }, 800, 'linear' )

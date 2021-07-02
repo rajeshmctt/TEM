@@ -21,10 +21,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 						<?php $form = ActiveForm::begin(['id' => 'login-form','options' => ['data-link-to'=>'site-login']]); ?>
 							
-							<?= $form->field($model, 'username',[
+							<?= $form->field($model, 'email',[
 									'template'=>' <div class="form-group form-material floating">
 															{input}
-															<label class="floating-label">Username</label>
+															<label class="floating-label">Email</label>
 															{hint}{error}
 														</div>' ])->textInput(['autofocus' => false]) ?>
 

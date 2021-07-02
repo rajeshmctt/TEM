@@ -3,11 +3,11 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Enquiry */
+/* @var $model common\models\EnquiryBatch */
 
-$this->title = 'Update Joined User: ' . $model->full_name;
-$this->params['breadcrumbs'][] = ['label' => 'Confirmed Participants', 'url' => ['enquiry/joined']];
-// $this->params['breadcrumbs'][] = ['label' => 'Ann '.$model->id, 'url' => ['view', 'id' => $model->id]];
+$this->title = 'Update Enquiry Program: ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Enquiry Programs', 'url' => ['index']];
+// $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="page enquiry-update">
@@ -25,26 +25,15 @@ $this->params['breadcrumbs'][] = 'Update';
 						echo "<li><a href=".Yii::$app->urlManager->createAbsoluteUrl($v['url'])." data-link-to='faculty-index'>".$v['label']."</a></li>";
 					}else{
 						//echo "<pre>"; print_r($v); exit;
-						echo "<li class='active'>$v</li>";
+						// echo "<li class='active'>$v</li>";
 					}
 				}?>
 			</ol>
 		</div>
 
         <?php }?>
-    <?= $this->render('_formj', [
+    <?= $this->render('_form', [
         'model' => $model,
-        'countries' => $countries,
-		'states' => $states,
-		'cities' => $cities,
-        'currency' => $currency,
-        'programs' => $programs,
-        'pbatches' => $pbatches,
-		'myprograms' => $myprograms,
-		'batches' => $batches,
-		'pgcount' => $pgcount,
-        'owners' => $owners,
-        'allelec' => $allelec,
     ]) ?>
 
 </div>

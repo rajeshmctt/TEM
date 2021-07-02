@@ -112,6 +112,19 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $username
      * @return static|null
      */
+    // public static function findByUsername($username)
+    public static function findByEmail($email)
+    {
+        // return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
@@ -240,5 +253,51 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function sendEmail($email)
+    {
+        //echo "done "; exit;
+		$user = User::findOne([
+            'status' => User::STATUS_ACTIVE,
+            'email' => $email,
+        ]); 
+		// echo "<pre> "; print_r($user); exit;
+        if ($user) {
+            if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
+                $user->generatePasswordResetToken();
+            }
+			// echo $user->password_reset_token; exit;
+            // $user->save();
+			// echo "<pre>"; print_r($user->getErrors()); exit;
+            if ($user->save()) {
+				// echo "<pre>";print_r($user);exit;
+                return \Yii::$app->mailer->compose(['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'], ['user' => $user])
+                    ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name])
+                    // ->setFrom(['raj1984.rajesh@gmail.com'])
+                    ->setTo([$email])
+                    ->setSubject('Password reset for ' . \Yii::$app->name)
+                    ->send();
+            }else{
+                echo "<pre>"; print_r($user->getErrors()); exit;
+            }
+        }
+
+        return false;
+    }
+
+    public function resetPassword($token,$pass)
+    {
+        $user = User::findByPasswordResetToken($token);
+		if($user == null){
+			Yii::$app->getSession()->setFlash('success', 'This link is already used to reset password.');
+			return Yii::$app->response->redirect(Url::to(['site/login']));
+		}else{
+			
+		}
+        $user->setPassword($pass);
+        $user->removePasswordResetToken();
+
+        return $user->save(false);
     }
 }

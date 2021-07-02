@@ -3,17 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Currency;
-use common\models\Country;
-use common\models\CurrencySearch;
+use common\models\EnquiryBatch;
+use common\models\EnquiryBatchSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CurrencyController implements the CRUD actions for Currency model.
+ * EnquiryBatchController implements the CRUD actions for EnquiryBatch model.
  */
-class CurrencyController extends Controller
+class EnquiryBatchController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -31,34 +30,22 @@ class CurrencyController extends Controller
     }
 
     /**
-     * Lists all Currency models.
+     * Lists all EnquiryBatch models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CurrencySearch();
+        $searchModel = new EnquiryBatchSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $model = new Currency();
-        $countries = [];
-        foreach(Country::find()->all() as $ctry){
-            $countries[$ctry->id] = $ctry->name;
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success','Currency added successfully');
-            return $this->redirect(['index']);
-        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model' => $model,
-            'countries' => $countries,
         ]);
     }
 
     /**
-     * Displays a single Currency model.
+     * Displays a single EnquiryBatch model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -71,13 +58,13 @@ class CurrencyController extends Controller
     }
 
     /**
-     * Creates a new Currency model.
+     * Creates a new EnquiryBatch model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Currency();
+        $model = new EnquiryBatch();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -89,7 +76,7 @@ class CurrencyController extends Controller
     }
 
     /**
-     * Updates an existing Currency model.
+     * Updates an existing EnquiryBatch model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -98,27 +85,18 @@ class CurrencyController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $countries = [];
-        foreach(Country::find()->all() as $ctry){
-            $countries[$ctry->id] = $ctry->name;
-        }
 
-        if ($model->load(Yii::$app->request->post())) {
-            // echo "<pre>"; print_r(Yii::$app->request->post()); exit;
-            if($model->save()){
-
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'countries' => $countries,
         ]);
     }
 
     /**
-     * Deletes an existing Currency model.
+     * Deletes an existing EnquiryBatch model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -132,15 +110,15 @@ class CurrencyController extends Controller
     }
 
     /**
-     * Finds the Currency model based on its primary key value.
+     * Finds the EnquiryBatch model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Currency the loaded model
+     * @return EnquiryBatch the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Currency::findOne($id)) !== null) {
+        if (($model = EnquiryBatch::findOne($id)) !== null) {
             return $model;
         }
 

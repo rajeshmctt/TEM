@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = 'Update';
 		</div>
 
         <?php }?>
-    <?= $this->render('_formj', [
+    <?= $this->render('_formj2', [
         'model' => $model,
         'countries' => $countries,
 		'states' => $states,
@@ -45,6 +45,8 @@ $this->params['breadcrumbs'][] = 'Update';
 		'pgcount' => $pgcount,
         'owners' => $owners,
         'allelec' => $allelec,
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
     ]) ?>
 
 </div>

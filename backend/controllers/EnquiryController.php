@@ -13,6 +13,7 @@ use common\models\EnquiryBatch;
 use common\models\EnquiryRemarks;
 use common\models\Currency;
 use common\models\Program;
+use common\models\Elective;
 use common\models\Batch;
 use common\models\Owner;
 use common\models\Country;
@@ -23,6 +24,7 @@ use backend\models\enums\UserTypes;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Fill;
+use common\models\EnquiryBatchSearch;
 
 /**
  * EnquiryController implements the CRUD actions for Enquiry model.
@@ -501,7 +503,15 @@ class EnquiryController extends Controller
 		$batches = EnquiryBatch::getEnquiryBatches($id);
         $myprograms = Batch::getBatchPrograms($batches);
         $pgcount = count($batches); 
-        // echo "<pre>"; print_r($model->enquiryBatches[0]->batch->name); exit;
+		$others = EnquiryBatch::getEbo($id);
+        $allelec1 = Elective::find()->all();
+        $allelec = [];
+        foreach($allelec1 as $elec){
+            $allelec[$elec->id] = $elec->name;
+        }
+        // echo "<pre>"; print_r(count($model->enquiryBatches)); exit;
+
+        // echo "<pre>"; print_r($model->enquiryBatches); exit;
         $countries = [];
         foreach(Country::find()->all() as $ctry){
             $countries[$ctry->id] = $ctry->name;
@@ -551,12 +561,15 @@ class EnquiryController extends Controller
 				for($i=1;$i<=3;$i++){
 					if($enquiries['batch'.$i]!=''){
 						$newbatches[] = $enquiries['batch'.$i];
+						$newcurrency[] = $enquiries['currency'.$i];
+						$newamount[] = $enquiries['amount'.$i];
+						$newinstall[] = $enquiries['installment_plan'.$i];
 					}
 				}
 				$add = array_diff($newbatches,$batches); 
 				//echo'<pre>'; print_r($batches); exit;	
 				$remov = array_diff($batches,$newbatches);
-				// echo'<pre>'; print_r($batches); print_r($newbatches); exit;	
+				// echo'<pre>'; print_r($newcurrency); print_r($newamount); exit;	
 				foreach($remov as $rem){
 					$enquiry_batch = EnquiryBatch::find()->where(['enquiry_id'=>$model->id, 'batch_id'=>$rem])->one();
 					//$enquiry_batch = new BatchUser();
@@ -578,15 +591,6 @@ class EnquiryController extends Controller
 					$enquiry_batch->save();
 				}
 			}
-            // if($model->l1_batch==0){
-            //     $model->l1_batch = NULL;
-            // }
-            // if($model->l2_batch==0){
-            //     $model->l2_batch = NULL;
-            // }
-            // if($model->l3_batch==0){
-            //     $model->l3_batch = NULL;
-            // }
             $remark = Yii::$app->request->post('Remark');
             if($model->save()){
                 if($remark['date_of_remark']!=''){
@@ -616,6 +620,148 @@ class EnquiryController extends Controller
             'batches' => $batches,
             'pgcount' => $pgcount,
             'owners' => $owners,
+            'allelec' => $allelec,
+        ]);
+    }
+
+    /**
+     * Updates an existing Enquiry model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdatej2($id)
+    {
+        $model = $this->findModel($id);
+		$batches = EnquiryBatch::getEnquiryBatches($id);
+        $myprograms = Batch::getBatchPrograms($batches);
+        $pgcount = count($batches); 
+		$others = EnquiryBatch::getEbo($id);
+        $allelec1 = Elective::find()->all();
+        $allelec = [];
+
+        //Show  Enquiry Batches  list
+        $searchModel = new EnquiryBatchSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$model->id);
+        
+        foreach($allelec1 as $elec){
+            $allelec[$elec->id] = $elec->name;
+        }
+        // echo "<pre>"; print_r(count($model->enquiryBatches)); exit;
+
+        // echo "<pre>"; print_r($model->enquiryBatches); exit;
+        $countries = [];
+        foreach(Country::find()->all() as $ctry){
+            $countries[$ctry->id] = $ctry->name;
+        }
+        $states = [];
+        foreach(State::find()->where(['country_id'=>$model->countries_id])->all() as $state){
+            $states[$state->id] = $state->name;
+        }
+        $cities = [];
+        foreach(City::find()->where(['state_id'=>$model->state_id])->all() as $city){
+            $cities[$city->id] = $city->name;
+        }
+        // foreach(Location::find()->all() as $ctry){
+        //     $countries[$ctry->id] = $ctry->name;
+        // }
+        $currency = [];
+        foreach(Currency::find()->all() as $crr){
+            $currency[$crr->id] = $crr->name;
+        }
+        $programs = [];
+        foreach(Program::find()->all() as $prg){
+            $programs[$prg->id] = $prg->name;
+        }
+        $pbatches =[];
+        $pbatch = Batch::find()->where(['program_id'=>$model->program_id])->all();
+        foreach($pbatch as $pbt){
+            $pbatches[0] = '--Select Batch--';
+            $pbatches[$pbt->id] = $pbt->name;
+        }
+        $doe = $model->date_of_enquiry;
+        $owners_m = Owner::find()->all();
+        $owners =[];
+        foreach($owners_m as $owner){
+            $owners[$owner->id] = $owner->name;
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->date_of_enquiry != ''){
+                $model->date_of_enquiry = $doe;
+            }
+
+            $enquiries = Yii::$app->request->post('Enquiry');
+			// echo'<pre>'; print_r($enquiries); exit;	
+			$pwup = Yii::$app->request->post();
+			$newbatches = [];
+			if(isset($enquiries['batch1'])){
+				// echo 'no'; exit;
+				for($i=1;$i<=3;$i++){
+					if($enquiries['batch'.$i]!=''){
+						$newbatches[] = $enquiries['batch'.$i];
+						$newcurrency[] = $enquiries['currency'.$i];
+						$newamount[] = $enquiries['amount'.$i];
+						$newinstall[] = $enquiries['installment_plan'.$i];
+					}
+				}
+				$add = array_diff($newbatches,$batches); 
+				//echo'<pre>'; print_r($batches); exit;	
+				$remov = array_diff($batches,$newbatches);
+				echo'<pre>'; print_r($newcurrency); print_r($newbatches); exit;	
+				foreach($remov as $rem){
+					$enquiry_batch = EnquiryBatch::find()->where(['enquiry_id'=>$model->id, 'batch_id'=>$rem])->one();
+					//$enquiry_batch = new BatchUser();
+					$enquiry_batch->status = Program::STATUS_DELETED;
+					if($enquiry_batch->save()){
+                        echo 'saved'; exit;
+                    }else{
+                        print_r($enquiry_batch->getErrors()); exit;
+                    }
+				}
+				foreach($add as $ad){
+					$enquiry_batch = EnquiryBatch::find()->where(['enquiry_id'=>$model->id, 'batch_id'=>$ad])->one();
+					if(count((array)$enquiry_batch)==0){
+						$enquiry_batch = new EnquiryBatch();
+					}
+					$enquiry_batch->enquiry_id = $model->id; 
+					$enquiry_batch->batch_id = $ad;
+					$enquiry_batch->status = Program::STATUS_ACTIVE;
+					$enquiry_batch->save();
+				}
+			}
+            $remark = Yii::$app->request->post('Remark');
+            if($model->save()){
+                if($remark['date_of_remark']!=''){
+                    $remark_m = new EnquiryRemarks();
+                    $remark_m->date = strtotime($remark['date_of_remark']);
+                    $remark_m->remarks = $remark['remark'];
+                    $remark_m->enquiry_id = $model->id;
+                    $remark_m->save();
+                }
+                // return $this->redirect(['index']);
+		        Yii::$app->getSession()->setFlash('success','Record Updated successfully');
+                return $this->redirect(Yii::$app->request->referrer);
+            }else{
+                echo "<pre>"; print_r($model->getErrors()); exit;
+            } 
+        }
+
+        return $this->render('updatej2', [
+            'model' => $model,
+            'countries' => $countries,
+            'states' => $states,
+            'cities' => $cities,
+            'currency' => $currency,
+            'programs' => $programs,
+            'pbatches' => $pbatches,
+            'myprograms' => $myprograms,
+            'batches' => $batches,
+            'pgcount' => $pgcount,
+            'owners' => $owners,
+            'allelec' => $allelec,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 	
@@ -648,10 +794,11 @@ class EnquiryController extends Controller
             $objPHPExcel->getActiveSheet()->SetCellValue('G1', 'Referred By');
             $objPHPExcel->getActiveSheet()->SetCellValue('H1', 'Program');
             $objPHPExcel->getActiveSheet()->SetCellValue('I1', 'Owner');
-            $objPHPExcel->getActiveSheet()->SetCellValue('J1', 'City');
-            $objPHPExcel->getActiveSheet()->SetCellValue('K1', 'Address');
-            $objPHPExcel->getActiveSheet()->SetCellValue('L1', 'Country');
-            $objPHPExcel->getActiveSheet()->SetCellValue('M1', 'Remarks');
+            $objPHPExcel->getActiveSheet()->SetCellValue('J1', 'Address');
+            $objPHPExcel->getActiveSheet()->SetCellValue('K1', 'City');
+            $objPHPExcel->getActiveSheet()->SetCellValue('L1', 'State');
+            $objPHPExcel->getActiveSheet()->SetCellValue('M1', 'Country');
+            $objPHPExcel->getActiveSheet()->SetCellValue('N1', 'Remarks');
             
             for ($i = 2; $i < $count + 2; $i++) {
                 $current=[];
@@ -665,9 +812,10 @@ class EnquiryController extends Controller
                 $objPHPExcel->getActiveSheet()->SetCellValue('H' . $i, isset($dataProvider[$i - 2]->program_id)?$dataProvider[$i - 2]->program->name:'N/A');
                 $objPHPExcel->getActiveSheet()->SetCellValue('I' . $i, isset($dataProvider[$i - 2]->owner_id)?$dataProvider[$i - 2]->owner0->name:'');
                 $objPHPExcel->getActiveSheet()->SetCellValue('J' . $i, $dataProvider[$i - 2]->address);
-                $objPHPExcel->getActiveSheet()->SetCellValue('K' . $i, $dataProvider[$i - 2]->city);
-                $objPHPExcel->getActiveSheet()->SetCellValue('L' . $i, isset($dataProvider[$i - 2]->country_id)?$dataProvider[$i - 2]->country->name:'');                
-                $objPHPExcel->getActiveSheet()->SetCellValue('M' . $i, $dataProvider[$i - 2]->remarks);
+                $objPHPExcel->getActiveSheet()->SetCellValue('K' . $i, isset($dataProvider[$i - 2]->city_id)?$dataProvider[$i - 2]->city0->name:''); 
+                $objPHPExcel->getActiveSheet()->SetCellValue('L' . $i, isset($dataProvider[$i - 2]->state_id)?$dataProvider[$i - 2]->state->name:''); 
+                $objPHPExcel->getActiveSheet()->SetCellValue('M' . $i, isset($dataProvider[$i - 2]->countries_id)?$dataProvider[$i - 2]->countries->name:'');                
+                $objPHPExcel->getActiveSheet()->SetCellValue('N' . $i, $dataProvider[$i - 2]->remarks);
             }
         }
         $objPHPExcel->getActiveSheet()->setTitle(EnquiryStatusTypes::$titles[$e_sts]);

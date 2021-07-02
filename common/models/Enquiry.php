@@ -83,6 +83,7 @@ class Enquiry extends \yii\db\ActiveRecord
             [['countries_id'], 'exist', 'skipOnError' => true, 'targetClass' => Country::className(), 'targetAttribute' => ['countries_id' => 'id']],
             [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Owner::className(), 'targetAttribute' => ['owner_id' => 'id']],
             [['state_id'], 'exist', 'skipOnError' => true, 'targetClass' => State::className(), 'targetAttribute' => ['state_id' => 'id']],
+            [['email', 'contact_no'], 'unique'],
         ];
     }
 
@@ -199,7 +200,7 @@ class Enquiry extends \yii\db\ActiveRecord
    {
        return $this->hasOne(City::className(), ['id' => 'city_id']);
    }
-   
+
    /**
     * Gets query for [[Countries]].
     *

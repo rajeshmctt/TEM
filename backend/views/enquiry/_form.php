@@ -87,11 +87,11 @@ use yii\helpers\ArrayHelper;
                 
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Address<span class="red-theme">*</span></label>
+                <label class="control-label">Address</label>
                 <?= $form->field($model, 'address')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Country<span class="red-theme">*</span></label>
+                <label class="control-label">Country</label>
                 <!--<?//= $form->field($model, 'country_id')->dropDownList($countries, ['options' => [$model->country_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Country --'])->label(false) ?>-->
                 <?= Select2::widget([
 						'name' => 'Enquiry[countries_id]',
@@ -108,7 +108,7 @@ use yii\helpers\ArrayHelper;
 					]); ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">State<span class="red-theme">*</span></label>
+                <label class="control-label">State</label>
                     <?= Select2::widget([
                         'name' => 'Enquiry[state_id]',
                         'id' => 'stat',
@@ -124,7 +124,7 @@ use yii\helpers\ArrayHelper;
                     ]); ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">City<span class="red-theme">*</span></label>                
+                <label class="control-label">City</label>                
                 <?= Select2::widget([
                         'name' => 'Enquiry[city_id]',
                         'id' => 'city',
@@ -142,7 +142,7 @@ use yii\helpers\ArrayHelper;
         </div>
 		<div class="form-group row"><!--form-material-->
             <div class="col-sm-3">
-                <label class="control-label">Program<span class="red-theme">*</span></label>
+                <label class="control-label">Program</label>
                 <?php
                 $dataProgram=ArrayHelper::map(\common\models\Program::find()->asArray()->all(), 'id', 'name');
                 echo $form->field($model, 'program_id')->dropDownList($dataProgram, 
@@ -159,22 +159,22 @@ use yii\helpers\ArrayHelper;
                 <!--<?//= $form->field($model, 'program_id')->dropDownList($programs, ['options' => [$model->program_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Program --'])->label(false) ?>-->
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Source<span class="red-theme">*</span></label>
+                <label class="control-label">Source</label>
                 <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['id'=>'source','options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
             </div>
             <div class="col-sm-3" id="referred_by" style="<?=$model->source==1?'':'display:none' ?>">
-                <label class="control-label">Referred by<span class="red-theme">*</span></label>
+                <label class="control-label">Referred by</label>
                 <?= $form->field($model, 'referred_by')->textInput()->label(false) ?>
             </div>
 
         </div>
 		<div class="form-group row">
             <div class="col-sm-3">
-                <label class="control-label">Owner<span class="red-theme">*</span></label>
+                <label class="control-label">Owner</label>
                 <?= $form->field($model, 'owner_id')->dropDownList($owners, ['options' => [$model->owner_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Owner --'])->label(false) ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Subject<span class="red-theme">*</span></label>
+                <label class="control-label">Subject</label>
                 <?= $form->field($model, 'subject')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3" <?=$model->isNewRecord?'style="display:none"':'' ?>>
@@ -185,13 +185,13 @@ use yii\helpers\ArrayHelper;
         </div>
 		<div class="form-group row" <?=$model->isNewRecord?'style="display:none"':'' ?>>
             <div class="col-sm-6" style="display:none">
-                <label class="control-label">Remarks<span class="red-theme">*</span></label>
+                <label class="control-label">Remarks</label>
                 <?= $form->field($model, 'remarks')->textarea(['rows' => 4])->label(false) ?>
             </div>
 
             <div class="col-sm-3">
-                <label class="control-label">Remark date<span class="red-theme">*</span></label>
-                <input type="text" name="Remark[date_of_remark]" id="remark_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="" >
+                <label class="control-label">Call date</label>
+                <input type="text" name="Remark[date_of_remark]" id="remark_date" class="form-control" data-provide="datepicker" placeholder="Call Date" value="" >
             </div>
             <div class="col-sm-9">
                 <label class="control-label">New Remark</label>
