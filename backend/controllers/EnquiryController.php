@@ -649,6 +649,36 @@ class EnquiryController extends Controller
         ]);
     }
 
+    public function actionValidateEmail($email)
+    {
+		$user = Enquiry::find()->where(['email' => $email])->one();
+		if(count((array)$user)>0){
+			// $result = 1;
+            return true;
+		}else{
+            return false;
+        }
+    }
+
+    public function actionValidatePhone($phone)
+    {
+		$enqs = Enquiry::find()->all();
+        $phones = [];
+        foreach($enqs as $enq){
+            $cont = str_replace('-', '', $enq->contact_no); // Replaces all spaces with hyphens.
+            $phones[$enq->id] = preg_replace('/[^A-Za-z0-9\-]/', '', $cont); // Removes special chars.
+        }
+        // echo "<pre>"; print_r($phones); exit;
+        
+        // echo $phone; exit;
+		if(in_array($phone,$phones)){
+			// $result = 1;
+            return true;
+		}else{
+            return false;
+        }
+    }
+
     /**
      * Updates an existing Enquiry model.
      * If update is successful, the browser will be redirected to the 'view' page.

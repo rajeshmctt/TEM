@@ -74,6 +74,7 @@ class EnquiryBatchController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             // echo "<pre>"; print_r($model); exit;
             if($model->save()){
+                Yii::$app->getSession()->setFlash('success','Record Added successfully');
                 // Electives functionality 5-7-2021(pending) hide for now RDM 
                 /*foreach($model->electives as $elec){
                     $elective = new EnquiryBatchElectives();
@@ -103,6 +104,7 @@ class EnquiryBatchController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->getSession()->setFlash('success','Record Updated successfully');
             // return $this->redirect(['index']);
 
             // Electives functionality 5-7-2021(pending) hide for now RDM 

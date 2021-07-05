@@ -22,18 +22,6 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'full_name')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'contact_no')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'owner')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'country_id')->textInput() ?>
-    <?= $form->field($model, 'source')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'subject')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'referred_by')->textInput(['maxlength' => true]) ?>
-    
-    <?= $form->field($model, 'amount')->textInput() ?>
-    <?= $form->field($model, 'currency_id')->textInput() ?>
-    <?= $form->field($model, 'status')->textInput() ?>
     <!--<?= $form->field($model, 'created_at')->textInput() ?>-->
     <!--<?= $form->field($model, 'updated_at')->textInput() ?>-->
     <div class="form-group">
@@ -74,18 +62,20 @@ use yii\helpers\ArrayHelper;
             </div>
             <div class="col-sm-3">
                 <label class="control-label">Email<span class="red-theme">*</span></label>
-                <?= $form->field($model, 'email')->textInput()->label(false) ?>
-				
-				<h5 style="display: none;" class='error red-theme' id="email_error" style="display: none">Email has already been taken.<a href="" id="conv" class="btn btn-success btn-xs">Check User</a></h5>
+                <?= $form->field($model, 'email')->textInput()->label(false) ?>				
+				<h5 style="display: none;" class='error red-theme' id="email_error" style="display: none">Email already exists.</h5>
             </div>
             <div class="col-sm-3">
                 <label class="control-label">Contact No<span class="red-theme">*&nbsp;&nbsp;</span></label><label id="descr" class="mask-label"></label>
                 <?= $form->field($model, 'contact_no')->textInput(['id' => 'customer_phone'])->label(false); ?>
                 <p class="theme_2 help-block">+91(8567)234-678</p>
 
-                <div style="display:none;" class="theme"><input type="checkbox" id="phone_mask" checked></div>
+                <div style="display:none;" class="theme"><input type="checkbox" id="phone_mask" checked></div>				
+				<h5 style="display: none;" class='error red-theme' id="phone_error" style="display: none">Contact number already exists.</h5>
                 
             </div>
+        </div>
+        <div class="form-group row"><!--form-material-->
             <div class="col-sm-3">
                 <label class="control-label">Address</label>
                 <?= $form->field($model, 'address')->textInput()->label(false) ?>
@@ -410,41 +400,48 @@ return false;
 			}
         });
 
-		$("#user-email").focusout(function(e) {
-			var email = $("#user-email").val();
+        $("#enquiry-email").on("blur","input",function(){
+            alert("finally bye");
+        });
+
+        console.log("testing this one also");
+		$("#enquiry-email").focusout(function(e) {
+            console.log("testing this one ");
+			var email = $("#enquiry-email").val();
 			$.ajax({
 				type:"GET",
-				url: "' . Yii::$app->getUrlManager()->createUrl(['user/validate-email']) . '",
+				url: "' . Yii::$app->getUrlManager()->createUrl(['enquiry/validate-email']) . '",
 				data: {email: email},
 				success: function (data) {
-					if(data != 0){
+					if(data){
 						console.log(data);
 						$("#email_error").show();
-						$("#conv").attr("href",data);
-					 }
-					 else
-						$("#email_error").hide();
-					}
-            });
-			$.ajax({
-				type:"GET",
-				url: "' . Yii::$app->getUrlManager()->createUrl(['user/validate-email2']) . '",
-				data: {email: email},
-				success: function (data) {
-					if(data != 0){
-						console.log(data);
-						$("#email_error").show();
-						$("#conv2").attr("href",data);
 					 }
 					 else
 						$("#email_error").hide();
 					}
             });
         });
+        
+        
+		$("#customer_phone").focusout(function(e) {
+            var phone = $("#customer_phone").val();
+            console.log(phone);
+			$.ajax({
+				type:"GET",
+				url: "' . Yii::$app->getUrlManager()->createUrl(['enquiry/validate-phone']) . '",
+				data: {phone: phone},
+				success: function (data) {
+					if(data){
+						console.log(data);
+						$("#phone_error").show();
+					 }
+					 else
+						$("#phone_error").hide();
+					}
+            });
+        });
 		
-		$("#conv").click(function(){
-			console.log("ahs");
-		});
 
 
    $("#country_first").change(function(){
@@ -575,6 +572,7 @@ return false;
 			}
 		});
 		$("#phone_mask").change();
+
 	
 
 	$("#user-organization_id").change(function(){
