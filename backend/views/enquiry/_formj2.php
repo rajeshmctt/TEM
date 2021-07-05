@@ -9,7 +9,6 @@ use common\models\Program;
 use common\models\Batch;
 use common\models\Company;
 use yii\helpers\ArrayHelper;
-use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Enquiry */
@@ -269,98 +268,298 @@ use yii\grid\GridView;
             </div>
             
         </div>
-        <!-- Index type  logic -->
+                        <!--add  program  logic -->
+                        <div class="form-group row" id="pb1"><!--grant-div panel-body-->
+                            
+                            <!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->
+                                <div class="col-sm-3">
+                                    <label class="control-label">Program</label>
+                                    <!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->
+                                    <?= Select2::widget([
+                                        'name' => 'Enquiry[program1]',
+                                        'id' => 'prog',
+                                        'value' => isset($batches[0])?$myprograms[$batches[0]]:'', // initial value
+                                        'data' => Program::getPrograms(),
+                                        'options' => ['placeholder' => 'Select a Program','class'=>'prog'],
+                                        'pluginOptions' => [
+                                            'tags' => true,
+                                            //'multiple' => 'true',
+                                            'tokenSeparators' => [',', ' '],
+                                            'maximumInputLength' => 20,
+                                        ],
+                                    ]); ?>
+                                    <!--<p class="theme_3 help-block">&nbsp You can also add a new Country</p>-->
+                                    <h5 style="display:none" class='error red-theme'>Country cannot be a
+                                        number.</h5>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">Batch</label>
+                                    <?= Select2::widget([
+                                        'name' => 'Enquiry[batch1]',
+                                        'id' => 'bat',
+                                        'value' => isset($batches[0])?$batches[0]:'', // initial value
+                                        'data' => isset($batches[0])?Batch::getProgBatches($myprograms[$batches[0]]):[],
+                                        'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
+                                        'pluginOptions' => [
+                                            'tags' => true,
+                                            //'multiple' => 'true',
+                                            'tokenSeparators' => [',', ' '],
+                                            'maximumInputLength' => 20,
+                                        ],
+                                    ]); ?>
+                                    <!--<?//= Html:: dropDownList('User[batches][]','',[],['id'=>'bat','class'=>'form-control batches','prompt'=>'Select Batch'])?>-->
+                                </div>
+                            <!--</div>-->         
+                            <div class="col-sm-3">
+                                <label class="control-label">Invoicing<span class="red-theme"></span></label>
+                                <!--<input type="text" id="invoice1" class="form-control" name="Enquiry[invoice1]" value="" aria-invalid="false">-->
+                                <?= Html::dropDownList('invoice1', null,UserTypes::$invoice,['class'=>'form-control']) ?>
+                            </div>
+                            <div class="col-sm-2">
+                                <label class="control-label">Electives<span class="red-theme"></span></label>
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[electives1]',
+                                    'id' => 'electives1',
+                                    'value' => isset($electives[0])?$electives[0]:[], // initial value
+                                    'data' => $allelec,
+                                    'options' => ['placeholder' => 'Select Electives','class'=>'electives'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
+                            </div>
+                            <!--<div class="col-sm-2">
+                                <label class="control-label">Status<span class="red-theme"></span></label>
+                                <input type="text" id="fstatus1" class="form-control" name="Enquiry[fstatus1]" value="" aria-invalid="false">
+                                <?//= $form->field($model, 'subject')->textInput()->label(false) ?>
+                            </div>-->
+                            <div class="col-sm-3">
+                                <label class="control-label">Amount<span class="red-theme"></span></label>
+                                <input type="text" id="amount1" class="form-control" name="Enquiry[amount1]" value="" aria-invalid="false">
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="control-label">Currency<span class="red-theme"></span></label>
+                                <!--<input type="text" id="currency" class="form-control" name="Enquiry[currency]" value="" aria-invalid="false">-->
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[currency1]',
+                                    'id' => 'currency1',
+                                    'value' => isset($model->currency_id)?$model->currency_id:'', // initial value
+                                    'data' => $currency,
+                                    'options' => ['placeholder' => 'Select Currency','class'=>'currency'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        //'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="control-label">Installment Plan<span class="red-theme"></span></label>
+                                <input type="text" id="installment_plan1" class="form-control" name="Enquiry[installment_plan1]" value="" aria-invalid="false">
+                            </div>
+
+                            <div class="col-sm-1">
+                                <label class="control-label add-grant-button"> Add </label>
+                                <button type="button" class="btn btn-success btn-round add-grant-button"><i class="glyphicon glyphicon-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="pb2" style="border-top: 1px solid black; padding-top: 10px;<?= (count($batches)>1?'':'display:none')?>"><!--grant-div panel-body-->
+                            <!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->
+                                <div class="col-sm-3">
+                                    <label class="control-label">Program</label><br>
+                                    <!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->
+                                    <?= Select2::widget([
+                                        'name' => 'Enquiry[program2]',
+                                        'id' => 'prog2',
+                                        'value' => isset($batches[1])?$myprograms[$batches[1]]:'', // initial value
+                                        'data' => Program::getPrograms(),
+                                        'options' => ['placeholder' => 'Select a Program','class'=>'prog'],
+                                        'pluginOptions' => [
+                                            'tags' => true,
+                                            //'multiple' => 'true',
+                                            'tokenSeparators' => [',', ' '],
+                                            'maximumInputLength' => 20,
+                                        ],
+                                    ]); ?>
+                                    <h5 style="display:none" class='error red-theme'>Country cannot be a
+                                        number.</h5>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">Batch</label>
+                                    <?= Select2::widget([
+                                        'name' => 'Enquiry[batch2]',
+                                        'id' => 'bat2',
+                                        'value' => isset($batches[1])?$batches[1]:'', // initial value
+                                        'data' => isset($batches[1])?Batch::getProgBatches($myprograms[$batches[1]]):[],
+                                        'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
+                                        'pluginOptions' => [
+                                            'tags' => true,
+                                            //'multiple' => 'true',
+                                            'tokenSeparators' => [',', ' '],
+                                            'maximumInputLength' => 20,
+                                        ],
+                                    ]); ?>
+                                </div>
+                            <!--</div>-->
+                            
+                            <div class="col-sm-3">
+                                <label class="control-label">Invoicing<span class="red-theme"></span></label>
+                                <!--<input type="text" id="invoice1" class="form-control" name="Enquiry[invoice1]" value="" aria-invalid="false">-->
+                                <?= Html::dropDownList('invoice2', null,UserTypes::$invoice,['class'=>'form-control']) ?>
+                            </div>
+                            <div class="col-sm-2">
+                                <label class="control-label">Electives<span class="red-theme"></span></label>
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[electives2]',
+                                    'id' => 'electives2',
+                                    'value' => isset($electives[1])?$electives[1]:[], // initial value
+                                    'data' => $allelec,
+                                    'options' => ['placeholder' => 'Select Electives','class'=>'electives'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
+                            </div>
+                            <!--<div class="col-sm-2">
+                                <label class="control-label">Status<span class="red-theme"></span></label>
+                                <input type="text" id="fstatus1" class="form-control" name="Enquiry[fstatus1]" value="" aria-invalid="false">
+                                <?//= $form->field($model, 'subject')->textInput()->label(false) ?>
+                            </div>-->
+                            <div class="col-sm-3">
+                                <label class="control-label">Amount<span class="red-theme"></span></label>
+                                <input type="text" id="amount2" class="form-control" name="Enquiry[amount2]" value="" aria-invalid="false">
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="control-label">Currency<span class="red-theme"></span></label>
+                                <!--<input type="text" id="currency" class="form-control" name="Enquiry[currency]" value="" aria-invalid="false">-->
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[currency2]',
+                                    'id' => 'currency2',
+                                    'value' => isset($model->currency_id)?$model->currency_id:'', // initial value
+                                    'data' => $currency,
+                                    'options' => ['placeholder' => 'Select Currency','class'=>'currency'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        //'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="control-label">Installment Plan<span class="red-theme"></span></label>
+                                <input type="text" id="installment_plan2" class="form-control" name="Enquiry[installment_plan2]" value="" aria-invalid="false">
+                            </div>
 
 
-        <p>
-        <?= Html::a('Add a Program', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+                            <div class="col-sm-1">
+                                <label class="control-label remove-grant-button"> Remove </label>
+                                <button type="button" class="btn btn-success btn-round remove-grant-button"><i class="glyphicon glyphicon-minus"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="pb3" style="border-top: 1px solid black; padding-top: 10px;<?= (count($batches)>2?'':'display:none')?>"><!--grant-div panel-body-->
+                            <!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->
+                                <div class="col-sm-3">
+                                    <label class="control-label">Program</label>
+                                    <!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->
+                                    <?= Select2::widget([
+                                        'name' => 'Enquiry[program3]',
+                                        'id' => 'prog3',
+                                        'value' => isset($batches[2])?$myprograms[$batches[2]]:'', // initial value
+                                        'data' => Program::getPrograms(),
+                                        'options' => ['placeholder' => 'Select a Program','class'=>'prog'],
+                                        'pluginOptions' => [
+                                            'tags' => true,
+                                            //'multiple' => 'true',
+                                            'tokenSeparators' => [',', ' '],
+                                            'maximumInputLength' => 20,
+                                        ],
+                                    ]); ?>
+                                    <h5 style="display:none" class='error red-theme'>Country cannot be a
+                                        number.</h5>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label class="control-label">Batch</label>
+                                    <?= Select2::widget([
+                                        'name' => 'Enquiry[batch3]',
+                                        'id' => 'bat3',
+                                        'value' => isset($batches[2])?$batches[2]:'', // initial value
+                                        'data' => isset($batches[2])?(Batch::getProgBatches($myprograms[$batches[2]])):[],
+                                        'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
+                                        'pluginOptions' => [
+                                            'tags' => true,
+                                            //'multiple' => 'true',
+                                            'tokenSeparators' => [',', ' '],
+                                            'maximumInputLength' => 20,
+                                        ],
+                                    ]); ?>
+                                </div>
+                            <!--</div>-->
+                            <div class="col-sm-3">
+                                <label class="control-label">Invoicing<span class="red-theme"></span></label>
+                                <!--<input type="text" id="invoice1" class="form-control" name="Enquiry[invoice1]" value="" aria-invalid="false">-->
+                                <?= Html::dropDownList('invoice3', null,UserTypes::$invoice,['class'=>'form-control']) ?>
+                            </div>
+                            <div class="col-sm-2">
+                                <label class="control-label">Final Status<span class="red-theme"></span></label>
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[electives3]',
+                                    'id' => 'electives3',
+                                    'value' => isset($electives[2])?$electives[2]:[], // initial value
+                                    'data' => $allelec,
+                                    'options' => ['placeholder' => 'Select Electives','class'=>'electives'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
+                            </div>
+                            <!--<div class="col-sm-2">
+                                <label class="control-label">Status<span class="red-theme"></span></label>
+                                <input type="text" id="fstatus1" class="form-control" name="Enquiry[fstatus1]" value="" aria-invalid="false">
+                                <?//= $form->field($model, 'subject')->textInput()->label(false) ?>
+                            </div>-->
+                            <div class="col-sm-3">
+                                <label class="control-label">Amount<span class="red-theme"></span></label>
+                                <input type="text" id="amount3" class="form-control" name="Enquiry[amount3]" value="" aria-invalid="false">
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="control-label">Currency<span class="red-theme"></span></label>
+                                <!--<input type="text" id="currency" class="form-control" name="Enquiry[currency]" value="" aria-invalid="false">-->
+                                <?= Select2::widget([
+                                    'name' => 'Enquiry[currency3]',
+                                    'id' => 'currency3',
+                                    'value' => isset($model->currency_id)?$model->currency_id:'', // initial value
+                                    'data' => $currency,
+                                    'options' => ['placeholder' => 'Select Currency','class'=>'currency'],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        //'multiple' => 'true',
+                                        'tokenSeparators' => [',', ' '],
+                                        'maximumInputLength' => 20,
+                                    ],
+                                ]); ?>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="control-label">Installment Plan<span class="red-theme"></span></label>
+                                <input type="text" id="installment_plan3" class="form-control" name="Enquiry[installment_plan3]" value="" aria-invalid="false">
+                            </div>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            // 'id',
-            // 'name',
-            // 'enquiry_id',
-            [
-                'label'=>'Program',
-                'attribute'=>'program_id',
-                'value'=>function ($model) {
-                    return isset($model->program_id)?$model->program->name:'';
-                },
-            ],
-            [
-                'label'=>'Batch',
-                'attribute'=>'batch_id',
-                'value'=>function ($model) {
-                    return isset($model->batch_id)?$model->batch->name:'';
-                },
-            ],
-            //'start_date',
-            //'created_at',
-            //'updated_at',
-            //'final_status',
-            [
-                'label'=>'Currency',
-                'attribute'=>'currency',
-                'value'=>function ($model) {
-                    return isset($model->currency)?$model->currency0->name:'';
-                },
-            ],
-            // [
-            //     'label' => 'Hours',
-            //     'attribute' => 'hours',
-            //     'value' => function ($model) {
-            //         return isset($model->hours)?$model->hours:'';
-            //     },
-            // ],
-            [
-                'label'=>'Amount',
-                'attribute'=>'amount',
-                'value'=>function ($model) {
-                    return ($model->amount!='')?$model->amount:'';
-                },
-            ],
-            [
-                'label'=>'Installment Plan',
-                'attribute'=>'installment_plan',
-                'value'=>function ($model) {
-                    return ($model->installment_plan!='')?$model->installment_plan:'';
-                },
-            ],
-            [
-                'label'=>'Invoicing',
-                'attribute'=>'invoicing',
-                'value'=>function ($model) {
-                    return ($model->invoicing!='')?UserTypes::$invoice($model->invoicing):'';
-                },
-            ],
-            //'status',
-
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}&nbsp;&nbsp;{delete}',
-
-                'buttons' => [                    
-                    'update' => function ($url, $model) {
-                        return Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry-batch/update', 'id' => $model->id]), [
-                            'title' => Yii::t('yii', 'Update'),
-                            'data' => [
-                                'link-to' => 'user-update',
-                            ],
-                        ]);
-                    },
-                ]
-            ],
-        ],
-    ]); ?>
-
-
+                            <div class="col-sm-1">
+                                <label class="control-label remove-grant-button"> Remove </label>
+                                <button type="button" class="btn btn-success btn-round remove-grant-button"><i class="glyphicon glyphicon-minus"></i></button>
+                            </div>
+                        </div>
 
         <div class="form-group row"><!--form-material-->
             

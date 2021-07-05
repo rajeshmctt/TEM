@@ -62,12 +62,16 @@ class EnquiryBatchController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($eid)
     {
         $model = new EnquiryBatch();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model->enquiry_id = $eid;
+        if ($model->load(Yii::$app->request->post())) {
+            // echo "<pre>"; print_r($model); exit;
+            if($model->save()){
+                
+            }
+            return $this->redirect(['enquiry/updatej', 'id' => $eid]);
         }
 
         return $this->render('create', [
@@ -87,7 +91,8 @@ class EnquiryBatchController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            // return $this->redirect(['index']);
+            return $this->redirect(['enquiry/updatej', 'id' => $model->enquiry_id]);
         }
 
         return $this->render('update', [

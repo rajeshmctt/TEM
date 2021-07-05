@@ -190,6 +190,13 @@ class EnquiryController extends Controller
         $link = \Yii::$app->urlManager->createAbsoluteUrl(["enquiry/index"]);
         // echo $link; exit; 
         if ($model->load(Yii::$app->request->post())) {
+            // echo "<pre>"; print_r($model->state_id); exit;
+            if($model->state_id == 0){
+                $model->state_id = NULL;
+            }
+            if($model->city_id == 0){
+                $model->city_id = NULL;
+            }
             $model->date_of_enquiry = strtotime($model->date_of_enquiry);
             //default enq_status on create = open
             $model->enq_status = 0;
@@ -270,6 +277,12 @@ class EnquiryController extends Controller
         }
         // echo "<pre>"; print_r($owners); exit;
         if ($model->load(Yii::$app->request->post())) {
+            if($model->state_id == 0){
+                $model->state_id = NULL;
+            }
+            if($model->city_id == 0){
+                $model->city_id = NULL;
+            }
             $model->date_of_enquiry = strtotime($model->date_of_enquiry);
             // if($model->l1_batch==0){
             // echo "<pre>"; print_r($model->date_of_enquiry); exit;
@@ -497,7 +510,7 @@ class EnquiryController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdatej($id)
+    public function actionUpdatej2($id)
     {
         $model = $this->findModel($id);
 		$batches = EnquiryBatch::getEnquiryBatches($id);
@@ -608,7 +621,7 @@ class EnquiryController extends Controller
             } 
         }
 
-        return $this->render('updatej', [
+        return $this->render('updatej2', [
             'model' => $model,
             'countries' => $countries,
             'states' => $states,
@@ -631,7 +644,7 @@ class EnquiryController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdatej2($id)
+    public function actionUpdatej($id)
     {
         $model = $this->findModel($id);
 		$batches = EnquiryBatch::getEnquiryBatches($id);
@@ -747,7 +760,7 @@ class EnquiryController extends Controller
             } 
         }
 
-        return $this->render('updatej2', [
+        return $this->render('updatej', [
             'model' => $model,
             'countries' => $countries,
             'states' => $states,

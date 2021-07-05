@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model common\models\EnquiryBatch */
 
 $this->title = 'Update Enquiry Program: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Enquiry Programs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Confirmed Participant: '.$model->enquiry->full_name, 'url' => ['enquiry/updatej','id'=>$model->enquiry_id]];
 // $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>

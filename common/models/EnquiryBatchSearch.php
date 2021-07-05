@@ -40,7 +40,7 @@ class EnquiryBatchSearch extends EnquiryBatch
      */
     public function search($params,$en_id)
     {
-        $query = EnquiryBatch::find()->where(['enquiry_id'=>$en_id]);
+        $query = EnquiryBatch::find()->where(['enquiry_id'=>$en_id])->orderBy(['id' => SORT_DESC]);
 
         // add conditions that should always apply here
 

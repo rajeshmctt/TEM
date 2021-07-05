@@ -238,6 +238,14 @@ use yii\helpers\ArrayHelper;
                                 'no-link' => "true",
                             ],
                         ]); ?>
+                        <?= $model->isNewRecord?'':Html::a('Move to Confirmed', '#', [
+                                        'title' => Yii::t('yii', 'Move to Joined'),
+                                        'class' => 'swal-info-join btn btn-primary',
+                                        'data' => [
+                                            'url' => Yii::$app->getUrlManager()->createUrl(['/enquiry/tojoined', 'id' => $model->id]),
+                                            'no-link' => "true",
+                                        ],
+                                    ]) ?>
         </div>
 		<?php ActiveForm::end(); ?>
     
