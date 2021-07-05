@@ -278,19 +278,62 @@ AppAsset::register($this);
 <?php } ?>
 
 <?php if (Yii::$app->user->identity->role == (UserTypes::SUPER_ADMIN || UserTypes::CLIENT) ) { ?>
+
 	<li class="dropdown site-menu-item has-sub">
+        <a class="dropdown-toggle" href="javascript:void(0)" data-dropdown-toggle="false">
+            <i class="site-menu-icon md-assignment" aria-hidden="true"></i>
+            <span class="site-menu-title">Data</span>
+			<span class="site-menu-arrow"></span>
+		</a>
+		<div class="dropdown-menu">
+            <div class="site-menu-scroll-wrap is-list">
+                <div>
+                    <div>
+                        <ul class="site-menu-sub site-menu-normal-list">
+                            <li class="site-menu-item">
+                                <a class="animsition-link"
+                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("program/index"); ?>">
+                                    <span class="site-menu-title">Manage Program</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link"
+                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("batch/index"); ?>">
+                                    <span class="site-menu-title">Manage Batches</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item" style="display:none">
+                                <a class="animsition-link"
+                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("elective/index"); ?>">
+                                    <span class="site-menu-title">Manage Electives</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link"
+                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl("currency/index"); ?>">
+                                    <span class="site-menu-title">Manage Currency</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+
+	<li class="dropdown site-menu-item has-sub" style="display:none">
         <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("program/index"); ?>">
             <i class="site-menu-icon md-desktop-mac" aria-hidden="true"></i>
             <span class="site-menu-title"> Program</span>
 		</a>
     </li>
-	<li class="dropdown site-menu-item has-sub">
+	<li class="dropdown site-menu-item has-sub" style="display:none">
         <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("batch/index"); ?>">
             <i class="site-menu-icon md-city" aria-hidden="true"></i>
             <span class="site-menu-title"> Batches</span>
 		</a>
     </li>
-	<li class="dropdown site-menu-item has-sub">
+	<li class="dropdown site-menu-item has-sub" style="display:none">
         <a class="animsition-link" href="<?= Yii::$app->urlManager->createAbsoluteUrl("elective/index"); ?>">
             <i class="site-menu-icon md-desktop-mac" aria-hidden="true"></i>
             <span class="site-menu-title"> Electives</span>
@@ -304,7 +347,7 @@ AppAsset::register($this);
 			<span class="site-menu-title">Country</span>
 		</a>
 	</li>
-	<li class="site-menu-item">
+	<li class="site-menu-item" style="display:none">
 		<a href="<?= Yii::$app->urlManager->createAbsoluteUrl("currency/index"); ?>">
 			<i class="site-menu-icon md-archive" aria-hidden="true"></i>
 			<span class="site-menu-title">Currency</span>

@@ -95,7 +95,7 @@ use yii\grid\GridView;
                                                             <h5 style="display: none;" class='error red-theme' id="email_error" style="display: none">Email has already been taken.<a href="" id="conv" class="btn btn-success btn-xs">Check User</a></h5>
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <label class="control-label">Contact No<span class="red-theme">*&nbsp;&nbsp;</span></label><label id="descr" class="mask-label"></label>
+                                                            <label class="control-label">Contact No&nbsp;&nbsp;</label><label id="descr" class="mask-label"></label>
                                                             <?= $form->field($model, 'contact_no')->textInput(['id' => 'customer_phone'])->label(false); ?>
                                                             <p class="theme_2 help-block">+91(8567)234-678</p>
 
@@ -103,7 +103,7 @@ use yii\grid\GridView;
                                                             
                                                         </div>
             <div class="col-sm-3">
-                <label class="control-label">Address<span class="red-theme">*</span></label>
+                <label class="control-label">Address</label>
                 <?= $form->field($model, 'address')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3" style="display:none">
@@ -111,11 +111,11 @@ use yii\grid\GridView;
                 <?= $form->field($model, 'city')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3" style="display:none">
-                <label class="control-label">Country<span class="red-theme">*</span></label>
+                <label class="control-label">Country</label>
                 <?= $form->field($model, 'country_id')->dropDownList($countries, ['options' => [$model->country_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Country --'])->label(false) ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Country<span class="red-theme">*</span></label>
+                <label class="control-label">Country</label>
                 <!--<?//= $form->field($model, 'country_id')->dropDownList($countries, ['options' => [$model->country_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Country --'])->label(false) ?>-->
                 <?= Select2::widget([
 						'name' => 'Enquiry[countries_id]',
@@ -132,7 +132,7 @@ use yii\grid\GridView;
 					]); ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">State<span class="red-theme">*</span></label>
+                <label class="control-label">State</label>
                     <?= Select2::widget([
                         'name' => 'Enquiry[state_id]',
                         'id' => 'stat',
@@ -148,11 +148,11 @@ use yii\grid\GridView;
                     ]); ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">City<span class="red-theme">*</span></label>                
+                <label class="control-label">City</label>                
                 <?= Select2::widget([
                         'name' => 'Enquiry[city_id]',
                         'id' => 'city',
-                        'value' => isset($model->city_id)?$model->city_id:'', // initial value
+                        'value' => isset($model->state_id)?$model->city_id:'', // initial value
                         'data' => isset($model->state_id)?$cities:[],
                         'options' => ['placeholder' => 'Select a City','class'=>'city'],
                         'pluginOptions' => [
@@ -163,18 +163,18 @@ use yii\grid\GridView;
                         ],
                     ]); ?>
             </div>
-        <!--</div>
-		<div class="form-group row">form-material-->
+        </div>
+		<div class="form-group row form-material"><!---->
             <div class="col-sm-3">
-                <label class="control-label">Source<span class="red-theme">*</span></label>
+                <label class="control-label">Source</label>
                 <?= $form->field($model, 'source')->dropDownList(UserTypes::$sources, ['id'=>'source','options' => [$model->source => ['Selected' => 'selected']], 'prompt' => ' -- Select Source --'])->label(false) ?>
             </div>
             <div class="col-sm-3" id="referred_by" style="<?=$model->source==1?'':'display:none' ?>">
-                <label class="control-label">Referred by<span class="red-theme">*</span></label>
+                <label class="control-label">Referred by</label>
                 <?= $form->field($model, 'referred_by')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Subject<span class="red-theme">*</span></label>
+                <label class="control-label">Subject</label>
                 <?= $form->field($model, 'subject')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3" <?=$model->isNewRecord?'style="display:none"':'' ?>>
@@ -182,7 +182,7 @@ use yii\grid\GridView;
                 <?= $form->field($model, 'enq_status')->dropDownList(UserTypes::$estatus, ['options' => [$model->enq_status => ['Selected' => 'selected']], 'prompt' => ' -- Select Status --'])->label(false) ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Owner<span class="red-theme">*</span></label>
+                <label class="control-label">Owner</label>
                 <?= $form->field($model, 'owner_id')->dropDownList($owners, ['options' => [$model->owner_id => ['Selected' => 'selected']], 'prompt' => ' -- Select Owner --'])->label(false) ?>
             </div>
             <div class="col-sm-3" style="display:none">
@@ -337,7 +337,7 @@ use yii\grid\GridView;
                 'label'=>'Invoicing',
                 'attribute'=>'invoicing',
                 'value'=>function ($model) {
-                    return ($model->invoicing!='')?UserTypes::$invoice($model->invoicing):'';
+                    return ($model->invoicing!='')?UserTypes::$invoice[$model->invoicing]:'';
                 },
             ],
             //'status',
@@ -408,8 +408,14 @@ use yii\grid\GridView;
     </div>
 
 
-
+    
     <?php
+
+$this->registerCss('
+    .select2-selection{
+        background-color: #ffeebb !important;
+    }
+');
 
 $this->registerJs('
     function readURL(input) {
@@ -441,6 +447,7 @@ $(document).ready(function(){
 					console.log(data);
 					console.log(data);
 					$("#stat").find("option").remove();
+					$("#city").find("option").remove();
 					$.each(obj, function(key,value) {
 						var key_string = JSON.stringify(key);
 						$("#stat").append("<option value="+key_string+">"+value+"</option>");

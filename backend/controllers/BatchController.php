@@ -146,13 +146,11 @@ class BatchController extends Controller
         //echo "<pre>"; print_r($action_steps); exit;
         $out = [];
         if($program != '') {
-			if(Yii::$app->user->identity->role==1){
-				$batches = Batch::find()->where(['program_id' => $program])->all();
-				$out[] = 'Select a batch';
-				foreach ($batches as $val) {
-					$out[$val->id] = $val->name;
-				}
-			}
+            $batches = Batch::find()->where(['program_id' => $program])->all();
+            // $out[] = 'Select a batch';
+            foreach ($batches as $val) {
+                $out[$val->id] = $val->name;
+            }
 		}
         return json_encode($out);
     }

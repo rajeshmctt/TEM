@@ -68,9 +68,9 @@ class UserTypes {
 		5 => 'Others',
 	];
 	public static $invoice = [
-		0=>'Pending',
-		1=>'Raised',
-		2=>'Paid',
+		1=>'Pending',
+		2=>'Raised',
+		3=>'Paid',
 	];
 	public static $fstatus = [
 		0=>'NA',

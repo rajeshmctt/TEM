@@ -4,6 +4,9 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\EnquiryBatch;
+use common\models\Enquiry;
+use common\models\Elective;
+use common\models\EnquiryBatchElectives;
 use common\models\EnquiryBatchSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -66,16 +69,25 @@ class EnquiryBatchController extends Controller
     {
         $model = new EnquiryBatch();
         $model->enquiry_id = $eid;
+        $enquiry = Enquiry::findOne($eid);
+        // echo "<pre>"; print_r($enquiry); exit;
         if ($model->load(Yii::$app->request->post())) {
             // echo "<pre>"; print_r($model); exit;
             if($model->save()){
-                
+                // Electives functionality 5-7-2021(pending) hide for now RDM 
+                /*foreach($model->electives as $elec){
+                    $elective = new EnquiryBatchElectives();
+                    $elective->enquiry_batch_id = $model->id;
+                    $elective->elective_id = $elec;
+                    $elective->save();
+                }*/
             }
             return $this->redirect(['enquiry/updatej', 'id' => $eid]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'enquiry' => $enquiry,
         ]);
     }
 
@@ -92,6 +104,36 @@ class EnquiryBatchController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             // return $this->redirect(['index']);
+
+            // Electives functionality 5-7-2021(pending) hide for now RDM 
+            /*echo "<pre>"; print_r($model->electives); exit;
+            foreach($model->electives as $elec){
+
+            }
+            $add = array_diff($newbatches,$batches); 
+            $remov = array_diff($batches,$newbatches);	
+            foreach($remov as $rem){
+                $enquiry_batch = EnquiryBatch::find()->where(['enquiry_id'=>$model->id, 'batch_id'=>$rem])->one();
+                $enquiry_batch->status = Program::STATUS_DELETED;
+                if($enquiry_batch->save()){
+                    echo 'saved'; exit;
+                }else{
+                    print_r($enquiry_batch->getErrors()); exit;
+                }
+            }
+            foreach($add as $ad){
+                $enquiry_batch = EnquiryBatch::find()->where(['enquiry_id'=>$model->id, 'batch_id'=>$ad])->one();
+                if(count((array)$enquiry_batch)==0){
+                    $enquiry_batch = new EnquiryBatch();
+                }
+                $enquiry_batch->enquiry_id = $model->id; 
+                $enquiry_batch->batch_id = $ad;
+                $enquiry_batch->status = Program::STATUS_ACTIVE;
+                $enquiry_batch->save();
+            } */
+
+
+
             return $this->redirect(['enquiry/updatej', 'id' => $model->enquiry_id]);
         }
 

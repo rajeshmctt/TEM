@@ -104,7 +104,7 @@ use backend\models\enums\UserTypes;
 					],
 				]);?>
             </div>
-            <div class="col-sm-4">    
+            <div class="col-sm-4" style="display:none">    
                 <label class="control-label">Electives<span class="red-theme">*</span></label>
                 <?= Select2::widget([
                                     'name' => 'EnquiryBatch[electives]',
@@ -119,15 +119,20 @@ use backend\models\enums\UserTypes;
                                         'maximumInputLength' => 20,
                                     ],
                                 ]); ?>
+            </div>          
+            <div class="col-sm-4">
+                <!--<label class="control-label">Invoicing<span class="red-theme"></span></label>-->
+                <!--<input type="text" id="invoice1" class="form-control" name="Enquiry[invoice1]" value="" aria-invalid="false">-->
+                <!--<?//= Html::dropDownList('invoice', null,UserTypes::$invoice,['class'=>'form-control']) ?>-->
+                <?= $form->field($model, 'invoicing')
+                ->dropDownList(
+                    UserTypes::$invoice,           // Flat array ('id'=>'label')
+                    ['prompt'=>'Select Invoicing Status']    // options
+                ); ?>
             </div>
         </div>
-        <div class="form-group row"><!--form-material-->            
-            <div class="col-sm-3">
-                <label class="control-label">Invoicing<span class="red-theme"></span></label>
-                <!--<input type="text" id="invoice1" class="form-control" name="Enquiry[invoice1]" value="" aria-invalid="false">-->
-                <?= Html::dropDownList('invoice1', null,UserTypes::$invoice,['class'=>'form-control']) ?>
-            </div>
-            <div class="col-sm-2">
+        <div class="form-group row"><!--form-material-->  
+            <div class="col-sm-4">
                 <label class="control-label">Currency<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'currency')->label(false)->widget(Select2::classname(), [
 					//'name' => 'User[location_id]',
@@ -143,7 +148,7 @@ use backend\models\enums\UserTypes;
 					],
 				]);?>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <label class="control-label">Amount<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'amount')->textInput(['type' => 'number'])->label(false) ?>
             </div>
@@ -202,7 +207,8 @@ $(document).ready(function(){
 				console.log(data);
 				//$("#bat").empty().select2({data: obj.results, tags:true,width :"100%"});
 				$("#bat").find("option").remove();
-				$.each(obj, function(key,value) {
+				$("#bat").append("<option value=\"\">Select a Batch</option>");
+                $.each(obj, function(key,value) {
 					var key_string = JSON.stringify(key);
 					$("#bat").append("<option value="+key_string+">"+value+"</option>");
 				});

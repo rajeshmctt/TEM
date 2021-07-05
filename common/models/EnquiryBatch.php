@@ -29,6 +29,7 @@ use Yii;
  */
 class EnquiryBatch extends \yii\db\ActiveRecord
 {
+    public $electives;
     /**
      * {@inheritdoc}
      */
@@ -45,6 +46,7 @@ class EnquiryBatch extends \yii\db\ActiveRecord
         return [
             [['enquiry_id', 'program_id', 'batch_id', 'currency', 'start_date', 'created_at', 'updated_at', 'amount', 'invoicing', 'status'], 'integer'],
             [['installment_plan'], 'string'],
+            [['electives'], 'safe'],
             [['name', 'final_status'], 'string', 'max' => 50],
             [['batch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Batch::className(), 'targetAttribute' => ['batch_id' => 'id']],
             [['enquiry_id'], 'exist', 'skipOnError' => true, 'targetClass' => Enquiry::className(), 'targetAttribute' => ['enquiry_id' => 'id']],

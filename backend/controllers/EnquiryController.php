@@ -340,7 +340,7 @@ class EnquiryController extends Controller
         $model = $this->findModel($id);
 		$batches = EnquiryBatch::getEnquiryBatches($id);
         $myprograms = Batch::getBatchPrograms($batches);
-        $pgcount = count($batches); 
+        $pgcount = count((array)$batches); 
         // echo "<pre>"; print_r($batches); exit;
         $countries = [];
         // $countries = [];
@@ -379,6 +379,12 @@ class EnquiryController extends Controller
             $owners[$owner->id] = $owner->name;
         }
         if ($model->load(Yii::$app->request->post())) {
+            if($model->state_id == 0){
+                $model->state_id = NULL;
+            }
+            if($model->city_id == 0){
+                $model->city_id = NULL;
+            }
             if($model->date_of_enquiry != ''){
                 $model->date_of_enquiry = $doe;
             }
@@ -515,7 +521,7 @@ class EnquiryController extends Controller
         $model = $this->findModel($id);
 		$batches = EnquiryBatch::getEnquiryBatches($id);
         $myprograms = Batch::getBatchPrograms($batches);
-        $pgcount = count($batches); 
+        $pgcount = count((array)$batches); 
 		$others = EnquiryBatch::getEbo($id);
         $allelec1 = Elective::find()->all();
         $allelec = [];
@@ -561,6 +567,12 @@ class EnquiryController extends Controller
             $owners[$owner->id] = $owner->name;
         }
         if ($model->load(Yii::$app->request->post())) {
+            if($model->state_id == 0){
+                $model->state_id = NULL;
+            }
+            if($model->city_id == 0){
+                $model->city_id = NULL;
+            }
             if($model->date_of_enquiry != ''){
                 $model->date_of_enquiry = $doe;
             }
@@ -649,7 +661,7 @@ class EnquiryController extends Controller
         $model = $this->findModel($id);
 		$batches = EnquiryBatch::getEnquiryBatches($id);
         $myprograms = Batch::getBatchPrograms($batches);
-        $pgcount = count($batches); 
+        $pgcount = count((array)$batches); 
 		$others = EnquiryBatch::getEbo($id);
         $allelec1 = Elective::find()->all();
         $allelec = [];
@@ -700,13 +712,21 @@ class EnquiryController extends Controller
             $owners[$owner->id] = $owner->name;
         }
         if ($model->load(Yii::$app->request->post())) {
+            if($model->state_id == 0){
+                $model->state_id = NULL;
+            }
+            if($model->city_id == 0){
+                $model->city_id = NULL;
+            }
             if($model->date_of_enquiry != ''){
                 $model->date_of_enquiry = $doe;
             }
-
+            if(!isset($model->city_id)){
+                $model->city_id = NULL;
+            }
             $enquiries = Yii::$app->request->post('Enquiry');
 			// echo'<pre>'; print_r($enquiries); exit;	
-			$pwup = Yii::$app->request->post();
+			/*$pwup = Yii::$app->request->post();
 			$newbatches = [];
 			if(isset($enquiries['batch1'])){
 				// echo 'no'; exit;
@@ -742,7 +762,7 @@ class EnquiryController extends Controller
 					$enquiry_batch->status = Program::STATUS_ACTIVE;
 					$enquiry_batch->save();
 				}
-			}
+			}*/
             $remark = Yii::$app->request->post('Remark');
             if($model->save()){
                 if($remark['date_of_remark']!=''){
