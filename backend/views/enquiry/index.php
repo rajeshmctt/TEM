@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Source',
                 'attribute' => 'source',
                 'value' => function ($model) {
-                    return isset($model->source)?UserTypes::$sources[$model->source]:'N/A';
+                    return ($model->source!='')?UserTypes::$sources[$model->source]:'N/A';
                 },
             ],
             'referred_by',  //hide

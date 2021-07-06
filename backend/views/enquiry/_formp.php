@@ -8,6 +8,7 @@ use kartik\select2\Select2;
 use common\models\Program;
 use common\models\Batch;
 use yii\helpers\ArrayHelper;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Enquiry */
@@ -276,139 +277,102 @@ use yii\helpers\ArrayHelper;
             </div>
             
         </div>
-        <div class="form-group row"><!--grant-div panel-body-->
-                            
-			<!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->
-				<div class="col-sm-6">
-					<label class="control-label">Program</label>
-					<!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->
-					<?= Select2::widget([
-						'name' => 'Enquiry[program1]',
-						'id' => 'prog',
-						'value' => isset($batches[0])?$myprograms[$batches[0]]:$model->program_id, // initial value
-						'data' => Program::getPrograms(),
-						'options' => ['placeholder' => 'Select a Program','class'=>'prog'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-					<!--<p class="theme_3 help-block">&nbsp You can also add a new Country</p>-->
-					<h5 style="display:none" class='error red-theme'>Country cannot be a
-						number.</h5>
-				</div>
-				<div class="col-sm-5">
-					<label class="control-label">Batch</label>
-					<?= Select2::widget([
-						'name' => 'Enquiry[batch1]',
-						'id' => 'bat',
-						'value' => isset($batches[0])?$batches[0]:'', // initial value
-						'data' => isset($batches[0])?Batch::getProgBatches($myprograms[$batches[0]]):Batch::getProgBatches($model->program_id),
-						'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-					<!--<?//= Html:: dropDownList('User[batches][]','',[],['id'=>'bat','class'=>'form-control batches','prompt'=>'Select Batch'])?>-->
-				</div>
-			<!--</div>-->
-			<div class="col-sm-1">
-				<label class="control-label add-grant-button"> Add </label>
-				<button type="button" class="btn btn-success btn-round add-grant-button"><i class="glyphicon glyphicon-plus"></i></button>
-			</div>
-		</div>
-        <div class="form-group row" id="pb2" <?= (count($batches)>1?'':'style="display:none"')?>><!--grant-div panel-body-->
-			<!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->
-				<div class="col-sm-6">
-					<label class="control-label">Program</label><br>
-					<!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->
-					<?= Select2::widget([
-						'name' => 'Enquiry[program2]',
-						'id' => 'prog2',
-						'value' => isset($batches[1])?$myprograms[$batches[1]]:'', // initial value
-						'data' => Program::getPrograms(),
-						'options' => ['placeholder' => 'Select a Program','class'=>'prog'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-					<h5 style="display:none" class='error red-theme'>Country cannot be a
-						number.</h5>
-				</div>
-				<div class="col-sm-5">
-					<label class="control-label">Batch</label>
-					<?= Select2::widget([
-						'name' => 'Enquiry[batch2]',
-						'id' => 'bat2',
-						'value' => isset($batches[1])?$batches[1]:'', // initial value
-						'data' => isset($batches[1])?Batch::getProgBatches($myprograms[$batches[1]]):[],
-						'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-				</div>
-			<!--</div>-->
-			<div class="col-sm-1">
-				<label class="control-label remove-grant-button"> Remove </label>
-				<button type="button" class="btn btn-success btn-round remove-grant-button"><i class="glyphicon glyphicon-minus"></i></button>
-			</div>
-		</div>
-		<div class="form-group row" id="pb3" <?= (count($batches)>2?'':'style="display:none"')?>><!--grant-div panel-body-->
-			<!--<div class="col-sm-11 panel-body"  > <!--style="border: 1px solid black"-->
-				<div class="col-sm-6">
-					<label class="control-label">Program</label>
-					<!--<?/*= Html:: dropDownList('User[program][]','',Program::getPrograms(),['id'=>'prog1','class'=>'form-control program','prompt'=>'Select Program'])*/?>-->
-					<?= Select2::widget([
-						'name' => 'Enquiry[program3]',
-						'id' => 'prog3',
-						'value' => isset($batches[2])?$myprograms[$batches[2]]:'', // initial value
-						'data' => Program::getPrograms(),
-						'options' => ['placeholder' => 'Select a Program','class'=>'prog'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-					<h5 style="display:none" class='error red-theme'>Country cannot be a
-						number.</h5>
-				</div>
-				<div class="col-sm-5">
-					<label class="control-label">Batch</label>
-					<?= Select2::widget([
-						'name' => 'Enquiry[batch3]',
-						'id' => 'bat3',
-						'value' => isset($batches[2])?$batches[2]:'', // initial value
-						'data' => isset($batches[2])?(Batch::getProgBatches($myprograms[$batches[2]])):[],
-						'options' => ['placeholder' => 'Select a Batch','class'=>'bat'],
-						'pluginOptions' => [
-							'tags' => true,
-							//'multiple' => 'true',
-							'tokenSeparators' => [',', ' '],
-							'maximumInputLength' => 20,
-						],
-					]); ?>
-				</div>
-			<!--</div>-->
-			<div class="col-sm-1">
-				<label class="control-label remove-grant-button"> Remove </label>
-				<button type="button" class="btn btn-success btn-round remove-grant-button"><i class="glyphicon glyphicon-minus"></i></button>
-			</div>
-		</div>
-		
+
+        <!-- Index type  logic start -->
+
+
+        <p>
+        <?= Html::a('Add a Program', ['enquiry-batch/create','eid'=>$model->id], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        // 'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            // 'id',
+            // 'name',
+            // 'enquiry_id',
+            [
+                'label'=>'Program',
+                'attribute'=>'program_id',
+                'value'=>function ($model) {
+                    return isset($model->program_id)?$model->program->name:'';
+                },
+            ],
+            [
+                'label'=>'Batch',
+                'attribute'=>'batch_id',
+                'value'=>function ($model) {
+                    return isset($model->batch_id)?$model->batch->name:'';
+                },
+            ],
+            //'start_date',
+            //'created_at',
+            //'updated_at',
+            //'final_status',
+            [
+                'label'=>'Currency',
+                'attribute'=>'currency',
+                'value'=>function ($model) {
+                    return isset($model->currency)?$model->currency0->name:'';
+                },
+            ],
+            // [
+            //     'label' => 'Hours',
+            //     'attribute' => 'hours',
+            //     'value' => function ($model) {
+            //         return isset($model->hours)?$model->hours:'';
+            //     },
+            // ],
+            [
+                'label'=>'Amount',
+                'attribute'=>'amount',
+                'value'=>function ($model) {
+                    return ($model->amount!='')?$model->amount:'';
+                },
+            ],
+            [
+                'label'=>'Installment Plan',
+                'attribute'=>'installment_plan',
+                'value'=>function ($model) {
+                    return ($model->installment_plan!='')?$model->installment_plan:'';
+                },
+            ],
+            [
+                'label'=>'Invoicing',
+                'attribute'=>'invoicing',
+                'value'=>function ($model) {
+                    return ($model->invoicing!='')?UserTypes::$invoice[$model->invoicing]:'';
+                },
+            ],
+            //'status',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update}&nbsp;&nbsp;{delete}',
+
+                'buttons' => [                    
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry-batch/update', 'id' => $model->id]), [
+                            'title' => Yii::t('yii', 'Update'),
+                            'data' => [
+                                'link-to' => 'user-update',
+                            ],
+                        ]);
+                    },
+                ]
+            ],
+        ],
+    ]); ?>
+
+        <!-- Index type  logic end -->
+
+
+
         <div class="form-group row"><!--form-material-->
 
         </div>
@@ -446,6 +410,11 @@ use yii\helpers\ArrayHelper;
 
     <?php
 
+$this->registerCss('
+	.table {
+		background-color: white;
+	}
+');
 $this->registerJs('
     function readURL(input) {
 		if (input.files && input.files[0]) {

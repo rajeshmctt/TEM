@@ -190,7 +190,7 @@ class EnquiryController extends Controller
         $link = \Yii::$app->urlManager->createAbsoluteUrl(["enquiry/index"]);
         // echo $link; exit; 
         if ($model->load(Yii::$app->request->post())) {
-            // echo "<pre>"; print_r($model->state_id); exit;
+            // echo "<pre>"; print_r($model->program_id); exit;
             if($model->state_id == 0){
                 $model->state_id = NULL;
             }
@@ -210,6 +210,12 @@ class EnquiryController extends Controller
                 $model->l3_batch = NULL;
             }*/
             if($model->save()){
+                if($model->program_id!=''){
+                    $ebm = new EnquiryBatch();
+                    $ebm->enquiry_id = $model->id;
+                    $ebm->program_id = $model->program_id;
+                    $ebm->save();
+                }
                 Yii::$app->getSession()->setFlash('success','You have successfully added an enquiry');
                 // return $this->redirect(['index']);
                 return $this->redirect(['create','add'=>1]);
@@ -342,6 +348,11 @@ class EnquiryController extends Controller
         $myprograms = Batch::getBatchPrograms($batches);
         $pgcount = count((array)$batches); 
         // echo "<pre>"; print_r($batches); exit;
+        
+        //Show  Enquiry Batches  list
+        $searchModel = new EnquiryBatchSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$model->id);
+
         $countries = [];
         // $countries = [];
         foreach(Country::find()->all() as $ctry){
@@ -467,6 +478,8 @@ class EnquiryController extends Controller
             'batches' => $batches,
             'pgcount' => $pgcount,
             'owners' => $owners,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

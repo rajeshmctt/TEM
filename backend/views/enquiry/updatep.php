@@ -44,6 +44,8 @@ $this->params['breadcrumbs'][] = 'Update';
 		'batches' => $batches,
 		'pgcount' => $pgcount,
         'owners' => $owners,
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
     ]) ?>
 
 </div>
