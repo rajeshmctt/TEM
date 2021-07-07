@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use kartik\select2\Select2;
 use common\models\Company;
 use yii\helpers\ArrayHelper;
+use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Enquiry */
@@ -54,10 +55,12 @@ use yii\helpers\ArrayHelper;
         <div class="form-group row"><!--form-material-->
             <div class="col-sm-3">    
                 <label class="control-label">Enquiry Date<span class="red-theme">*</span></label>
-                <input type="text" name="Enquiry[date_of_enquiry]" id="enquiry_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="<?=isset($model->date_of_enquiry)? date("m/d/Y",$model->date_of_enquiry):''?>" >
+                <!--<input type="text" name="Enquiry[date_of_enquiry]" id="enquiry_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="<?//=isset($model->date_of_enquiry)? date("m/d/Y",$model->date_of_enquiry):''?>" >-->
+                
+                    <?= $form->field($model, 'date_of_enquiry',['options' => ['class' => 'form-group', 'data-provide'=>"datepicker"]])->input('email', ['placeholder' => "Enquiry Date"])->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3">
-                <label class="control-label">Full Name<span class="red-theme">*</span></label>
+                <label class="control-label">Name<span class="red-theme">*</span></label>
                 <?= $form->field($model, 'full_name')->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3">
@@ -251,6 +254,12 @@ use yii\helpers\ArrayHelper;
 
 
     <?php
+$eid = ($model->id=="")?0:$model->id;
+$this->registerCss('
+    .datepicker-days{
+        display: none;
+    }
+');
 
 $this->registerJs('
     function readURL(input) {
@@ -320,6 +329,16 @@ $(document).ready(function(){
         }else{
             $("#referred_by").hide();
         }
+    });
+    
+    $("#enquiry-date_of_enquiry").click(function(){
+        $(".datepicker-inline").hide();
+    });
+
+    $("#enquiry-date_of_enquiry").datepicker({
+        /*format: "dd/mm/yyyy",*/
+        autoclose: true,
+        inline: false
     });
 
     $("#enquiry_date").datepicker({
@@ -400,46 +419,51 @@ return false;
 			}
         });
 
-        $("#enquiry-email").on("blur","input",function(){
+        /*$("#enquiry-email").on("blur","input",function(){
             alert("finally bye");
-        });
+        });*/
 
         console.log("testing this one also");
 		$("#enquiry-email").focusout(function(e) {
-            console.log("testing this one ");
 			var email = $("#enquiry-email").val();
-			$.ajax({
-				type:"GET",
-				url: "' . Yii::$app->getUrlManager()->createUrl(['enquiry/validate-email']) . '",
-				data: {email: email},
-				success: function (data) {
-					if(data){
-						console.log(data);
-						$("#email_error").show();
-					 }
-					 else
-						$("#email_error").hide();
-					}
-            });
+            var bid = '. $eid .';
+            if(bid ==0){
+                $.ajax({
+                    type:"GET",
+                    url: "' . Yii::$app->getUrlManager()->createUrl(['enquiry/validate-email']) . '",
+                    data: {email: email},
+                    success: function (data) {
+                        if(data){
+                            console.log(data);
+                            $("#email_error").show();
+                        }
+                        else
+                            $("#email_error").hide();
+                        }
+                });
+            }
         });
         
         
 		$("#customer_phone").focusout(function(e) {
             var phone = $("#customer_phone").val();
             console.log(phone);
-			$.ajax({
-				type:"GET",
-				url: "' . Yii::$app->getUrlManager()->createUrl(['enquiry/validate-phone']) . '",
-				data: {phone: phone},
-				success: function (data) {
-					if(data){
-						console.log(data);
-						$("#phone_error").show();
-					 }
-					 else
-						$("#phone_error").hide();
-					}
-            });
+            var bid = '. $eid .';
+            if(bid ==0 && phone != ""){
+                $.ajax({
+                    type:"GET",
+                    url: "' . Yii::$app->getUrlManager()->createUrl(['enquiry/validate-phone']) . '",
+                    data: {phone: phone},
+                    success: function (data) {
+                        if(data){
+                            console.log(data);
+                            $("#phone_error").show();
+                        }
+                        else
+                            $("#phone_error").hide();
+                        }
+                });
+            }
         });
 		
 

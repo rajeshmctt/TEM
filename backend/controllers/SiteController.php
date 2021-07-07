@@ -193,6 +193,44 @@ class SiteController extends Controller
         }
     }
 
+    public function actionResetPassword($token)
+    {
+        $model = new User;
+		$reset = 0;
+        $validationResult = $this->ajaxValidation($model);
+        if ($validationResult) {
+            return $validationResult;
+        }
+		
+        $resetModel = User::findOne([
+            'password_reset_token' => $token,
+            'status' => User::STATUS_ACTIVE,
+        ]);
+		if($resetModel==null){
+			$reset = 1; 
+		}
+		// echo "<pre>4"; print_r($resetModel); exit;
+		
+        if ($model->load(Yii::$app->request->post())) {
+			// echo $model->password_hash; exit;
+            if ($model->resetPassword($token, $model->password_hash)) {
+                Yii::$app->getSession()->setFlash('success', 'New password saved.');
+                return $this->goHome();
+            } else {
+                Yii::$app->getSession()->setFlash('error', 'New password not saved.');
+                $this->layout = "login";
+                return $this->render('reset_password', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        $this->layout = "login";
+        return $this->render('reset_password', [
+            'model' => $model,
+            'reset' => $reset,
+        ]);
+    }
+
     /**
      * Logout action.
      *

@@ -248,6 +248,7 @@ class EnquiryController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->date_of_enquiry = date("m/d/Y",$model->date_of_enquiry);
         $countries = [];
         foreach(Country::find()->all() as $ctry){
             $countries[$ctry->id] = $ctry->name;

@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Owner',
                 'attribute' => 'owner_id',
                 'value' => function ($model) {
-                    return isset($model->owner_id)?$model->owner0->name:'Not Set';
+                    return isset($model->owner_id)?$model->owner0->name:'';//Not Set
                 },
             ],
             'subject',
@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Source',
                 'attribute' => 'source',
                 'value' => function ($model) {
-                    return ($model->source!='')?UserTypes::$sources[$model->source]:'N/A';
+                    return ($model->source!='')?UserTypes::$sources[$model->source]:'';//N/A
                 },
             ],
             'referred_by',  //hide
@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Program',
                 'attribute' => 'program_id',
                 'value' => function ($model) {
-                    return isset($model->program_id)?$model->program->name:'N/A';
+                    return isset($model->program_id)?$model->program->name:''; //N/A
                 },
                 'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
             ],

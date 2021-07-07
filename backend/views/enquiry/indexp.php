@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Owner',
                 'attribute' => 'owner_id',
                 'value' => function ($model) {
-                    return isset($model->owner_id)?$model->owner0->name:'Not Set';
+                    return isset($model->owner_id)?$model->owner0->name:'';
                 },
             ],
             [

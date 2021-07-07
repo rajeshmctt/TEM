@@ -70,8 +70,10 @@ class Enquiry extends \yii\db\ActiveRecord
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            [['date_of_enquiry', 'owner_id', 'country_id', 'countries_id', 'state_id', 'city_id', 'program_id', 'amount', 'currency_id', 'enq_status', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['owner_id', 'country_id', 'countries_id', 'state_id', 'city_id', 'program_id', 'amount', 'currency_id', 'enq_status', 'status', 'created_at', 'updated_at'], 'integer'],
             [['remarks'], 'string'], 
+            [['date_of_enquiry'], 'required'],
+            [['date_of_enquiry'], 'safe'],
             [['full_name', 'address', 'owner', 'close_reason', 'subject'], 'string', 'max' => 255],
             [['contact_no'], 'string', 'max' => 20],
             [['email', 'city', 'source', 'referred_by'], 'string', 'max' => 50],
@@ -94,8 +96,8 @@ class Enquiry extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'date_of_enquiry' => 'Date Of Enquiry',
-            'full_name' => 'Full Name',
+            'date_of_enquiry' => 'Enquiry Date',
+            'full_name' => 'Name',
             'contact_no' => 'Contact No',
             'email' => 'Email',
             'address' => 'Address',
