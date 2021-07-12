@@ -25,6 +25,7 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Fill;
 use common\models\EnquiryBatchSearch;
+use yii\web\UploadedFile;
 
 /**
  * EnquiryController implements the CRUD actions for Enquiry model.
@@ -840,6 +841,143 @@ class EnquiryController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionGetcsv()
+    {
+        $model = new Enquiry();
+        // echo realpath(dirname(__FILE__)); exit; 
+        if ($model->load(Yii::$app->request->post()) ) {
+
+            $model->file1 = UploadedFile::getInstance($model, 'file1');
+
+            if ( $model->file1 )
+                {
+                    $time = time();
+                    
+                    // echo "<pre>"; print_r($_FILES['Enquiry']['tmp_name']['file1']); exit;
+                    $myfile = $_FILES['Enquiry']['tmp_name']['file1'];
+                    /*if ($_FILES['uploadedfile']['error'] == UPLOAD_ERR_OK               //checks for errors
+                    && is_uploaded_file($_FILES['uploadedfile']['tmp_name'])) { //checks that file is uploaded
+                echo file_get_contents($_FILES['uploadedfile']['tmp_name']); 
+              }*/
+
+                    // $model->file1->saveAs(realpath(dirname(__FILE__)).'csv/' .$time. '.' . $model->file1->extension);
+                    // $model->file1 = 'csv/' .$time. '.' . $model->file1->extension;
+                    $count = 0;
+                    $handle = fopen($myfile, "r");
+                    while (($fileop = fgetcsv($handle, 1000, ",")) !== false) 
+                    {
+                        $date = strtotime($fileop[0]);
+                        $name = $fileop[1];
+                        $city = $fileop[2];
+                        $country = $fileop[3];
+                        $source = $fileop[4];
+                        $subject = $fileop[5];
+                        $referred_by = $fileop[6];
+                        $program = $fileop[7];
+                        $owner = $fileop[8];
+                        // $confirmation_email = $fileop[9];
+                        $remarks = $fileop[10];
+                        $email = $fileop[11];
+                        $phone = $fileop[12];
+                        $status = $fileop[13];
+                        // print_r($fileop);exit();
+                        // echo gettype($date)." ".gettype($name)." ".gettype($email)."<br>";
+                        // echo $date." ".$name." ".$email."<br>";
+                        if($date != ''){
+                            // print_R($fileop)."<br>";
+                            // echo 1234;
+                            // Add to db
+                            $enqm = new Enquiry();
+                            $enqm->date_of_enquiry = $date;
+                            $enqm->full_name = $name;
+                            if($city != ''){
+                                $mycity = City::find()->where(['name'=> $city])->one();
+                                $enqm->city_id = isset($mycity)?$mycity->id:'';
+                                $enqm->state_id = isset($mycity)?$mycity->state_id:'';
+                            }
+                            if($country != ''){
+                                $mycountry = Country::find()->where(['name'=> $country])->one();
+                                $enqm->countries_id = isset($mycountry)?$mycountry->id:'';
+                            }
+                            $enqm->source = strval(array_search($source,UserTypes::$sources));
+                            // echo gettype($enqm->source). " ".$enqm->source; exit;
+                            /*if($enqm->source==false){
+                                $enqm->source = '';
+                            }*/
+                            // exit;
+                            $enqm->subject = $subject;
+                            $enqm->referred_by = $referred_by;
+                            $myprog = Program::find()->where(['name'=>$program])->one();
+                            if($myprog==''){
+                                $myprog = new Program();
+                                $myprog->name = $program;
+                                $myprog->save();
+                            }
+                            $enqm->program_id = $myprog->id;
+                            $myown = Owner::find()->where(['name'=>$owner])->one();
+                            if($myown==''){
+                                // echo 1; exit; 
+                                $myown = new Owner();
+                                $myown->name = $owner;
+                                if($myown->save()){
+
+                                }else{
+                                    echo "<pre>"; print_r($myown->getErrors());
+                                }
+                            }
+                            // exit;
+                            $enqm->owner_id = $myown->id;
+                            $enqm->email = $email;
+                            $enqm->contact_no = $phone;
+                            $enqm->enq_status = array_search($status,UserTypes::$estatus);
+                            // echo "<pre>"; print_r($enqm); exit;
+                            if($enqm->save()){
+                                $count++;
+                                $myrem = explode("\n", $remarks);
+                                foreach($myrem as $rem){
+                                    $remdet = explode(":", $rem);
+                                    // echo strtotime(trim($remdet[0],'"'))."<br>";
+                                    $erem = new EnquiryRemarks();
+                                    $erem->enquiry_id = $enqm->id;
+                                    $erem->date = strtotime(trim($remdet[0],'"'));
+                                    $erem->remarks = $remdet[1];
+                                    $erem->save();
+                                }
+                            }else{
+                                echo "<pre>"; print_r($enqm->getErrors()); exit;
+                            }
+                            // echo "<pre>"; exit;
+                            // $date = intval($date) + 111;
+                            // echo "a".$date."d23<br>";
+                            // echo "<pre>"; print_r($enqm); exit;
+                            /*if($enqm->save()){
+                                $count++;
+                            } else{
+                                // echo "<pre>"; print_r($enqm->getErrors());
+                            }*/
+                            // echo "yes";
+                        }
+                        // $sql = "INSERT INTO enquiry(date_of_enquiry, full_name, email) VALUES ('$date', '$name', '$email')";
+                        // $query = Yii::$app->db->createCommand($sql)->execute();
+                     }
+                    //  exit;
+                     /*if ($query) 
+                     {
+                        echo "data upload successfully";
+                     }*/
+
+                }
+
+            // $model->save();
+            Yii::$app->getSession()->setFlash('success',$count.'Records imported successfully');
+            return $this->redirect(['getcsv']);
+        } else {
+            return $this->render('getcsv', [
+                'model' => $model,
+            ]);
+        }
     }
 	
 	public function export($e_sts) //='',$str_date='',$end_date=''

@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $model common\models\EnquiryBatch */
 
 $this->title = 'Update Enquiry Program: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Confirmed Participants: ', 'url' => ['enquiry/joined']];
-$this->params['breadcrumbs'][] = ['label' => 'Confirmed Participant: '.$model->enquiry->full_name, 'url' => ['enquiry/updatej','id'=>$model->enquiry_id]];
+$this->params['breadcrumbs'][] = ['label' => 'Potential Participants: ', 'url' => ['enquiry/potential']];
+$this->params['breadcrumbs'][] = ['label' => 'Potential Participant: '.$model->enquiry->full_name, 'url' => ['enquiry/updatep','id'=>$model->enquiry_id]];
 // $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
@@ -26,14 +26,14 @@ $this->params['breadcrumbs'][] = 'Update';
 						echo "<li><a href=".Yii::$app->urlManager->createAbsoluteUrl($v['url'])." data-link-to='faculty-index'>".$v['label']."</a></li>";
 					}else{
 						//echo "<pre>"; print_r($v); exit;
-						// echo "<li class='active'>$v</li>";
+						echo "<li class='active'>$v</li>";
 					}
 				}?>
 			</ol>
 		</div>
 
         <?php }?>
-    <?= $this->render('_form', [
+    <?= $this->render('_pform', [
         'model' => $model,
     ]) ?>
 

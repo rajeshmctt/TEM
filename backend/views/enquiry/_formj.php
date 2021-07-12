@@ -415,6 +415,9 @@ $this->registerCss('
     .select2-selection{
         background-color: #ffeebb !important;
     }
+	.table {
+		background-color: white;
+	}
 ');
 
 $this->registerJs('

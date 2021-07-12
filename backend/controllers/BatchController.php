@@ -80,7 +80,7 @@ class BatchController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             // echo "<pre>"; print_r($model); exit;
             if($model->save()){
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
             
         }
@@ -102,7 +102,7 @@ class BatchController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

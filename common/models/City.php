@@ -61,6 +61,16 @@ class City extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[State]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getState()
+    {
+        return $this->hasOne(State::className(), ['id' => 'state_id']);
+    }
+
+    /**
      * Gets query for [[Enquiries]].
      *
      * @return \yii\db\ActiveQuery

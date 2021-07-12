@@ -11,6 +11,7 @@ use common\models\EnquiryBatchSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\models\enums\EnquiryStatusTypes;
 
 /**
  * EnquiryBatchController implements the CRUD actions for EnquiryBatch model.
@@ -93,6 +94,38 @@ class EnquiryBatchController extends Controller
     }
 
     /**
+     * Creates a new EnquiryBatch model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionPcreate($eid)
+    {
+        $model = new EnquiryBatch();
+        $model->enquiry_id = $eid;
+        $enquiry = Enquiry::findOne($eid);
+        // echo "<pre>"; print_r($enquiry); exit;
+        if ($model->load(Yii::$app->request->post())) {
+            // echo "<pre>"; print_r($model); exit;
+            if($model->save()){
+                Yii::$app->getSession()->setFlash('success','Record Added successfully');
+                // Electives functionality 5-7-2021(pending) hide for now RDM 
+                /*foreach($model->electives as $elec){
+                    $elective = new EnquiryBatchElectives();
+                    $elective->enquiry_batch_id = $model->id;
+                    $elective->elective_id = $elec;
+                    $elective->save();
+                }*/
+            }
+            return $this->redirect(['enquiry/updatej', 'id' => $eid]);
+        }
+
+        return $this->render('pcreate', [
+            'model' => $model,
+            'enquiry' => $enquiry,
+        ]);
+    }
+
+    /**
      * Updates an existing EnquiryBatch model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -140,6 +173,32 @@ class EnquiryBatchController extends Controller
         }
 
         return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing EnquiryBatch model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionPupdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->getSession()->setFlash('success','Record Updated successfully');
+
+            if($model->enquiry->status == EnquiryStatusTypes::JOINED){
+                return $this->redirect(['enquiry/updatej', 'id' => $model->enquiry_id]);
+            }else{
+                return $this->redirect(['enquiry/updatep', 'id' => $model->enquiry_id]);
+            }
+        }
+
+        return $this->render('pupdate', [
             'model' => $model,
         ]);
     }

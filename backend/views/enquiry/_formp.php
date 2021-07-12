@@ -282,7 +282,7 @@ use yii\grid\GridView;
 
 
         <p>
-        <?= Html::a('Add a Program', ['enquiry-batch/create','eid'=>$model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Add a Program', ['enquiry-batch/pcreate','eid'=>$model->id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -310,11 +310,9 @@ use yii\grid\GridView;
                     return isset($model->batch_id)?$model->batch->name:'';
                 },
             ],
-            //'start_date',
-            //'created_at',
-            //'updated_at',
-            //'final_status',
-            [
+
+            // Hide other details for Potential RDM 9july 21 
+            /*[
                 'label'=>'Currency',
                 'attribute'=>'currency',
                 'value'=>function ($model) {
@@ -348,7 +346,7 @@ use yii\grid\GridView;
                 'value'=>function ($model) {
                     return ($model->invoicing!='')?UserTypes::$invoice[$model->invoicing]:'';
                 },
-            ],
+            ],*/
             //'status',
 
             [
@@ -357,7 +355,7 @@ use yii\grid\GridView;
 
                 'buttons' => [                    
                     'update' => function ($url, $model) {
-                        return Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry-batch/update', 'id' => $model->id]), [
+                        return Html::a('<span class="icon md-eye"></span>', Yii::$app->getUrlManager()->createUrl(['/enquiry-batch/pupdate', 'id' => $model->id]), [
                             'title' => Yii::t('yii', 'Update'),
                             'data' => [
                                 'link-to' => 'user-update',
@@ -411,6 +409,9 @@ use yii\grid\GridView;
     <?php
 
 $this->registerCss('
+.select2-selection{
+    background-color: #ffeebb !important;
+}
 	.table {
 		background-color: white;
 	}

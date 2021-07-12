@@ -96,7 +96,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     return isset($model->owner_id)?$model->owner0->name:'';//Not Set
                 },
             ],
-            'subject',
+            [
+                'attribute'=>'subject',
+                'contentOptions' => ['style' => 'width:20%; white-space: normal;'],
+            ],
             [
                 'label' => 'Source',
                 'attribute' => 'source',

@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-body">
 							<?php if($reset){ ?>
 							<!--<div class="panel-body">-->
-								<div class='alert alert-danger'>This link is already used to reset the password.</div>
+								<div class='alert alert-danger'>This token is already used to reset the password.</div>
 							<!--</div>-->
 							<?php } ?>
 <div class="login-box animated fadeInDown">
