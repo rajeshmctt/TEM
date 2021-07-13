@@ -16,6 +16,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string|null $address
  * @property string|null $owner
 * @property int|null $owner_id 
+* @property int|null $info_email_sent_on
  * @property string|null $city
  * @property int|null $country_id
 * @property int|null $countries_id 
@@ -71,11 +72,11 @@ class Enquiry extends \yii\db\ActiveRecord
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            [['owner_id', 'country_id', 'countries_id', 'state_id', 'city_id', 'program_id', 'amount', 'currency_id', 'enq_status', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['remarks'], 'string'], 
+            [['owner_id', 'info_email_sent_on', 'country_id', 'countries_id', 'state_id', 'city_id', 'program_id', 'amount', 'currency_id', 'enq_status', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['remarks', 'subject'], 'string'], 
             [['date_of_enquiry'], 'required'],
             [['date_of_enquiry','file1'], 'safe'],
-            [['full_name', 'address', 'owner', 'close_reason', 'subject'], 'string', 'max' => 255],
+            [['full_name', 'address', 'owner', 'close_reason'], 'string', 'max' => 255],
             [['contact_no'], 'string', 'max' => 20],
             [['email', 'city', 'source', 'referred_by'], 'string', 'max' => 50],
             [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['country_id' => 'id']],
@@ -104,6 +105,7 @@ class Enquiry extends \yii\db\ActiveRecord
             'address' => 'Address',
             'owner' => 'Owner',
             'owner_id' => 'Owner ID', 
+            'info_email_sent_on' => 'Info Email Sent On',
             'city' => 'City',
             'country_id' => 'Country ID',
             'countries_id' => 'Countries ID', 

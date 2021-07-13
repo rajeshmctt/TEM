@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 <!--<a href="javascript:void(0);" data-no-link="true" id="addRowBtn" class="btn btn-success btn-sm"><i class="icon md-plus" aria-hidden="true"></i>Add New
                                                     Level</a>-->
                                                 <?= Html::a('Create Enquiry', ['create'], ['class' => 'btn btn-success']) ?>
+                                                <?= Html::a('Import Enquiries', ['getcsv'], ['class' => 'btn btn-info']) ?>
                                                 <?= Html::submitButton( '<i class="icon md-download"></i> Export To Excel', ['class' => 'btn btn-warning', 'name' => 'export']) ?>
                                                 <!--<a class="btn btn-success add_enq waves-effect waves-light" href="#">Create Enquiry (modal)</a>-->
                                             </div>

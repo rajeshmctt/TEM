@@ -7,7 +7,7 @@ use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model common\models\Currency */
 /* @var $form yii\widgets\ActiveForm */
-$this->title = 'Create Enquiry';
+$this->title = 'Import Enquiries';
 $this->params['breadcrumbs'][] = ['label' => 'Enquiries', 'url' => ['enquiry/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

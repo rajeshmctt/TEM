@@ -865,6 +865,7 @@ class EnquiryController extends Controller
                     // $model->file1->saveAs(realpath(dirname(__FILE__)).'csv/' .$time. '.' . $model->file1->extension);
                     // $model->file1 = 'csv/' .$time. '.' . $model->file1->extension;
                     $count = 0;
+					$er_email = [];
                     $handle = fopen($myfile, "r");
                     while (($fileop = fgetcsv($handle, 1000, ",")) !== false) 
                     {
@@ -917,7 +918,7 @@ class EnquiryController extends Controller
                             }
                             $enqm->program_id = $myprog->id;
                             $myown = Owner::find()->where(['name'=>$owner])->one();
-                            if($myown==''){
+                            /*if($myown==''){
                                 // echo 1; exit; 
                                 $myown = new Owner();
                                 $myown->name = $owner;
@@ -926,9 +927,9 @@ class EnquiryController extends Controller
                                 }else{
                                     echo "<pre>"; print_r($myown->getErrors());
                                 }
-                            }
+                            }*/
                             // exit;
-                            $enqm->owner_id = $myown->id;
+                            $enqm->owner_id = isset($myown->id)?$myown->id:'';
                             $enqm->email = $email;
                             $enqm->contact_no = $phone;
                             $enqm->enq_status = array_search($status,UserTypes::$estatus);
@@ -946,7 +947,8 @@ class EnquiryController extends Controller
                                     $erem->save();
                                 }
                             }else{
-                                echo "<pre>"; print_r($enqm->getErrors()); exit;
+								$er_email[] = $enqm->email;
+                                // echo "<pre>"; print_r($enqm->getErrors()); exit;
                             }
                             // echo "<pre>"; exit;
                             // $date = intval($date) + 111;
@@ -971,7 +973,7 @@ class EnquiryController extends Controller
                 }
 
             // $model->save();
-            Yii::$app->getSession()->setFlash('success',$count.'Records imported successfully');
+            Yii::$app->getSession()->setFlash('success',$count.' Records imported. '.implode(", ",$er_email)." not added.");
             return $this->redirect(['getcsv']);
         } else {
             return $this->render('getcsv', [

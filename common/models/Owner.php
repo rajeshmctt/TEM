@@ -32,10 +32,11 @@ class Owner extends \yii\db\ActiveRecord
     {
         return [
             // [['email'], 'required'],
+            // ['email', 'default', 'value' => 'owner@ctt.com'],
             [['status'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['email', 'contact_no'], 'string', 'max' => 255],
-            [['email'], 'unique'],
+            // [['email'], 'unique'],
         ];
     }
 

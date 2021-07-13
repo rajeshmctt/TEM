@@ -18,7 +18,7 @@ class EnquirySearch extends Enquiry
     public function rules()
     {
         return [
-            [['id', 'date_of_enquiry', 'country_id', 'program_id',  'amount', 'currency_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'date_of_enquiry', 'owner_id', 'info_email_sent_on', 'country_id', 'program_id',  'amount', 'currency_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['full_name', 'contact_no', 'email', 'address', 'owner', 'city', 'source', 'subject', 'referred_by', 'remarks'], 'safe'],
         ];
     }
@@ -61,6 +61,8 @@ class EnquirySearch extends Enquiry
         $query->andFilterWhere([
             'id' => $this->id,
             'date_of_enquiry' => $this->date_of_enquiry,
+            'owner_id' => $this->owner_id, 
+            'info_email_sent_on' => $this->info_email_sent_on, 
             'country_id' => $this->country_id,
             'program_id' => $this->program_id,
             'amount' => $this->amount,
