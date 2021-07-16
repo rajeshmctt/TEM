@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -73,10 +73,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 // 'label' => 'Program',
                 'attribute' => 'date_of_enquiry',
                 'value' => function ($model) {
-                    return date('M-d-Y',$model->date_of_enquiry);
+                    return date('d-m-Y',strtotime($model->date_of_enquiry));
                 },
+                'filter' => Html::activeInput('text', $searchModel, 'date_of_enquiry', ['class' => 'form-control','data-provide'=>"datepicker"]),
             ],
-            'full_name',
+            [
+                'attribute' => 'full_name',
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
+            ],
             'contact_no',
             'email:email',
             //'address',
@@ -89,13 +93,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     return isset($model->country_id)?$model->country->name:'Not Set';
                 },
             ],*/
-            'subject',
+            [
+                'attribute'=>'subject',
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
+            ],
             [
                 'label' => 'Source',
                 'attribute' => 'source',
                 'value' => function ($model) {
                     return isset($model->source)?UserTypes::$sources[$model->source]:'N/A';
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'source', UserTypes::$sources, ['class' => 'form-control', 'prompt' => 'Select Source']),
             ],
             'referred_by',  //hide
             [
@@ -104,6 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return isset($model->owner_id)?$model->owner0->name:'Not Set';
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'owner_id', $owners, ['class' => 'form-control', 'prompt' => 'Select Owner']),
             ],
             [
                 'label' => 'Program',
@@ -111,8 +120,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return isset($model->program_id)?$model->program->name:'N/A';
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'program_id', $programs, ['class' => 'form-control', 'prompt' => 'Select Program']),
             ],
-            // 'program_id',
+            [
+                'label' => 'Reason of Closing',
+                'attribute' => 'close_reason',
+                'value' => function ($model) {
+                    // return UserTypes::$reasons[$model->close_reason];
+                    return isset($model->close_reason)?UserTypes::$reasons[$model->close_reason]:'N/A';
+                },
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
+                'filter' => Html::activeDropDownList($searchModel, 'close_reason', UserTypes::$reasons, ['class' => 'form-control', 'prompt' => 'Select Reason']),
+            ],
             //'final_status_l1',
             //'invoice_raised_l1',
             //'l1_batch',

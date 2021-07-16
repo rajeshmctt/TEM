@@ -18,8 +18,8 @@ class EnquirySearch extends Enquiry
     public function rules()
     {
         return [
-            [['id', 'date_of_enquiry', 'owner_id', 'info_email_sent_on', 'country_id', 'program_id',  'amount', 'currency_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['full_name', 'contact_no', 'email', 'address', 'owner', 'city', 'source', 'subject', 'referred_by', 'remarks'], 'safe'],
+            [['id', 'owner_id', 'info_email_sent_on', 'country_id', 'countries_id', 'program_id',  'amount', 'currency_id','close_reason', 'enq_status', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['full_name', 'date_of_enquiry', 'contact_no', 'email', 'address', 'owner', 'city', 'source', 'subject', 'referred_by', 'remarks'], 'safe'],
         ];
     }
 
@@ -60,19 +60,37 @@ class EnquirySearch extends Enquiry
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'date_of_enquiry' => $this->date_of_enquiry,
+            // 'date_of_enquiry' => date("Y-m-d", strtotime($this->date_of_enquiry)),
             'owner_id' => $this->owner_id, 
             'info_email_sent_on' => $this->info_email_sent_on, 
             'country_id' => $this->country_id,
+            'countries_id' => $this->countries_id,
             'program_id' => $this->program_id,
             'amount' => $this->amount,
             'currency_id' => $this->currency_id,
+            'close_reason' => $this->close_reason,
+            'enq_status' => $this->enq_status,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
-
+        if($this->date_of_enquiry!=''){
+            $query->andFilterWhere(['like', 'date_of_enquiry', date("Y-m-d", strtotime($this->date_of_enquiry))]);
+        }
+        /*if($this->date_of_enquiry!=''){
+            // echo 2; //exit;
+            $mdt = floor(strtotime(urldecode($this->date_of_enquiry))/100000);
+            // $query->andFilterWhere(['like', 'date_of_enquiry', strtotime(urldecode($this->date_of_enquiry))/100000]);
+                // ->andFilterWhere(['<', 'date_of_enquiry', strtotime(urldecode($this->date_of_enquiry))-86400]);
+        }else{
+            // echo 1; 
+        }*/
+        // echo $this->date_of_enquiry; exit;
         $query->andFilterWhere(['like', 'full_name', $this->full_name])
+            // ->andFilterWhere(['>=', 'date_of_enquiry', strtotime($this->date_of_enquiry)])
+            // ->andFilterWhere(['<', 'date_of_enquiry', strtotime($this->date_of_enquiry)-86400])
+            // ->andFilterWhere(['like', 'date_of_enquiry', floor(strtotime(urldecode($this->date_of_enquiry))/100000)])  // date(strtotime
+            // ->andFilterWhere(['like', 'date_of_enquiry', date("Y-m-d", strtotime($this->date_of_enquiry))])
             ->andFilterWhere(['like', 'contact_no', $this->contact_no])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'address', $this->address])

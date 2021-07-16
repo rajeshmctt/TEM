@@ -82,7 +82,7 @@ use yii\grid\GridView;
                                                         <div class="form-group form-material row">
                                                         <div class="col-sm-3">    
                                                             <label class="control-label">Enquiry Date<span class="red-theme">*</span></label>
-                                                            <input type="text" name="Enquiry[date_of_enquiry]" id="enquiry_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="<?=isset($model->date_of_enquiry)? date("m/d/Y",$model->date_of_enquiry):''?>" >
+                                                            <input type="text" name="Enquiry[date_of_enquiry]" id="enquiry_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="<?=isset($model->date_of_enquiry)? date("d-m-Y",strtotime($model->date_of_enquiry)):''?>" >
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <label class="control-label">Full Name<span class="red-theme">*</span></label>
@@ -251,7 +251,7 @@ use yii\grid\GridView;
                 <input type="text" name="Remark[date_of_remark]" id="remark_date" class="form-control" data-provide="datepicker" placeholder="Call Date" value="" >
             </div>
             <div class="col-sm-9">
-                <label class="control-label">New Remark</label>
+                <label class="control-label">Add Remark</label>
                 <div class="form-group field-enquiry-remarks">
                     <textarea id="remarks" class="form-control" name="Remark[remark]" rows="1" aria-invalid="false"></textarea>
                 </div>            
@@ -261,9 +261,9 @@ use yii\grid\GridView;
         <div class="form-group row">form-material-->
             <div class="col-sm-12" >
                 <label class="control-label">Old Remarks</label>
-                <textarea style="width:100%; background-color:#ffeebb" readonly>
+                <textarea style="width:100%; background-color:#ffeebb" rows="4" readonly>
                 <?php foreach($model->enquiryRemarks as $rem){ ?>
-                    <?= date("m/d/Y",$rem->date).": ".$rem->remarks."\n" ?>
+                    <?= date("d-m-Y",$rem->date).": ".$rem->remarks."\n" ?>
                 <?php } ?>
                 </textarea>
             </div>
@@ -481,7 +481,7 @@ $(document).ready(function(){
 
 		});
 	$("#enquiry_date").datepicker({
-        /*format: "dd/mm/yyyy",*/
+        format: "dd-mm-yyyy",
         autoclose: true
     });
 
@@ -496,7 +496,7 @@ $(document).ready(function(){
     });
 
     $("#remark_date").datepicker({
-        /*format: "dd/mm/yyyy",*/
+        format: "dd-mm-yyyy",
         autoclose: true
     });
 	$("#text").hide();

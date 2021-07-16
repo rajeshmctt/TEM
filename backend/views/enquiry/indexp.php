@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -79,8 +79,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 // 'label' => 'Program',
                 'attribute' => 'date_of_enquiry',
                 'value' => function ($model) {
-                    return date('M-d-Y',$model->date_of_enquiry);
+                    return date('d-m-Y',strtotime($model->date_of_enquiry));
                 },
+                'filter' => Html::activeInput('text', $searchModel, 'date_of_enquiry', ['class' => 'form-control','data-provide'=>"datepicker"]),
             ],
             'full_name',
             'contact_no',
@@ -101,6 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return isset($model->countries_id)?$model->countries->name:'';
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'countries_id', $countries, ['class' => 'form-control', 'prompt' => 'Select Country']),
             ],
             //'source',
             // 'subject',
@@ -111,22 +113,36 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return isset($model->owner_id)?$model->owner0->name:'';
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'owner_id', $owners, ['class' => 'form-control', 'prompt' => 'Select Owner']),
+            ],
+            [
+                'attribute'=>'subject',
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
+            ],
+            [
+                'label' => 'Source',
+                'attribute' => 'source',
+                'value' => function ($model) {
+                    return ($model->source!='')?UserTypes::$sources[$model->source]:'';//N/A
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'source', UserTypes::$sources, ['class' => 'form-control', 'prompt' => 'Select Source']),
             ],
             [
                 'format'=> 'raw',
                 'label' => 'Program',
-                'attribute' => 'program_id',
+                // 'attribute' => 'program_id',
                 'value' => function ($model) {
                     $prg = count($model->enquiryBatches);
                     $prgs = '';
                     foreach($model->enquiryBatches as $bat){
-                        if($bat->status == 10){
+                        // if($bat->status == 10){
                             $prgs .= $bat->batch->program->name."<br>";
-                        }
+                        // }
                     }
                     // return isset($model->program_id)?$model->program->name:'N/A';
                     return $prgs;
                 },
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
             ],
             [
                 'label' => 'Status',
@@ -134,6 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return isset($model->enq_status)?UserTypes::$estatus[$model->enq_status]:'N/A';
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'enq_status', UserTypes::$estatus, ['class' => 'form-control', 'prompt' => 'Select Status']),
             ],
             // 'program_id',
             //'final_status_l1',

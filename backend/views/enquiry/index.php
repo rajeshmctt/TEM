@@ -68,25 +68,46 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+    <!--  echo floor(strtotime(urldecode("07%2F09%2F2021"))/100000); exit; -->
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             // 'id',
             // 'date_of_enquiry',
             [
-                // 'label' => 'Program',
+                // 'label' => 'Program',data-provide="datepicker"
                 'attribute' => 'date_of_enquiry',
                 'value' => function ($model) {
-                    return date('M-d-Y',$model->date_of_enquiry);
+                    // return date('M-d-Y',$model->date_of_enquiry);
+                    return date('d-m-Y',strtotime($model->date_of_enquiry));
+                },
+                'contentOptions' => ['style' => 'width:10%; white-space: normal; ','data-provide' => 'datepicker'], //font-size: 12px !important;
+                //  $form->field($model, 'date_of_enquiry',['options' => ['class' => 'form-group', 'data-provide'=>"datepicker"]])->textInput()->label(false)
+                
+                //  Html::input('text','password1','', $options=['class'=>'form-control','data-provide'=>"datepicker",'maxlength'=>10, 'style'=>'width:350px']) 
+                //Html::activeInput('text', $user, 'name', ['class' => $username])
+
+                'filter' => Html::activeInput('text', $searchModel, 'date_of_enquiry', ['class' => 'form-control','data-provide'=>"datepicker"]),
+                // 'filter' => Html::input('text','EnquirySearch[date_of_enquiry]',$searchModel->date_of_enquiry, $options=['class'=>'form-control','data-provide'=>"datepicker",'maxlength'=>10]),
+            ],
+            [
+                'label' => 'Name',
+                'attribute' => 'full_name',
+                'contentOptions' => ['style' => 'width:10%; white-space: normal;'],
+            ],
+            'contact_no',
+            [
+                'format' => 'raw',
+                'attribute' => 'email',
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'], // font-size: 11px !important;
+                // substr("Hello world",0,6);
+                'value' => function ($model) {
+                    return substr($model->email,0,20)."<br>".substr($model->email,20);
                 },
             ],
-            'full_name',
-            'contact_no',
-            'email:email',
             //'address',
             // 'owner', //hide
             //'city',
@@ -96,10 +117,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return isset($model->owner_id)?$model->owner0->name:'';//Not Set
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'owner_id', $owners, ['class' => 'form-control', 'prompt' => 'Select Owner']),
             ],
             [
                 'attribute'=>'subject',
-                'contentOptions' => ['style' => 'width:20%; white-space: normal;'],
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
             ],
             [
                 'label' => 'Source',
@@ -107,8 +129,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return ($model->source!='')?UserTypes::$sources[$model->source]:'';//N/A
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'source', UserTypes::$sources, ['class' => 'form-control', 'prompt' => 'Select Source']),
             ],
-            'referred_by',  //hide
+            // 'referred_by',  //hide
             [
                 'label' => 'Program',
                 'attribute' => 'program_id',
@@ -116,6 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return isset($model->program_id)?$model->program->name:''; //N/A
                 },
                 'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
+                'filter' => Html::activeDropDownList($searchModel, 'program_id', $programs, ['class' => 'form-control', 'prompt' => 'Select Program']),
             ],
             [
                 'label' => 'Status',
@@ -123,6 +147,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return isset($model->enq_status)?UserTypes::$estatus[$model->enq_status]:'N/A';
                 },
+                'contentOptions' => ['style' => 'width:10%; white-space: normal;'],
+                'filter' => Html::activeDropDownList($searchModel, 'enq_status', UserTypes::$estatus, ['class' => 'form-control', 'prompt' => 'Select Status']),
             ],
             // 'program_id',
             //'final_status_l1',
@@ -315,8 +341,8 @@ Yii::$app->view->registerJs("
             });
 		});
         
-		$('#dt').datepicker({
-			/*format: 'dd/mm/yyyy',*/
+		$('#enquirysearch-date_of_enquiry').datepicker({
+			format: 'dd-mm-yyyy',
 			autoclose: true
 		});
 

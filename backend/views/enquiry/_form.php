@@ -56,7 +56,7 @@ use yii\jui\DatePicker;
             <div class="col-sm-3">    
                 <label class="control-label">Enquiry Date<span class="red-theme">*</span></label>
                 <!--<input type="text" name="Enquiry[date_of_enquiry]" id="enquiry_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="<?//=isset($model->date_of_enquiry)? date("m/d/Y",$model->date_of_enquiry):''?>" >-->
-                
+
                     <?= $form->field($model, 'date_of_enquiry',['options' => ['class' => 'form-group', 'data-provide'=>"datepicker"]])->input('email', ['placeholder' => "Enquiry Date"])->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3">
@@ -187,7 +187,7 @@ use yii\jui\DatePicker;
                 <input type="text" name="Remark[date_of_remark]" id="remark_date" class="form-control" data-provide="datepicker" placeholder="Call Date" value="" >
             </div>
             <div class="col-sm-9">
-                <label class="control-label">New Remark</label>
+                <label class="control-label">Add Remark</label>
                 <div class="form-group field-enquiry-remarks">
                     <textarea id="remarks" class="form-control" name="Remark[remark]" rows="1" aria-invalid="false"></textarea>
                 </div>            
@@ -197,7 +197,7 @@ use yii\jui\DatePicker;
         <div class="form-group row">form-material-->
             <div class="col-sm-12" >
                 <label class="control-label">Remarks</label>
-                <textarea style="width:100%" readonly>
+                <textarea style="width:100%; background-color:#ffeebb" rows="4" readonly>
                 <?php foreach($model->enquiryRemarks as $rem){ ?>
                     <?= date("m/d/Y",$rem->date).": ".$rem->remarks."\n" ?>
                 <?php } ?>
@@ -259,6 +259,9 @@ $this->registerCss('
     .datepicker-days{
         display: none;
     }
+	.table {
+		background-color: white;
+	}
 ');
 
 $this->registerJs('
@@ -336,18 +339,18 @@ $(document).ready(function(){
     });
 
     $("#enquiry-date_of_enquiry").datepicker({
-        /*format: "dd/mm/yyyy",*/
+        format: "dd-mm-yyyy",
         autoclose: true,
         inline: false
     });
 
     $("#enquiry_date").datepicker({
-        /*format: "dd/mm/yyyy",*/
+        format: "dd-mm-yyyy",
         autoclose: true
     });
 
     $("#remark_date").datepicker({
-        /*format: "dd/mm/yyyy",*/
+        format: "dd-mm-yyyy",
         autoclose: true
     });
 	$("#text").hide();

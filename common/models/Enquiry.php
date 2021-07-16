@@ -9,7 +9,7 @@ use yii\behaviors\TimestampBehavior;
  * This is the model class for table "enquiry".
  *
  * @property int $id
- * @property int|null $date_of_enquiry
+* @property string|null $date_of_enquiry
  * @property string|null $full_name
  * @property string|null $contact_no
  * @property string|null $email
@@ -23,7 +23,7 @@ use yii\behaviors\TimestampBehavior;
 * @property int|null $state_id 
 * @property int|null $city_id 
  * @property string|null $source
-* @property string|null $close_reason 
+* @property int|null $close_reason
  * @property string|null $subject
  * @property string|null $referred_by
  * @property int|null $program_id
@@ -72,11 +72,11 @@ class Enquiry extends \yii\db\ActiveRecord
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            [['owner_id', 'info_email_sent_on', 'country_id', 'countries_id', 'state_id', 'city_id', 'program_id', 'amount', 'currency_id', 'enq_status', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['owner_id', 'info_email_sent_on', 'country_id', 'countries_id', 'state_id', 'city_id', 'close_reason', 'program_id', 'amount', 'currency_id', 'enq_status', 'status', 'created_at', 'updated_at'], 'integer'],
             [['remarks', 'subject'], 'string'], 
             [['date_of_enquiry'], 'required'],
             [['date_of_enquiry','file1'], 'safe'],
-            [['full_name', 'address', 'owner', 'close_reason'], 'string', 'max' => 255],
+            [['full_name', 'address', 'owner'], 'string', 'max' => 255],
             [['contact_no'], 'string', 'max' => 20],
             [['email', 'city', 'source', 'referred_by'], 'string', 'max' => 50],
             [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['country_id' => 'id']],

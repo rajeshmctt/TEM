@@ -85,6 +85,10 @@ class UserTypes {
 		5=>'Others',
 		6=>'Closed-Not interested',
 		7=>'Closed-Not relevant',
+		8=>'Closed-Joined Somwehere else',
+		9=>'Closed-Not interested',
+		10=>'Closed-Not relevant',
+
 	];
 	public static $reasons = [
 		0=>'Not Interested',

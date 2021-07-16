@@ -26,6 +26,7 @@ use PHPExcel_IOFactory;
 use PHPExcel_Style_Fill;
 use common\models\EnquiryBatchSearch;
 use yii\web\UploadedFile;
+use yii\helpers\ArrayHelper;
 
 /**
  * EnquiryController implements the CRUD actions for Enquiry model.
@@ -55,6 +56,11 @@ class EnquiryController extends Controller
     {
         // Export excel functionality 19june21 RDM
         $export = Yii::$app->request->get('export');
+        $progs = Program::find()->all();
+        $programs = ArrayHelper::map($progs, 'id', 'name');
+        $owns = Owner::find()->all();
+        $owners = ArrayHelper::map($owns, 'id', 'name');
+        // echo "<pre>"; print_r($programs); exit; 
         if(isset($export)) // && !isset($search)
         {
             $this->export(EnquiryStatusTypes::ACTIVE);
@@ -67,6 +73,8 @@ class EnquiryController extends Controller
                 'title' => 'Enquiries',
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'programs' => $programs,
+                'owners' => $owners,
             ]);
         }
     }
@@ -86,11 +94,24 @@ class EnquiryController extends Controller
 		else {
             $searchModel = new EnquirySearch();
             $dataProvider = $searchModel->search(EnquiryStatusTypes::POTENTIAL, Yii::$app->request->queryParams);
+            // print_r($dataProvider->getModels()); exit;
+            $countries =[];
+            foreach($dataProvider->getModels() as $enq){
+                $countries[$enq->countries_id] = $enq->countries->name;
+            }
+            // print_r($countries); exit;
+            $progs = Program::find()->all();
+            $programs = ArrayHelper::map($progs, 'id', 'name');
+            $owns = Owner::find()->all();
+            $owners = ArrayHelper::map($owns, 'id', 'name');
 
             return $this->render('indexp', [
                 'title' => 'Potential Participants',
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'programs' => $programs,
+                'owners' => $owners,
+                'countries' => $countries,
             ]);
         }
     }
@@ -110,11 +131,23 @@ class EnquiryController extends Controller
 		else {
             $searchModel = new EnquirySearch();
             $dataProvider = $searchModel->search(EnquiryStatusTypes::JOINED, Yii::$app->request->queryParams);
+            $countries =[];
+            foreach($dataProvider->getModels() as $enq){
+                $countries[$enq->countries_id] = $enq->countries->name;
+            }
+            // print_r($countries); exit;
+            $progs = Program::find()->all();
+            $programs = ArrayHelper::map($progs, 'id', 'name');
+            $owns = Owner::find()->all();
+            $owners = ArrayHelper::map($owns, 'id', 'name');
 
             return $this->render('indexj', [
                 'title' => 'Confirmed Participants',
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'countries' => $countries,
+                'programs' => $programs,
+                'owners' => $owners,
             ]);
         }
     }
@@ -134,11 +167,17 @@ class EnquiryController extends Controller
 		else {
             $searchModel = new EnquirySearch();
             $dataProvider = $searchModel->search(EnquiryStatusTypes::CLOSED, Yii::$app->request->queryParams);
+            $progs = Program::find()->all();
+            $programs = ArrayHelper::map($progs, 'id', 'name');
+            $owns = Owner::find()->all();
+            $owners = ArrayHelper::map($owns, 'id', 'name');
 
             return $this->render('indexc', [
                 'title' => 'Closed Enquiries',
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'programs' => $programs,
+                'owners' => $owners,
             ]);
         }
     }
@@ -198,7 +237,7 @@ class EnquiryController extends Controller
             if($model->city_id == 0){
                 $model->city_id = NULL;
             }
-            $model->date_of_enquiry = strtotime($model->date_of_enquiry);
+            $model->date_of_enquiry = date('Y-m-d',strtotime($model->date_of_enquiry));
             //default enq_status on create = open
             $model->enq_status = 0;
             /*if($model->l1_batch==0){
@@ -249,7 +288,11 @@ class EnquiryController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->date_of_enquiry = date("m/d/Y",$model->date_of_enquiry);
+        /*if($model->date_of_enquiry == "2021-07-24"){
+            echo "yes";
+        }*/
+        // echo $model->date_of_enquiry; exit;
+        $model->date_of_enquiry = date("d-m-Y",strtotime($model->date_of_enquiry)); // changing format for display
         $countries = [];
         foreach(Country::find()->all() as $ctry){
             $countries[$ctry->id] = $ctry->name;
@@ -291,7 +334,8 @@ class EnquiryController extends Controller
             if($model->city_id == 0){
                 $model->city_id = NULL;
             }
-            $model->date_of_enquiry = strtotime($model->date_of_enquiry);
+            // $model->date_of_enquiry = strtotime($model->date_of_enquiry);
+            $model->date_of_enquiry = date('Y-m-d',strtotime($model->date_of_enquiry)); //change format to save in db
             // if($model->l1_batch==0){
             // echo "<pre>"; print_r($model->date_of_enquiry); exit;
             //     $model->l1_batch = NULL;
@@ -398,8 +442,10 @@ class EnquiryController extends Controller
             if($model->city_id == 0){
                 $model->city_id = NULL;
             }
-            if($model->date_of_enquiry != ''){
+            if($model->date_of_enquiry == ''){
                 $model->date_of_enquiry = $doe;
+            }else{
+                $model->date_of_enquiry = date('Y-m-d',strtotime($model->date_of_enquiry)); //change format to save in db
             }
             $enquiries = Yii::$app->request->post('Enquiry');
 			// echo'<pre>'; print_r($model->date_of_enquiry); exit;	
@@ -492,7 +538,7 @@ class EnquiryController extends Controller
         // echo  "<pre>123"; print_r($e_model); exit;
         if ($e_model->load(Yii::$app->request->get())) {	//echo "test"; exit;
             //$password_model->new_password
-            
+            // echo "<pre>"; print_r($e_model); exit;
 
             if($e_model->status == 2)
             {
@@ -588,8 +634,10 @@ class EnquiryController extends Controller
             if($model->city_id == 0){
                 $model->city_id = NULL;
             }
-            if($model->date_of_enquiry != ''){
+            if($model->date_of_enquiry == ''){
                 $model->date_of_enquiry = $doe;
+            }else{
+                $model->date_of_enquiry = date('Y-m-d',strtotime($model->date_of_enquiry)); //change format to save in db
             }
 
             $enquiries = Yii::$app->request->post('Enquiry');
@@ -763,8 +811,10 @@ class EnquiryController extends Controller
             if($model->city_id == 0){
                 $model->city_id = NULL;
             }
-            if($model->date_of_enquiry != ''){
+            if($model->date_of_enquiry == ''){
                 $model->date_of_enquiry = $doe;
+            }else{
+                $model->date_of_enquiry = date('Y-m-d',strtotime($model->date_of_enquiry)); //change format to save in db
             }
             if(!isset($model->city_id)){
                 $model->city_id = NULL;
@@ -869,7 +919,7 @@ class EnquiryController extends Controller
                     $handle = fopen($myfile, "r");
                     while (($fileop = fgetcsv($handle, 1000, ",")) !== false) 
                     {
-                        $date = strtotime($fileop[0]);
+                        $date = date('Y-m-d',strtotime($fileop[0]));
                         $name = $fileop[1];
                         $city = $fileop[2];
                         $country = $fileop[3];
@@ -885,7 +935,7 @@ class EnquiryController extends Controller
                         $status = $fileop[13];
                         // print_r($fileop);exit();
                         // echo gettype($date)." ".gettype($name)." ".gettype($email)."<br>";
-                        // echo $date." ".$name." ".$email."<br>";
+                        echo $date." ".$name." ".$email."<br>"; exit;
                         if($date != ''){
                             // print_R($fileop)."<br>";
                             // echo 1234;
@@ -932,7 +982,8 @@ class EnquiryController extends Controller
                             $enqm->owner_id = isset($myown->id)?$myown->id:'';
                             $enqm->email = $email;
                             $enqm->contact_no = $phone;
-                            $enqm->enq_status = array_search($status,UserTypes::$estatus);
+                            $eq_st = array_search($status,UserTypes::$estatus);
+                            $enqm->enq_status = ($eq_st!='')?$eq_st:0; // else open status 
                             // echo "<pre>"; print_r($enqm); exit;
                             if($enqm->save()){
                                 $count++;
@@ -943,12 +994,12 @@ class EnquiryController extends Controller
                                     $erem = new EnquiryRemarks();
                                     $erem->enquiry_id = $enqm->id;
                                     $erem->date = strtotime(trim($remdet[0],'"'));
-                                    $erem->remarks = $remdet[1];
+                                    $erem->remarks = isset($remdet[1])?$remdet[1]:'';
                                     $erem->save();
                                 }
                             }else{
 								$er_email[] = $enqm->email;
-                                // echo "<pre>"; print_r($enqm->getErrors()); exit;
+                                // echo $enqm->email."<pre>"; print_r($enqm->getErrors()); exit;
                             }
                             // echo "<pre>"; exit;
                             // $date = intval($date) + 111;
