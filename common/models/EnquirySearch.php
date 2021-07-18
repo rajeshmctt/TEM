@@ -19,7 +19,7 @@ class EnquirySearch extends Enquiry
     {
         return [
             [['id', 'owner_id', 'info_email_sent_on', 'country_id', 'countries_id', 'program_id',  'amount', 'currency_id','close_reason', 'enq_status', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['full_name', 'date_of_enquiry', 'contact_no', 'email', 'address', 'owner', 'city', 'source', 'subject', 'referred_by', 'remarks'], 'safe'],
+            [['full_name', 'date_of_enquiry', 'contact_no', 'email', 'address', 'owner', 'city', 'source', 'subject', 'referred_by', 'remarks','programs'], 'safe'],
         ];
     }
 
@@ -41,9 +41,10 @@ class EnquirySearch extends Enquiry
      */
     public function search($status, $params)
     {
-        $query = Enquiry::find()->where(['status'=>$status])->orderBy(['created_at' => SORT_DESC]);
+        $query = Enquiry::find()->where(['enquiry.status'=>$status])->orderBy(['created_at' => SORT_DESC]);
 
         // add conditions that should always apply here
+        $query->joinWith(['enquiryBatches']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -65,7 +66,7 @@ class EnquirySearch extends Enquiry
             'info_email_sent_on' => $this->info_email_sent_on, 
             'country_id' => $this->country_id,
             'countries_id' => $this->countries_id,
-            'program_id' => $this->program_id,
+            'enquiry.program_id' => $this->program_id,
             'amount' => $this->amount,
             'currency_id' => $this->currency_id,
             'close_reason' => $this->close_reason,
@@ -99,7 +100,8 @@ class EnquirySearch extends Enquiry
             ->andFilterWhere(['like', 'source', $this->source])
             ->andFilterWhere(['like', 'subject', $this->subject])
             ->andFilterWhere(['like', 'remarks', $this->remarks])
-            ->andFilterWhere(['like', 'referred_by', $this->referred_by]);
+            ->andFilterWhere(['like', 'referred_by', $this->referred_by])
+            ->andFilterWhere(['like', 'enquiry_batch.program_id', $this->programs]);
 
         return $dataProvider;
     }

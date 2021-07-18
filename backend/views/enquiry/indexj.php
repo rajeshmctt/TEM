@@ -146,7 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'format'=> 'raw',
                 'label' => 'Program',
-                // 'attribute' => 'program_id',
+                'attribute' => 'programs',
                 'value' => function ($model) {
                     $prg = count($model->enquiryBatches);
                     $prgs = '';
@@ -160,6 +160,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $prgs;
                 },
                 'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
+                'filter' => Html::activeDropDownList($searchModel, 'programs', $programs, ['class' => 'form-control', 'prompt' => 'Select Program']),
             ],
             [
                 'label' => 'Status',
@@ -168,6 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return isset($model->enq_status)?UserTypes::$estatus[$model->enq_status]:'N/A';
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'enq_status', UserTypes::$estatus, ['class' => 'form-control', 'prompt' => 'Select Status']),
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
             ],
             // 'program_id',
             //'final_status_l1',

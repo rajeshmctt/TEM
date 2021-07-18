@@ -57,7 +57,7 @@ use yii\jui\DatePicker;
                 <label class="control-label">Enquiry Date<span class="red-theme">*</span></label>
                 <!--<input type="text" name="Enquiry[date_of_enquiry]" id="enquiry_date" class="form-control" data-provide="datepicker" placeholder="Enquiry Date" value="<?//=isset($model->date_of_enquiry)? date("m/d/Y",$model->date_of_enquiry):''?>" >-->
 
-                    <?= $form->field($model, 'date_of_enquiry',['options' => ['class' => 'form-group', 'data-provide'=>"datepicker"]])->input('email', ['placeholder' => "Enquiry Date"])->textInput()->label(false) ?>
+                    <?= $form->field($model, 'date_of_enquiry',['options' => ['class' => 'form-group', 'data-provide'=>"datepicker"]])->input('date_of_enquiry', ['placeholder' => "Enquiry Date"])->textInput()->label(false) ?>
             </div>
             <div class="col-sm-3">
                 <label class="control-label">Name<span class="red-theme">*</span></label>

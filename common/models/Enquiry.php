@@ -48,6 +48,7 @@ use yii\behaviors\TimestampBehavior;
 class Enquiry extends \yii\db\ActiveRecord
 {
     public $file1;
+    public $programs;
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
     /**
@@ -73,7 +74,7 @@ class Enquiry extends \yii\db\ActiveRecord
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             [['owner_id', 'info_email_sent_on', 'country_id', 'countries_id', 'state_id', 'city_id', 'close_reason', 'program_id', 'amount', 'currency_id', 'enq_status', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['remarks', 'subject'], 'string'], 
+            [['remarks', 'subject','programs'], 'string'], 
             [['date_of_enquiry'], 'required'],
             [['date_of_enquiry','file1'], 'safe'],
             [['full_name', 'address', 'owner'], 'string', 'max' => 255],

@@ -928,15 +928,14 @@ class EnquiryController extends Controller
                         $referred_by = $fileop[6];
                         $program = $fileop[7];
                         $owner = $fileop[8];
-                        // $confirmation_email = $fileop[9];
+                        $information_email = strtotime($fileop[9]);//strtotime($fileop[0])
                         $remarks = $fileop[10];
                         $email = $fileop[11];
                         $phone = $fileop[12];
                         $status = $fileop[13];
-                        // print_r($fileop);exit();
-                        // echo gettype($date)." ".gettype($name)." ".gettype($email)."<br>";
-                        echo $date." ".$name." ".$email."<br>"; exit;
-                        if($date != ''){
+                        // echo ($date=="1970-01-01")." 123".$name." ".$email."<br>"; exit;
+                        // trim($fileop[0])!="Date" || $fileop[0]!=""
+                        if($date!="1970-01-01"){
                             // print_R($fileop)."<br>";
                             // echo 1234;
                             // Add to db
@@ -980,6 +979,7 @@ class EnquiryController extends Controller
                             }*/
                             // exit;
                             $enqm->owner_id = isset($myown->id)?$myown->id:'';
+                            $enqm->info_email_sent_on = $information_email;
                             $enqm->email = $email;
                             $enqm->contact_no = $phone;
                             $eq_st = array_search($status,UserTypes::$estatus);
@@ -1024,7 +1024,8 @@ class EnquiryController extends Controller
                 }
 
             // $model->save();
-            Yii::$app->getSession()->setFlash('success',$count.' Records imported. '.implode(", ",$er_email)." not added.");
+            $er2 = (count($er_email)!=0)?implode(", ",$er_email)." not imported.":"";
+            Yii::$app->getSession()->setFlash('success',$count.' Records imported. '. $er2);
             return $this->redirect(['getcsv']);
         } else {
             return $this->render('getcsv', [

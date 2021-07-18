@@ -103,12 +103,14 @@ class ProgramController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if($model->tentative_date==''){
-            $model->tentative_date = 0;
-        }
         // echo "<pre>"; print_r($model); exit;
+        $doe = $model->tentative_date;
         if ($model->load(Yii::$app->request->post()) ) {
             $model->tentative_date = strtotime($model->tentative_date);
+            if($model->tentative_date==''){
+                $model->tentative_date = 0;
+            }
+            // echo $model->tentative_date; exit;
             if($model->save()){
 
             }else{

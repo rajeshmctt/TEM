@@ -55,7 +55,7 @@ use yii\widgets\ActiveForm;
                 <?= $form->field($model, 'hours')->textInput(['type' => 'number'])->label(false) ?>
             </div>
             <div class="col-sm-3">    
-                <label class="control-label">Enquiry Date<span class="red-theme">*</span></label>
+                <label class="control-label">Tentative Date<span class="red-theme">*</span></label>
                 <input type="text" name="Program[tentative_date]" id="tentative_date" class="form-control" data-provide="datepicker" placeholder="Tentative Date" value="<?=($model->tentative_date!=0)? date("m/d/Y",$model->tentative_date):''?>" >
             </div>
         </div>
@@ -76,6 +76,15 @@ use yii\widgets\ActiveForm;
 
 
     <?php
+$eid = ($model->id=="")?0:$model->id;
+$this->registerCss('
+    .datepicker-days{
+        display: none;
+    }
+	.table {
+		background-color: white;
+	}
+');
 
 $this->registerJs('
 $(document).ready(function(){
@@ -86,6 +95,7 @@ $(document).ready(function(){
         /*format: "dd/mm/yyyy",*/
         autoclose: true
     });
+    
 
 });
 ');

@@ -37,7 +37,7 @@ class Program extends \yii\db\ActiveRecord
         return [
             [['tentative_date', 'hours', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['name'], 'required'],
+            [['name','tentative_date'], 'required'],
         ];
     }
 
