@@ -937,7 +937,9 @@ class EnquiryController extends Controller
                         // trim($fileop[0])!="Date" || $fileop[0]!=""
                         if($date!="1970-01-01"){
                             // print_R($fileop)."<br>";
-                            // echo 1234;
+                            if($program == "Webinar"){
+                                break;
+                            } 
                             // Add to db
                             $enqm = new Enquiry();
                             $enqm->date_of_enquiry = $date;
@@ -959,14 +961,14 @@ class EnquiryController extends Controller
                             // exit;
                             $enqm->subject = $subject;
                             $enqm->referred_by = $referred_by;
-                            $myprog = Program::find()->where(['name'=>$program])->one();
-                            if($myprog==''){
+                            $myprog = Program::find()->where(['name'=>UserTypes::$pmap[$program]])->one();
+                            /*if($myprog==''){
                                 $myprog = new Program();
                                 $myprog->name = $program;
                                 $myprog->save();
-                            }
-                            $enqm->program_id = $myprog->id;
-                            $myown = Owner::find()->where(['name'=>$owner])->one();
+                            }*/
+                            $enqm->program_id = isset($myprog->id)?$myprog->id:'';
+                            $myown = Owner::find()->where(['name'=>UserTypes::$omap[$owner]])->one();
                             /*if($myown==''){
                                 // echo 1; exit; 
                                 $myown = new Owner();
@@ -978,13 +980,26 @@ class EnquiryController extends Controller
                                 }
                             }*/
                             // exit;
+                            // echo $myown->id."<br>";
                             $enqm->owner_id = isset($myown->id)?$myown->id:'';
                             $enqm->info_email_sent_on = $information_email;
                             $enqm->email = $email;
                             $enqm->contact_no = $phone;
                             $eq_st = array_search($status,UserTypes::$estatus);
                             $enqm->enq_status = ($eq_st!='')?$eq_st:0; // else open status 
-                            // echo "<pre>"; print_r($enqm); exit;
+                            $st_enq = [0,1,3,5];
+                            $st_con = [2,4];
+                            $st_clo = [6,7,8];
+                            if(in_array($eq_st,$st_enq)){
+                                $enqm->status = EnquiryStatusTypes::ACTIVE;   
+                            }
+                            if(in_array($eq_st,$st_con)){
+                                $enqm->status = EnquiryStatusTypes::JOINED;   
+                            }
+                            if(in_array($eq_st,$st_clo)){
+                                $enqm->status = EnquiryStatusTypes::CLOSED;   
+                            }
+                            // echo UserTypes::$estatus[$eq_st]." ".EnquiryStatusTypes::$titles[$enqm->status]."<br>";
                             if($enqm->save()){
                                 $count++;
                                 $myrem = explode("\n", $remarks);

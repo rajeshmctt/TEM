@@ -86,14 +86,36 @@ class UserTypes {
 		6=>'Closed-Not interested',
 		7=>'Closed-Not relevant',
 		8=>'Closed-Joined Somwehere else',
-		9=>'Closed-Not interested',
-		10=>'Closed-Not relevant',
-
 	];
 	public static $reasons = [
 		0=>'Not Interested',
 		1=>'Joined somewhere else',
 		2=>'Not relevant',
+	];
+	public static $omap = [
+		'Arvind' =>	'Arvind',
+		'Bradley' => 'Srilanka',
+		'Jose'=>'Portugal & Spain',
+		'Malini'=>'Nigeria',
+		'Manjula'=>'Manjula',
+		'Partho'=>'Bangladesh',
+		'Ruchi'=>'Ruchi',
+		'Sridhar'=>'Arvind',
+		'Sridhar/Arvind'=>'Arvind',
+		'Srilanka'=>'Srilanka',
+		'Taruna'=>'Singapore and Malaysia',
+	];
+	public static $pmap = [
+		'Coach Training -ACC'=>'ACC ACSTH: 60 Hours L1 program',
+		'Coach Training -PCC'=>'PCC ACTP: 65 Hours L2 program transfer Student',
+		'Coach Training -ACTP'=>'ACC + PCC ACTP: 125 Hours L1 + L2 program',
+		'Coach Training - MCC'=>'MASTER COACH CERTIFICATION (78 HRS)',
+		'MCCP'=>'MENTOR COACH CERTIFICATION PROGRAM (40 HRS)',
+		'Supervision'=>'SUPERVISOR CERTIFICATION PROGRAM (30 HRS)',
+		'NLP 30 Hours'=>'NLP COACH PRACTIONER PROGRAM (30 HRS)',
+		'STC 30 Hours'=>'SYSTEMIC TEAM COACHING PRACTIONER CERTIFICATION PROGRAM (30 HRS)',
+		'Yog 30 Hours'=>'YOGA PSYCHOLOGY CERTIFICATION PROGRAM (30 HRS)',
+		'10 Hours Mentoring'=>'10 Hours Mentoring',
 	];
 	// public static $events1 = [
 		// self::ADD_TO_SYS1 => 'New Participant added',
