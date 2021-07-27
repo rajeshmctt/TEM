@@ -136,13 +136,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     $prgs = '';
                     foreach($model->enquiryBatches as $bat){
                         // if($bat->status == 10){
-                            $prgs .= $bat->batch->program->name."<br>";
+                            // $prgs .= $bat->batch->program->name."<br>";
+                            $prgs .= isset($bat->program_id)?$bat->program->name."<br>":"<br>";
                         // }
                     }
                     // return isset($model->program_id)?$model->program->name:'N/A';
                     return $prgs;
                 },
                 'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
+                'filter' => Html::activeDropDownList($searchModel, 'programs', $programs, ['class' => 'form-control', 'prompt' => 'Select Program']),
             ],
             [
                 'label' => 'Status',

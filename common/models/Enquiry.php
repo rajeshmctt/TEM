@@ -184,7 +184,8 @@ class Enquiry extends \yii\db\ActiveRecord
      */
     public function getEnquiryRemarks()
     {
-        return $this->hasMany(EnquiryRemarks::className(), ['enquiry_id' => 'id']);
+        return $this->hasMany(EnquiryRemarks::className(), ['enquiry_id' => 'id'])->
+        orderBy(['id' => SORT_DESC]); //latest remark on top rdm 27july
     }
 
     /**

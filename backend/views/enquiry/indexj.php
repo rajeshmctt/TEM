@@ -152,7 +152,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $prgs = '';
                     foreach($model->enquiryBatches as $bat){
                         // if($bat->status == 10){
-                            $prgs .= isset($bat->batch_id)?$bat->batch->program->name."<br>":"<br>";
+                            $prgs .= isset($bat->program_id)?$bat->program->name."<br>":"<br>";
                             // $prgs .= isset($bat->program_id)?$bat->program->name."<br>":''."<br>";
                         // }
                     }

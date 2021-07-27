@@ -126,6 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return $model->program->name;
                 },
+                'filter' => Html::activeDropDownList($searchModel, 'program_id', $programs, ['class' => 'form-control', 'prompt' => 'Select Program']),
             ],
             // 'start_date',
             // 'created_at',

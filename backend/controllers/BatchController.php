@@ -4,10 +4,12 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\Batch;
+use common\models\Program;
 use common\models\BatchSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * BatchController implements the CRUD actions for Batch model.
@@ -38,12 +40,20 @@ class BatchController extends Controller
         $searchModel = new BatchSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $model = new Batch();
+        $progs = Program::find()->all();
+        $programs = ArrayHelper::map($progs, 'id', 'name');
 
         if ($model->load(Yii::$app->request->post())) {
             // echo "<pre>"; print_r($model); exit;
             if($model->save()){
                 Yii::$app->getSession()->setFlash('success','Batch added successfully');
                 return $this->redirect(['index']);
+            }else{
+                $err = $model->getErrors();
+                if(isset($err['name'])){
+                    // echo "<pre>"; print_r($ern['name'][0]); exit;
+                    Yii::$app->getSession()->setFlash('error','Not Saved. '.$err['name'][0]);
+                }
             }
             
         }
@@ -52,6 +62,7 @@ class BatchController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
+            'programs' => $programs,
         ]);
     }
 

@@ -89,8 +89,8 @@ class UserTypes {
 	];
 	public static $reasons = [
 		0=>'Not Interested',
-		1=>'Joined somewhere else',
-		2=>'Not relevant',
+		1=>'Not relevant',
+		2=>'Joined somewhere else',
 	];
 	public static $omap = [
 		'Arvind' =>	'Arvind',

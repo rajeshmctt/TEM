@@ -451,7 +451,8 @@ class EnquiryController extends Controller
 			// echo'<pre>'; print_r($model->date_of_enquiry); exit;	
 			$pwup = Yii::$app->request->post();
 			$newbatches = [];
-			if(isset($enquiries['batch1'])){
+			// Remove old logic to add/remove batches rdm 26jul
+            /*if(isset($enquiries['batch1'])){
 				// echo 'no'; exit;
 				for($i=1;$i<=3;$i++){
 					if($enquiries['batch'.$i]!=''){
@@ -482,7 +483,7 @@ class EnquiryController extends Controller
 					$enquiry_batch->status = Program::STATUS_ACTIVE;
 					$enquiry_batch->save();
 				}
-			}
+			}*/
 
             // if($model->l1_batch==0){
             //     $model->l1_batch = NULL;
@@ -987,6 +988,9 @@ class EnquiryController extends Controller
                             $enqm->contact_no = $phone;
                             $eq_st = array_search($status,UserTypes::$estatus);
                             $enqm->enq_status = ($eq_st!='')?$eq_st:0; // else open status 
+                            if($enqm->enq_status > 5){
+                                $enqm->close_reason = $eq_st - 6;
+                            }
                             $st_enq = [0,1,3,5];
                             $st_con = [2,4];
                             $st_clo = [6,7,8];
@@ -997,7 +1001,7 @@ class EnquiryController extends Controller
                                 $enqm->status = EnquiryStatusTypes::JOINED;   
                             }
                             if(in_array($eq_st,$st_clo)){
-                                $enqm->status = EnquiryStatusTypes::CLOSED;   
+                                $enqm->status = EnquiryStatusTypes::CLOSED;
                             }
                             // echo UserTypes::$estatus[$eq_st]." ".EnquiryStatusTypes::$titles[$enqm->status]."<br>";
                             if($enqm->save()){
@@ -1011,6 +1015,12 @@ class EnquiryController extends Controller
                                     $erem->date = strtotime(trim($remdet[0],'"'));
                                     $erem->remarks = isset($remdet[1])?$remdet[1]:'';
                                     $erem->save();
+                                }
+                                if($enqm->program_id!=''){
+                                    $ebm = new EnquiryBatch();
+                                    $ebm->program_id = $enqm->program_id;
+                                    $ebm->enquiry_id = $enqm->id;
+                                    $ebm->save();
                                 }
                             }else{
 								$er_email[] = $enqm->email;
