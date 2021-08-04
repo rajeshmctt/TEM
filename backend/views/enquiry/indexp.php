@@ -83,7 +83,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => Html::activeInput('text', $searchModel, 'date_of_enquiry', ['class' => 'form-control','data-provide'=>"datepicker"]),
             ],
-            'full_name',
+            [
+                'attribute' => 'full_name',
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
+            ],
             'contact_no',
             'email:email',
             //'address',
@@ -113,6 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return isset($model->owner_id)?$model->owner0->name:'';
                 },
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
                 'filter' => Html::activeDropDownList($searchModel, 'owner_id', $owners, ['class' => 'form-control', 'prompt' => 'Select Owner']),
             ],
             [
@@ -125,6 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return ($model->source!='')?UserTypes::$sources[$model->source]:'';//N/A
                 },
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
                 'filter' => Html::activeDropDownList($searchModel, 'source', UserTypes::$sources, ['class' => 'form-control', 'prompt' => 'Select Source']),
             ],
             [
@@ -153,6 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return isset($model->enq_status)?UserTypes::$estatus[$model->enq_status]:'N/A';
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'enq_status', UserTypes::$estatus, ['class' => 'form-control', 'prompt' => 'Select Status']),
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
             ],
             // 'program_id',
             //'final_status_l1',

@@ -113,6 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return isset($model->owner_id)?$model->owner0->name:'Not Set';
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'owner_id', $owners, ['class' => 'form-control', 'prompt' => 'Select Owner']),
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
             ],
             [
                 'label' => 'Program',
@@ -121,6 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return isset($model->program_id)?$model->program->name:'N/A';
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'program_id', $programs, ['class' => 'form-control', 'prompt' => 'Select Program']),
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
             ],
             [
                 'label' => 'Reason of Closing',

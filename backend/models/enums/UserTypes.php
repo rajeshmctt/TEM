@@ -103,7 +103,7 @@ class UserTypes {
 		'Sridhar'=>'Arvind',
 		'Sridhar/Arvind'=>'Arvind',
 		'Srilanka'=>'Srilanka',
-		'Taruna'=>'Singapore and Malaysia',
+		'Taruna'=>'Singapore & Malaysia',
 	];
 	public static $pmap = [
 		'Coach Training -ACC'=>'ACC ACSTH: 60 Hours L1 program',

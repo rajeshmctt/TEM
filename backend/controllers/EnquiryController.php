@@ -54,6 +54,9 @@ class EnquiryController extends Controller
      */
     public function actionIndex()
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         // Export excel functionality 19june21 RDM
         $export = Yii::$app->request->get('export');
         $progs = Program::find()->all();
@@ -85,6 +88,9 @@ class EnquiryController extends Controller
      */
     public function actionPotential()
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         // Export excel functionality 19june21 RDM
         $export = Yii::$app->request->get('export');
         if(isset($export)) // && !isset($search)
@@ -122,6 +128,9 @@ class EnquiryController extends Controller
      */
     public function actionJoined()
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         // Export excel functionality 19june21 RDM
         $export = Yii::$app->request->get('export');
         if(isset($export)) // && !isset($search)
@@ -158,6 +167,9 @@ class EnquiryController extends Controller
      */
     public function actionClosed()
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         // Export excel functionality 19june21 RDM
         $export = Yii::$app->request->get('export');
         if(isset($export)) // && !isset($search)
@@ -202,6 +214,9 @@ class EnquiryController extends Controller
      */
     public function actionCreate($add=0)
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         // echo $add; exit;
         $model = new Enquiry();
         $countries = [];
@@ -287,6 +302,9 @@ class EnquiryController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         $model = $this->findModel($id);
         /*if($model->date_of_enquiry == "2021-07-24"){
             echo "yes";
@@ -389,6 +407,9 @@ class EnquiryController extends Controller
      */
     public function actionUpdatep($id)
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         $model = $this->findModel($id);
 		$batches = EnquiryBatch::getEnquiryBatches($id);
         $myprograms = Batch::getBatchPrograms($batches);
@@ -580,6 +601,9 @@ class EnquiryController extends Controller
      */
     public function actionUpdatej2($id)
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         $model = $this->findModel($id);
 		$batches = EnquiryBatch::getEnquiryBatches($id);
         $myprograms = Batch::getBatchPrograms($batches);
@@ -752,6 +776,9 @@ class EnquiryController extends Controller
      */
     public function actionUpdatej($id)
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         $model = $this->findModel($id);
 		$batches = EnquiryBatch::getEnquiryBatches($id);
         $myprograms = Batch::getBatchPrograms($batches);
@@ -896,6 +923,9 @@ class EnquiryController extends Controller
 
     public function actionGetcsv()
     {
+        if (!isset(Yii::$app->user->identity->role)) {
+			return $this->redirect(["site/index"]);
+		}
         $model = new Enquiry();
         // echo realpath(dirname(__FILE__)); exit; 
         if ($model->load(Yii::$app->request->post()) ) {
@@ -928,7 +958,7 @@ class EnquiryController extends Controller
                         $subject = $fileop[5];
                         $referred_by = $fileop[6];
                         $program = $fileop[7];
-                        $owner = $fileop[8];
+                        $owner = trim($fileop[8]);  // remove spaces rdm 27july
                         $information_email = strtotime($fileop[9]);//strtotime($fileop[0])
                         $remarks = $fileop[10];
                         $email = $fileop[11];
@@ -937,7 +967,7 @@ class EnquiryController extends Controller
                         // echo ($date=="1970-01-01")." 123".$name." ".$email."<br>"; exit;
                         // trim($fileop[0])!="Date" || $fileop[0]!=""
                         if($date!="1970-01-01"){
-                            // print_R($fileop)."<br>";
+                            // echo "r$owner"."r <br>"; exit;
                             if($program == "Webinar"){
                                 break;
                             } 

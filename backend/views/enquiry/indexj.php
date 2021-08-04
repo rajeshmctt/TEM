@@ -129,6 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return isset($model->owner_id)?$model->owner0->name:'Not Set';
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'owner_id', $owners, ['class' => 'form-control', 'prompt' => 'Select Owner']),
+                'contentOptions' => ['style' => 'width:15%; white-space: normal;'],
             ],
             [
                 'attribute'=>'subject',
@@ -141,6 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ($model->source!='')?UserTypes::$sources[$model->source]:'';//N/A
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'source', UserTypes::$sources, ['class' => 'form-control', 'prompt' => 'Select Source']),
+                'contentOptions' => ['style' => 'width:10%; white-space: normal;'],
             ],
             // 'referred_by',  //hide
             [
