@@ -41,7 +41,7 @@ class EnquirySearch extends Enquiry
      */
     public function search($status, $params)
     {
-        $query = Enquiry::find()->where(['enquiry.status'=>$status])->orderBy(['created_at' => SORT_DESC]);
+        $query = Enquiry::find()->where(['enquiry.status'=>$status])->orderBy(['id' => SORT_DESC]);
 
         // add conditions that should always apply here
         $query->joinWith(['enquiryBatches']);

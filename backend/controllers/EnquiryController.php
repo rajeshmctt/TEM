@@ -103,7 +103,9 @@ class EnquiryController extends Controller
             // print_r($dataProvider->getModels()); exit;
             $countries =[];
             foreach($dataProvider->getModels() as $enq){
-                $countries[$enq->countries_id] = $enq->countries->name;
+                if(isset($enq->countries_id)){
+                    $countries[$enq->countries_id] = $enq->countries->name;
+                }
             }
             // print_r($countries); exit;
             $progs = Program::find()->all();
@@ -142,7 +144,9 @@ class EnquiryController extends Controller
             $dataProvider = $searchModel->search(EnquiryStatusTypes::JOINED, Yii::$app->request->queryParams);
             $countries =[];
             foreach($dataProvider->getModels() as $enq){
-                $countries[$enq->countries_id] = $enq->countries->name;
+                if(isset($enq->countries_id)){
+                    $countries[$enq->countries_id] = $enq->countries->name;
+                }
             }
             // print_r($countries); exit;
             $progs = Program::find()->all();
@@ -958,18 +962,23 @@ class EnquiryController extends Controller
                         $subject = $fileop[5];
                         $referred_by = $fileop[6];
                         $program = $fileop[7];
-                        $owner = trim($fileop[8]);  // remove spaces rdm 27july
+                        $owner = ucfirst(trim($fileop[8]));  // remove spaces rdm 27july
                         $information_email = strtotime($fileop[9]);//strtotime($fileop[0])
                         $remarks = $fileop[10];
                         $email = $fileop[11];
                         $phone = $fileop[12];
                         $status = $fileop[13];
+
+                        // echo $email; continue;
                         // echo ($date=="1970-01-01")." 123".$name." ".$email."<br>"; exit;
                         // trim($fileop[0])!="Date" || $fileop[0]!=""
                         if($date!="1970-01-01"){
                             // echo "r$owner"."r <br>"; exit;
                             if($program == "Webinar"){
-                                break;
+                                continue;
+                            } 
+                            if($program == "Others"){
+                                continue;
                             } 
                             // Add to db
                             $enqm = new Enquiry();
@@ -1013,9 +1022,14 @@ class EnquiryController extends Controller
                             // exit;
                             // echo $myown->id."<br>";
                             $enqm->owner_id = isset($myown->id)?$myown->id:'';
-                            $enqm->info_email_sent_on = $information_email;
+                            if($information_email==""){
+                                $enqm->info_email_sent_on = 0;
+                            }else{
+                                $enqm->info_email_sent_on = $information_email;
+                            }
+                            // echo "a".$information_email."b"; exit;
                             $enqm->email = $email;
-                            $enqm->contact_no = $phone;
+                            $enqm->contact_no = ($phone!="")?$phone:"Not set ".rand(10,99999);
                             $eq_st = array_search($status,UserTypes::$estatus);
                             $enqm->enq_status = ($eq_st!='')?$eq_st:0; // else open status 
                             if($enqm->enq_status > 5){
@@ -1054,7 +1068,7 @@ class EnquiryController extends Controller
                                 }
                             }else{
 								$er_email[] = $enqm->email;
-                                // echo $enqm->email."<pre>"; print_r($enqm->getErrors()); exit;
+                                // echo $information_email."<pre>"; print_r($enqm->getErrors()); exit;
                             }
                             // echo "<pre>"; exit;
                             // $date = intval($date) + 111;
